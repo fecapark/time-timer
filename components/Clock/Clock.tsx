@@ -43,6 +43,19 @@ const ClockCenter = styled.div`
   position: relative;
 `;
 
+const ClockBackground = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+
+  width: 400px;
+  height: 400px;
+
+  border-radius: 50%;
+  /* background-color: tan; */
+`;
+
 const ClockHandler = styled.div`
   width: 60px;
   height: 60px;
@@ -50,6 +63,7 @@ const ClockHandler = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
+  transform-origin: center center;
   transform: translate3d(-50%, -50%, 0);
 
   border-radius: 50%;
@@ -103,30 +117,71 @@ function range(n: number) {
 }
 
 export default function Clock() {
+  const moveAreaRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
 
-    const dragHandler = (e: PointerEvent) => {
-      const { offsetX, offsetY } = e;
-      const pointerPos = new Vector2(offsetX - width / 2, offsetY - height / 2);
-
-      // Todo: 여기서부터 이제 드래그시 회전하는 기능 만들면 됨.
+    const pointerDownHandler = () => {
+      canSet = true;
     };
 
-    const { width, height } = handlerRef.current.getBoundingClientRect();
-    handlerRef.current.addEventListener("pointermove", dragHandler);
+    const pointerMoveHandler = (e: PointerEvent) => {
+      if (!canSet) return;
+      const offsetPos = new Vector2(e.offsetX, e.offsetY);
+      const relPos = offsetPos.sub(centerPos.sub(moveAreaPos)).normalize();
+      const isRightSide = relPos.x >= 0;
+      const cos = Math.acos(relPos.dot(new Vector2(0, -1))) * (180 / Math.PI);
+
+      requestAnimationFrame(() => {
+        handlerRef.current!.style.transform = `translate3d(-50%, -50%, 0) rotate3d(0, 0, 1, ${
+          isRightSide ? 360 + cos : -cos
+        }deg)`;
+      });
+    };
+
+    const pointerEndHandler = () => {
+      canSet = false;
+    };
+
+    let canSet = false;
+    const {
+      width,
+      height,
+      x: hx,
+      y: hy,
+    } = handlerRef.current.getBoundingClientRect();
+    const { x: ax, y: ay } = moveAreaRef.current.getBoundingClientRect();
+
+    const moveAreaPos = new Vector2(ax, ay);
+    const centerPos = new Vector2(hx + width / 2, hy + height / 2);
+
+    moveAreaRef.current.addEventListener("pointerdown", pointerDownHandler);
+    moveAreaRef.current.addEventListener("pointermove", pointerMoveHandler);
+    moveAreaRef.current.addEventListener("pointerup", pointerEndHandler);
+    moveAreaRef.current.addEventListener("pointerout", pointerEndHandler);
 
     return () => {
-      handlerRef.current?.removeEventListener("pointermove", dragHandler);
+      moveAreaRef.current?.removeEventListener(
+        "pointerdown",
+        pointerDownHandler
+      );
+      moveAreaRef.current?.removeEventListener(
+        "pointermove",
+        pointerMoveHandler
+      );
+      moveAreaRef.current?.removeEventListener("pointerup", pointerEndHandler);
+      moveAreaRef.current?.removeEventListener("pointerout", pointerEndHandler);
     };
-  }, [handlerRef.current]);
+  }, [moveAreaRef.current, handlerRef.current]);
 
   return (
     <Container>
       <MainClock>
         <ClockCenter>
+          <ClockBackground ref={moveAreaRef} />
           <ClockHandler ref={handlerRef}>
             <div className="pointer"></div>
           </ClockHandler>
