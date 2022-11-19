@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import React, { useEffect, useRef } from "react";
+import { Vector2 } from "../../utils/vector";
 
 interface IGraduationStyleProps {
   rotate: number;
@@ -12,6 +14,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
 `;
 
 const MainClock = styled.div`
@@ -23,22 +30,44 @@ const MainClock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: border-color 0.15s cubic-bezier(0, 0, 0, 1);
+
+  &:hover {
+    border-color: ${({ theme }) => theme.background.accent};
+    transition: border-color 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
 `;
-
-// const SizeTester = styled.div`
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate3d(-50%, -50%, 0);
-
-//   width: 400px;
-//   height: 400px;
-//   border-radius: 50%;
-//   background-color: #ffcc00;
-// `;
 
 const ClockCenter = styled.div`
   position: relative;
+`;
+
+const ClockHandler = styled.div`
+  width: 60px;
+  height: 60px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+
+  border-radius: 50%;
+  background-color: white;
+
+  .pointer {
+    width: 6px;
+    height: 20px;
+    background-color: inherit;
+
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate3d(-50%, 10%, 0);
+  }
 `;
 
 const Graduation = styled.div<IGraduationStyleProps>`
@@ -46,7 +75,6 @@ const Graduation = styled.div<IGraduationStyleProps>`
   height: ${(props) => (props.accent ? 20 : 14)}px;
 
   position: absolute;
-
   transform-origin: center center;
   transform: translate3d(
       ${(props) => {
@@ -66,20 +94,42 @@ function getRotatedPosition(radius: number, degree: number) {
   };
 }
 
-export default function Clock() {
-  function range(n: number) {
-    const res = [];
-    for (let i = 0; i < n; i++) {
-      res.push(i);
-    }
-    return res;
+function range(n: number) {
+  const res = [];
+  for (let i = 0; i < n; i++) {
+    res.push(i);
   }
+  return res;
+}
+
+export default function Clock() {
+  const handlerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!handlerRef.current) return;
+
+    const dragHandler = (e: PointerEvent) => {
+      const { offsetX, offsetY } = e;
+      const pointerPos = new Vector2(offsetX - width / 2, offsetY - height / 2);
+
+      // Todo: 여기서부터 이제 드래그시 회전하는 기능 만들면 됨.
+    };
+
+    const { width, height } = handlerRef.current.getBoundingClientRect();
+    handlerRef.current.addEventListener("pointermove", dragHandler);
+
+    return () => {
+      handlerRef.current?.removeEventListener("pointermove", dragHandler);
+    };
+  }, [handlerRef.current]);
 
   return (
     <Container>
       <MainClock>
         <ClockCenter>
-          {/* <SizeTester></SizeTester> */}
+          <ClockHandler ref={handlerRef}>
+            <div className="pointer"></div>
+          </ClockHandler>
           {range(60).map((i) => (
             <Graduation
               rotate={i * 6}
