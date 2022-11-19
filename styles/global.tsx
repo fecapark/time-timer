@@ -1,4 +1,5 @@
-import { Global, css } from "@emotion/react";
+import { Global, css, useTheme } from "@emotion/react";
+import { Theme } from "./theme";
 
 const GlobalStyle = css`
   * {
@@ -10,12 +11,15 @@ const GlobalStyle = css`
     box-sizing: border-box;
   }
 
-  html {
-    font-size: 14px;
-    color: white;
+  html,
+  body {
+    width: 100%;
   }
 
   body {
+    font-size: 14px;
+    color: ${Theme.font.primary};
+    background-color: ${Theme.background.primary};
   }
 `;
 

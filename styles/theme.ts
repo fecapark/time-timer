@@ -4,6 +4,11 @@ const background = {
   accent: "#004a77",
 };
 
+const font = {
+  primary: "#ffffff",
+};
+
 export const Theme = {
   background,
+  font,
 };
