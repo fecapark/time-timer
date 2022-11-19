@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  basePath: "/absproxy/3000",
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
