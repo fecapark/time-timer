@@ -20,6 +20,17 @@ export default function Clock() {
 
     const pointerDownHandler = (e: PointerEvent) => {
       canSet = true;
+
+      const offsetPos = new Vector2(e.offsetX, e.offsetY);
+      const relPos = offsetPos.sub(centerPos.sub(moveAreaPos)).normalize();
+      const isRightSide = relPos.x >= 0;
+      const cos = Math.acos(relPos.dot(new Vector2(0, -1))) * (180 / Math.PI);
+
+      requestAnimationFrame(() => {
+        handlerRef.current!.style.transform = `translate3d(-50%, -50%, 0) rotate3d(0, 0, 1, ${
+          isRightSide ? 360 + cos : -cos
+        }deg)`;
+      });
     };
 
     const pointerMoveHandler = (e: PointerEvent) => {
