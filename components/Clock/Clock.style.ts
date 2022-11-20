@@ -48,7 +48,6 @@ export const ClockBackground = styled.div`
   height: 400px;
 
   border-radius: 50%;
-  /* background-color: tan; */
 `;
 
 export const ClockHandler = styled.div`
@@ -93,4 +92,17 @@ export const Graduation = styled.div<IGraduationStyleProps>`
     )
     rotate3d(0, 0, 1, ${(props) => -props.rotate}deg);
   background-color: ${(props) => (props.accent ? "white" : "grey")};
+
+  span {
+    font-family: "Roboto", "sans-serif";
+    font-size: 16px;
+    font-weight: 500;
+
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform-origin: center center;
+    transform: translate3d(-50%, ${(props) => -props.gap}px, 0)
+      rotate3d(0, 0, 1, ${(props) => props.rotate}deg);
+  }
 `;
