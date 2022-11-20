@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { Vector2 } from "../../utils/vector";
 import {
   ClockBackground,
   ClockCenter,
@@ -9,6 +8,7 @@ import {
   MainClock,
 } from "./Clock.style";
 import { range } from "./Clock.util";
+import { Vector2 } from "../../utils/vector";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
@@ -18,7 +18,7 @@ export default function Clock() {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
 
-    const pointerDownHandler = () => {
+    const pointerDownHandler = (e: PointerEvent) => {
       canSet = true;
     };
 
@@ -80,11 +80,7 @@ export default function Clock() {
             <div className="pointer"></div>
           </ClockHandler>
           {range(60).map((i) => (
-            <Graduation
-              rotate={i * 6}
-              accent={i % 5 == 0}
-              id={`${i}`}
-            ></Graduation>
+            <Graduation rotate={i * 6} accent={i % 5 == 0} key={i}></Graduation>
           ))}
         </ClockCenter>
       </MainClock>

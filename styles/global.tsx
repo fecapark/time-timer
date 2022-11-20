@@ -18,10 +18,21 @@ const GlobalStyle = css`
     height: 100%;
   }
 
+  html,
+  body {
+    position: fixed;
+    overflow: hidden;
+  }
+
   body {
     font-size: 14px;
     color: ${Theme.font.primary};
     background-color: ${Theme.background.primary};
+  }
+
+  #__next {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 `;
 
