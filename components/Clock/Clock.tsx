@@ -7,7 +7,13 @@ import {
   Graduation,
   MainClock,
 } from "./Clock.style";
-import { range } from "./Clock.util";
+import {
+  getPointerPosFromCenter,
+  getRotationDegree,
+  isMovedToRightWhenStoped,
+  isRotatedOverOneRound,
+  range,
+} from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
 
 export default function Clock() {
@@ -19,19 +25,6 @@ export default function Clock() {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
     if (!backgroundRef.current) return;
-
-    const getRelPos = (offsetPos: Vector2) => {
-      return offsetPos.sub(centerPos.sub(moveAreaPos));
-    };
-
-    const getRotationDegree = (offsetPos: Vector2) => {
-      const relPos = getRelPos(offsetPos).normalize();
-      const isRightSide = relPos.x >= 0;
-      let degree = Math.acos(relPos.dot(new Vector2(0, -1))) * (180 / Math.PI);
-      degree = isRightSide ? degree : 360 - degree;
-
-      return degree;
-    };
 
     const updateClockShapeByDegree = (degree: number) => {
       requestAnimationFrame(() => {
@@ -50,31 +43,22 @@ export default function Clock() {
       stop = false;
 
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
-      const degree = getRotationDegree(offsetPos);
+      const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
+      const degree = getRotationDegree(relPos);
       updateClockShapeByDegree(degree);
-    };
-
-    const isRotatedOverOneRound = (pos: Vector2) => {
-      const isPointerOnLeftSide = pos.y <= 0 && pos.x < 0;
-      const isPointerOnRightBefore = prevRelPos !== null && prevRelPos.x >= 0;
-      return isPointerOnLeftSide && isPointerOnRightBefore;
-    };
-
-    const isMovedToRightWhenStoped = (pos: Vector2) => {
-      return stop && pos.x >= 0 && pos.y <= 0;
     };
 
     const pointerMoveHandler = (e: PointerEvent) => {
       if (!canSet) return;
 
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
-      const relPos = getRelPos(offsetPos);
-      let degree = stop ? 0 : getRotationDegree(offsetPos);
+      const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
+      let degree = stop ? 0 : getRotationDegree(relPos);
 
-      if (isRotatedOverOneRound(relPos)) {
+      if (isRotatedOverOneRound(relPos, prevRelPos)) {
         stop = true;
         degree = 0;
-      } else if (isMovedToRightWhenStoped(relPos)) {
+      } else if (isMovedToRightWhenStoped(relPos, stop)) {
         stop = false;
       }
 
