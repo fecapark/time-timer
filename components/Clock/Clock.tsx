@@ -33,13 +33,7 @@ export default function Clock() {
       return degree;
     };
 
-    const pointerDownHandler = (e: PointerEvent) => {
-      canSet = true;
-      stop = false;
-
-      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
-      const degree = getRotationDegree(offsetPos);
-
+    const updateClockShapeByDegree = (degree: number) => {
       requestAnimationFrame(() => {
         handlerRef.current!.style.transform = `
           translate3d(-50%, -50%, 0) 
@@ -51,6 +45,25 @@ export default function Clock() {
       });
     };
 
+    const pointerDownHandler = (e: PointerEvent) => {
+      canSet = true;
+      stop = false;
+
+      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
+      const degree = getRotationDegree(offsetPos);
+      updateClockShapeByDegree(degree);
+    };
+
+    const isRotatedOverOneRound = (pos: Vector2) => {
+      const isPointerOnLeftSide = pos.y <= 0 && pos.x < 0;
+      const isPointerOnRightBefore = prevRelPos !== null && prevRelPos.x >= 0;
+      return isPointerOnLeftSide && isPointerOnRightBefore;
+    };
+
+    const isMovedToRightWhenStoped = (pos: Vector2) => {
+      return stop && pos.x >= 0 && pos.y <= 0;
+    };
+
     const pointerMoveHandler = (e: PointerEvent) => {
       if (!canSet) return;
 
@@ -58,28 +71,15 @@ export default function Clock() {
       const relPos = getRelPos(offsetPos);
       let degree = stop ? 0 : getRotationDegree(offsetPos);
 
-      if (
-        relPos.y <= 0 &&
-        relPos.x < 0 &&
-        prevRelPos !== null &&
-        prevRelPos.x >= 0
-      ) {
+      if (isRotatedOverOneRound(relPos)) {
         stop = true;
         degree = 0;
-      } else if (relPos.y <= 0 && relPos.x >= 0) {
+      } else if (isMovedToRightWhenStoped(relPos)) {
         stop = false;
       }
-      prevRelPos = relPos.copy();
 
-      requestAnimationFrame(() => {
-        handlerRef.current!.style.transform = `
-          translate3d(-50%, -50%, 0) 
-          rotate3d(0, 0, 1, ${degree}deg)
-        `;
-        backgroundRef.current!.style.background = `
-          conic-gradient(#00000000 ${degree}deg, #FA3141dd ${degree}deg)
-        `;
-      });
+      prevRelPos = relPos.copy();
+      updateClockShapeByDegree(degree);
     };
 
     const pointerEndHandler = () => {
@@ -103,12 +103,12 @@ export default function Clock() {
     let moveAreaPos = new Vector2(0, 0);
     let prevRelPos: Vector2 | null = null;
 
-    window.addEventListener("resize", handleResize);
     moveAreaRef.current.addEventListener("pointerdown", pointerDownHandler);
     moveAreaRef.current.addEventListener("pointermove", pointerMoveHandler);
     moveAreaRef.current.addEventListener("pointerup", pointerEndHandler);
     moveAreaRef.current.addEventListener("pointerout", pointerEndHandler);
 
+    window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => {
