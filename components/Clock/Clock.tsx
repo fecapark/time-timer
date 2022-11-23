@@ -12,11 +12,13 @@ import { Vector2 } from "../../utils/vector";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
+    if (!backgroundRef.current) return;
 
     const getRelPos = (offsetPos: Vector2) => {
       return offsetPos.sub(centerPos.sub(moveAreaPos));
@@ -35,7 +37,7 @@ export default function Clock() {
       canSet = true;
       stop = false;
 
-      const offsetPos = new Vector2(e.offsetX, e.offsetY);
+      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const degree = getRotationDegree(offsetPos);
 
       requestAnimationFrame(() => {
@@ -43,7 +45,7 @@ export default function Clock() {
           translate3d(-50%, -50%, 0) 
           rotate3d(0, 0, 1, ${degree}deg)
         `;
-        moveAreaRef.current!.style.background = `
+        backgroundRef.current!.style.background = `
           conic-gradient(#00000000 ${degree}deg, #FA3141dd ${degree}deg)
         `;
       });
@@ -52,7 +54,7 @@ export default function Clock() {
     const pointerMoveHandler = (e: PointerEvent) => {
       if (!canSet) return;
 
-      const offsetPos = new Vector2(e.offsetX, e.offsetY);
+      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getRelPos(offsetPos);
       let degree = stop ? 0 : getRotationDegree(offsetPos);
 
@@ -74,7 +76,7 @@ export default function Clock() {
           translate3d(-50%, -50%, 0) 
           rotate3d(0, 0, 1, ${degree}deg)
         `;
-        moveAreaRef.current!.style.background = `
+        backgroundRef.current!.style.background = `
           conic-gradient(#00000000 ${degree}deg, #FA3141dd ${degree}deg)
         `;
       });
@@ -85,26 +87,32 @@ export default function Clock() {
       stop = false;
     };
 
+    const handleResize = () => {
+      const { width, height, x, y } =
+        handlerRef.current!.getBoundingClientRect();
+      const { x: ax, y: ay } = moveAreaRef.current!.getBoundingClientRect();
+
+      moveAreaPos = new Vector2(ax, ay);
+      centerPos = new Vector2(x + width / 2, y + height / 2);
+    };
+
     let canSet = false;
     let stop = false;
-    const {
-      width,
-      height,
-      x: hx,
-      y: hy,
-    } = handlerRef.current.getBoundingClientRect();
-    const { x: ax, y: ay } = moveAreaRef.current.getBoundingClientRect();
 
-    const moveAreaPos = new Vector2(ax, ay);
-    const centerPos = new Vector2(hx + width / 2, hy + height / 2);
+    let centerPos = new Vector2(0, 0);
+    let moveAreaPos = new Vector2(0, 0);
     let prevRelPos: Vector2 | null = null;
 
+    window.addEventListener("resize", handleResize);
     moveAreaRef.current.addEventListener("pointerdown", pointerDownHandler);
     moveAreaRef.current.addEventListener("pointermove", pointerMoveHandler);
     moveAreaRef.current.addEventListener("pointerup", pointerEndHandler);
     moveAreaRef.current.addEventListener("pointerout", pointerEndHandler);
 
+    handleResize();
+
     return () => {
+      window.removeEventListener("resize", handleResize);
       moveAreaRef.current?.removeEventListener(
         "pointerdown",
         pointerDownHandler
@@ -116,18 +124,18 @@ export default function Clock() {
       moveAreaRef.current?.removeEventListener("pointerup", pointerEndHandler);
       moveAreaRef.current?.removeEventListener("pointerout", pointerEndHandler);
     };
-  }, [moveAreaRef.current, handlerRef.current]);
+  }, [moveAreaRef.current, backgroundRef.current, handlerRef.current]);
 
   return (
     <Container>
-      <MainClock>
+      <MainClock ref={moveAreaRef}>
         <ClockCenter>
           {range(60).map((i) => (
             <Graduation rotate={i * 6} accent={i % 5 == 0} gap={16} key={i}>
               {i % 5 == 0 ? <span>{i}</span> : null}
             </Graduation>
           ))}
-          <ClockBackground ref={moveAreaRef} />
+          <ClockBackground ref={backgroundRef} />
           <ClockHandler ref={handlerRef}>
             <div className="pointer"></div>
           </ClockHandler>
