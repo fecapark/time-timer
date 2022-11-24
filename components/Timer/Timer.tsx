@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
+import { isClockPointerDownAtom } from "../../shared/atom";
 
 const Container = styled.div`
   position: absolute;
@@ -7,7 +9,7 @@ const Container = styled.div`
   bottom: 60px;
 `;
 
-const TimeText = styled.div`
+const TimeText = styled.div<{ onZoom: boolean }>`
   font-size: 60px;
   line-height: 60px;
   font-weight: 100;
@@ -17,13 +19,13 @@ const TimeText = styled.div`
   align-items: flex-end;
 
   transform-origin: right bottom;
-  transform: scale(1);
-  transition: transform 0.15s cubic-bezier(0, 0, 0, 1);
-
-  .zoom {
-    transform: scale(2);
-    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
-  }
+  transform: scale(${(props) => (props.onZoom ? 2 : 1)});
+  transition: transform
+    ${(props) =>
+      props.onZoom
+        ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+        : "0.15s cubic-bezier(0, 0, 0, 1)"};
+  transition-delay: 0.35s;
 
   .row {
     width: 100%;
@@ -45,9 +47,11 @@ const TimeText = styled.div`
 `;
 
 export default function Timer() {
+  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
+
   return (
     <Container>
-      <TimeText>
+      <TimeText onZoom={isClockPointerDown}>
         <div className="row">
           <span className="min">60</span>
         </div>

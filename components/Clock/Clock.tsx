@@ -15,11 +15,19 @@ import {
   range,
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
+import { useSetRecoilState } from "recoil";
+import { isClockPointerDownAtom } from "../../shared/atom";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
+
+  /*
+    그리고 timer 가서 해당 상태값에 따른 트랜지션 주면 끗!!!!
+  */
+
+  const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;
@@ -46,6 +54,7 @@ export default function Clock() {
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
       const degree = getRotationDegree(relPos);
       updateClockShapeByDegree(degree);
+      setIsClockPointerDown(true);
     };
 
     const pointerMoveHandler = (e: PointerEvent) => {
@@ -70,6 +79,7 @@ export default function Clock() {
       if (!canSet) return;
       canSet = false;
       stop = false;
+      setIsClockPointerDown(false);
     };
 
     const handleResize = () => {
