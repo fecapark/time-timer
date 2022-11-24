@@ -16,18 +16,15 @@ import {
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
 import { useSetRecoilState } from "recoil";
-import { isClockPointerDownAtom } from "../../shared/atom";
+import { clockDegreeAtom, isClockPointerDownAtom } from "../../shared/atom";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
 
-  /*
-    그리고 timer 가서 해당 상태값에 따른 트랜지션 주면 끗!!!!
-  */
-
   const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
+  const setClockDegree = useSetRecoilState(clockDegreeAtom);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;
@@ -55,6 +52,7 @@ export default function Clock() {
       const degree = getRotationDegree(relPos);
       updateClockShapeByDegree(degree);
       setIsClockPointerDown(true);
+      setClockDegree(degree);
     };
 
     const pointerMoveHandler = (e: PointerEvent) => {
@@ -73,6 +71,7 @@ export default function Clock() {
 
       prevRelPos = relPos.copy();
       updateClockShapeByDegree(degree);
+      setClockDegree(degree);
     };
 
     const pointerEndHandler = () => {
