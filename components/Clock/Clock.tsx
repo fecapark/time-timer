@@ -67,6 +67,7 @@ export default function Clock() {
     };
 
     const pointerEndHandler = () => {
+      if (!canSet) return;
       canSet = false;
       stop = false;
     };
@@ -89,8 +90,7 @@ export default function Clock() {
 
     moveAreaRef.current.addEventListener("pointerdown", pointerDownHandler);
     moveAreaRef.current.addEventListener("pointermove", pointerMoveHandler);
-    moveAreaRef.current.addEventListener("pointerup", pointerEndHandler);
-    moveAreaRef.current.addEventListener("pointerout", pointerEndHandler);
+    document.addEventListener("pointerup", pointerEndHandler);
 
     window.addEventListener("resize", handleResize);
     handleResize();
@@ -105,8 +105,7 @@ export default function Clock() {
         "pointermove",
         pointerMoveHandler
       );
-      moveAreaRef.current?.removeEventListener("pointerup", pointerEndHandler);
-      moveAreaRef.current?.removeEventListener("pointerout", pointerEndHandler);
+      document.removeEventListener("pointerup", pointerEndHandler);
     };
   }, [moveAreaRef.current, backgroundRef.current, handlerRef.current]);
 
