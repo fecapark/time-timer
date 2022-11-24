@@ -12,6 +12,18 @@ const Container = styled.header<{ triggerHide: boolean }>`
   justify-content: center;
   align-items: center;
 
+  transform: translate3d(
+    0,
+    ${(props) => (props.triggerHide ? "-100%" : "0")},
+    0
+  );
+  transition: transform
+    ${(props) =>
+      props.triggerHide
+        ? "0.5s cubic-bezier(0.2, 0, 0, 1)"
+        : "0.3s cubic-bezier(0, 0, 0, 1)"};
+  transition-delay: 0.4s;
+
   .logo {
     display: flex;
     gap: 2px;
