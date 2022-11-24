@@ -5,7 +5,12 @@ const background = {
 };
 
 const font = {
-  primary: "#ffffff",
+  family: {
+    primary: "Roboto, sans-serif",
+  },
+  color: {
+    primary: "#ffffff",
+  },
 };
 
 export const Theme = {

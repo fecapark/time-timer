@@ -93,7 +93,6 @@ export const Graduation = styled.div<IGraduationStyleProps>`
   background-color: ${(props) => (props.accent ? "white" : "grey")};
 
   span {
-    font-family: "Roboto", "sans-serif";
     font-size: 16px;
     font-weight: 500;
 
