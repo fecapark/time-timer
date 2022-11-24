@@ -10,7 +10,42 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Header = styled.header``;
+const Header = styled.header`
+  font-size: 18px;
+  padding: 2em 0;
+
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .logo {
+    display: flex;
+    gap: 2px;
+
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
+    cursor: default;
+
+    .word {
+      padding: 3px 6px;
+      line-height: 1em;
+
+      &.right {
+        background-color: white;
+        color: #212121;
+      }
+    }
+  }
+`;
 
 const Main = styled.main`
   width: 100%;
@@ -38,7 +73,12 @@ const Footer = styled.footer`
 export default function Home() {
   return (
     <Container>
-      <Header></Header>
+      <Header>
+        <div className="logo">
+          <div className="left word">Time</div>
+          <div className="right word">Timer</div>
+        </div>
+      </Header>
       <Main>
         <Clock />
         <Timer />
