@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import Clock from "../components/Clock/Clock";
+import Footer from "../components/Layouts/Footer/Footer";
+import Header from "../components/Layouts/Header/Header";
 import Timer from "../components/Timer/Timer";
 
 const Container = styled.div`
@@ -8,43 +10,6 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-`;
-
-const Header = styled.header`
-  font-size: 18px;
-  padding: 2em 0;
-
-  width: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .logo {
-    display: flex;
-    gap: 2px;
-
-    font-family: "Raleway", sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
-
-    cursor: default;
-
-    .word {
-      padding: 3px 6px;
-      line-height: 1em;
-
-      &.right {
-        background-color: white;
-        color: #212121;
-      }
-    }
-  }
 `;
 
 const Main = styled.main`
@@ -58,34 +23,15 @@ const Main = styled.main`
   position: relative;
 `;
 
-const Footer = styled.footer`
-  font-size: 12px;
-  color: #a0a0a0;
-  width: 100%;
-
-  padding: 3em 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 export default function Home() {
   return (
     <Container>
-      <Header>
-        <div className="logo">
-          <div className="left word">Time</div>
-          <div className="right word">Timer</div>
-        </div>
-      </Header>
+      <Header />
       <Main>
         <Clock />
         <Timer />
       </Main>
-      <Footer>
-        <span>Copyright &copy; 2022 Sanghyeok Park. All rights reserved.</span>
-      </Footer>
+      <Footer />
     </Container>
   );
 }
