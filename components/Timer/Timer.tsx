@@ -7,7 +7,7 @@ const Container = styled.div`
   position: absolute;
 
   right: 60px;
-  bottom: 60px;
+  bottom: 0px;
 `;
 
 const TimeText = styled.div<{ onZoom: boolean }>`
