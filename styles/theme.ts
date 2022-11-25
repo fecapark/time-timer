@@ -6,7 +6,7 @@ const background = {
 
 const font = {
   family: {
-    primary: "Roboto, sans-serif",
+    primary: "'Roboto', 'Noto Sans KR', sans-serif",
   },
   color: {
     primary: "#ffffff",

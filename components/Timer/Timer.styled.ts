@@ -5,6 +5,9 @@ export const Container = styled.div`
 
   right: 60px;
   bottom: 0px;
+
+  display: flex;
+  align-items: flex-end;
 `;
 
 export const TimeText = styled.div<{ onZoom: boolean }>`
@@ -26,7 +29,7 @@ export const TimeText = styled.div<{ onZoom: boolean }>`
   transition-delay: 0.3s;
 
   .row {
-    width: 100%;
+    width: 100px;
     display: flex;
     justify-content: flex-end;
 
@@ -34,5 +37,20 @@ export const TimeText = styled.div<{ onZoom: boolean }>`
     .sec {
       font-family: "Poppins", sans-serif;
     }
+  }
+`;
+
+export const TimerButtonContainer = styled.div`
+  font-size: 14px;
+
+  button {
+    all: unset;
+
+    border: 1px solid white;
+    padding: 0.8em 1.6em;
+    border-radius: 1000px;
+
+    cursor: pointer;
+    transform: translate3d(0, -10px, 0);
   }
 `;
