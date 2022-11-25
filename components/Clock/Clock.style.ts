@@ -39,6 +39,7 @@ export const ClockBackground = styled.div`
   height: 400px;
 
   border-radius: 50%;
+  background-color: #0000001e;
 `;
 
 export const ClockHandler = styled.div`
@@ -85,7 +86,7 @@ export const Graduation = styled.div<IGraduationStyleProps>`
   background-color: ${(props) => (props.accent ? "white" : "grey")};
 
   span {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
 
     position: absolute;

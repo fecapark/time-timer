@@ -38,7 +38,7 @@ export default function Clock() {
           rotate3d(0, 0, 1, ${degree}deg)
         `;
         backgroundRef.current!.style.background = `
-          conic-gradient(#00000000 ${degree}deg, #FA3141dd ${degree}deg)
+          conic-gradient(#0000001e ${degree}deg, #FA3141dd ${degree}deg)
         `;
       });
     };
@@ -123,7 +123,7 @@ export default function Clock() {
       <MainClock ref={moveAreaRef}>
         <ClockCenter>
           {range(60).map((i) => (
-            <Graduation rotate={i * 6} accent={i % 5 == 0} gap={16} key={i}>
+            <Graduation rotate={i * 6} accent={i % 5 == 0} gap={20} key={i}>
               {i % 5 == 0 ? <span>{i}</span> : null}
             </Graduation>
           ))}
