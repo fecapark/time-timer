@@ -17,6 +17,7 @@ import {
 import { Vector2 } from "../../utils/vector";
 import { useSetRecoilState } from "recoil";
 import { clockDegreeAtom, isClockPointerDownAtom } from "../../shared/atom";
+import { Theme } from "../../styles/theme";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
@@ -38,7 +39,7 @@ export default function Clock() {
           rotate3d(0, 0, 1, ${degree}deg)
         `;
         backgroundRef.current!.style.background = `
-          conic-gradient(#0000001e ${degree}deg, #FA3141dd ${degree}deg)
+          conic-gradient(#0000001e ${degree}deg, ${Theme.background.accent}dd ${degree}deg)
         `;
       });
     };

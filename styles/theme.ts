@@ -1,7 +1,8 @@
 const background = {
   primary: "#1f1f1f",
   secondary: "#28292a",
-  accent: "#004a77",
+  accent: "#FA3141",
+  hoverAccent: "#004a77",
 };
 
 const font = {
