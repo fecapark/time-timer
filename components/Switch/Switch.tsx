@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, MovingBall } from "./Switch.style";
 import { ISwitchProps } from "./Switch.type";
 
 export default function Switch({ defaultState, onOn, onOff }: ISwitchProps) {
   const [switchState, setSwitchState] = useState(defaultState);
+
   const onClick = () => {
     setSwitchState((prev) => {
-      if (prev === "on") {
-        onOff();
-        return "off";
-      }
-
-      onOn();
+      if (prev === "on") return "off";
       return "on";
     });
   };
+
+  useEffect(() => {
+    if (switchState === "on") onOn();
+    else onOff();
+  }, [switchState]);
 
   return (
     <Container state={switchState} onClick={onClick}>
