@@ -10,7 +10,7 @@ export default function Timer() {
 
   return (
     <Container>
-      <TimerButtonContainer>
+      <TimerButtonContainer onHide={isClockPointerDown}>
         <button>시작하기</button>
       </TimerButtonContainer>
       <TimeText onZoom={isClockPointerDown}>

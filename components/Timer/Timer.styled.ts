@@ -5,9 +5,6 @@ export const Container = styled.div`
 
   right: 60px;
   bottom: 0px;
-
-  display: flex;
-  align-items: flex-end;
 `;
 
 export const TimeText = styled.div<{ onZoom: boolean }>`
@@ -40,8 +37,9 @@ export const TimeText = styled.div<{ onZoom: boolean }>`
   }
 `;
 
-export const TimerButtonContainer = styled.div`
+export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
   font-size: 14px;
+  margin-bottom: 30px;
 
   button {
     all: unset;
@@ -50,7 +48,14 @@ export const TimerButtonContainer = styled.div`
     padding: 0.8em 1.6em;
     border-radius: 1000px;
 
+    opacity: ${(props) => (props.onHide ? "0" : "1")};
+    visibility: ${(props) => (props.onHide ? "hidden" : "visible")};
+    transform: translate3d(0, ${(props) => (props.onHide ? "-40" : "0")}px, 0);
+    transition: ${(props) =>
+      props.onHide
+        ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+        : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"};
+
     cursor: pointer;
-    transform: translate3d(0, -10px, 0);
   }
 `;
