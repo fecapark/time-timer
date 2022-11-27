@@ -15,8 +15,12 @@ import {
   range,
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
-import { useSetRecoilState } from "recoil";
-import { clockDegreeAtom, isClockPointerDownAtom } from "../../shared/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  clockDegreeAtom,
+  isClockPointerDownAtom,
+  isTimingNowAtom,
+} from "../../shared/atom";
 import { Theme } from "../../styles/theme";
 
 export default function Clock() {
@@ -24,6 +28,7 @@ export default function Clock() {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
 
+  const isTimingNow = useRecoilValue(isTimingNowAtom);
   const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
   const setClockDegree = useSetRecoilState(clockDegreeAtom);
 
@@ -48,6 +53,8 @@ export default function Clock() {
       canSet = true;
       stop = false;
 
+      if (isTimingNow) return;
+
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
       const degree = getRotationDegree(relPos);
@@ -58,6 +65,7 @@ export default function Clock() {
 
     const pointerMoveHandler = (e: PointerEvent) => {
       if (!canSet) return;
+      if (isTimingNow) return;
 
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
@@ -77,6 +85,8 @@ export default function Clock() {
 
     const pointerEndHandler = () => {
       if (!canSet) return;
+      if (isTimingNow) return;
+
       canSet = false;
       stop = false;
       setIsClockPointerDown(false);
@@ -117,7 +127,12 @@ export default function Clock() {
       );
       document.removeEventListener("pointerup", pointerEndHandler);
     };
-  }, [moveAreaRef.current, backgroundRef.current, handlerRef.current]);
+  }, [
+    moveAreaRef.current,
+    backgroundRef.current,
+    handlerRef.current,
+    isTimingNow,
+  ]);
 
   return (
     <Container>

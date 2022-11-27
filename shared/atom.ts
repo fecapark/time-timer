@@ -10,3 +10,8 @@ export const clockDegreeAtom = atom<number>({
   key: `clock-degree/${v1()}`,
   default: 360,
 });
+
+export const isTimingNowAtom = atom<boolean>({
+  key: `is-timing-now/${v1()}`,
+  default: false,
+});

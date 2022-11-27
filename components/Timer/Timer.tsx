@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { clockDegreeAtom, isClockPointerDownAtom } from "../../shared/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  clockDegreeAtom,
+  isClockPointerDownAtom,
+  isTimingNowAtom,
+} from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import {
   Container,
@@ -13,17 +17,25 @@ import { getTimeFromDegree } from "./Timer.util";
 
 export default function Timer() {
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
-
+  const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
+    useState(false);
+  const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
-  const clockDegree = useRecoilValue(clockDegreeAtom);
+  const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
   const { min, sec } = getTimeFromDegree(clockDegree);
 
   return (
     <Container>
-      <TimerButtonContainer onHide={isClockPointerDown}>
-        <button>시작하기</button>
+      <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
+        <button
+          onClick={() => {
+            setIsTimingNow((prev) => !prev);
+          }}
+        >
+          시작하기
+        </button>
       </TimerButtonContainer>
-      <OptionSwitchContainer onHide={isClockPointerDown}>
+      <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
         <OptionSwitchRow isOn={isAlarmSoundOn}>
           <span>종료시 알람 소리 켜기</span>
           <Switch
@@ -36,12 +48,20 @@ export default function Timer() {
             }}
           />
         </OptionSwitchRow>
-        {/* <OptionSwitchRow isOn={true}>
+        <OptionSwitchRow isOn={isSendPushNotificationOn || isTimingNow}>
           <span>종료시 푸쉬 알림 켜기</span>
-          <Switch defaultState="off" onOn={() => {}} onOff={() => {}} />
-        </OptionSwitchRow> */}
+          <Switch
+            defaultState="off"
+            onOn={() => {
+              setIsSendPushNotificationOn(true);
+            }}
+            onOff={() => {
+              setIsSendPushNotificationOn(false);
+            }}
+          />
+        </OptionSwitchRow>
       </OptionSwitchContainer>
-      <TimeText onZoom={isClockPointerDown}>
+      <TimeText onZoom={isClockPointerDown || isTimingNow}>
         <div className="row">
           <span className="min">{min}</span>
         </div>
