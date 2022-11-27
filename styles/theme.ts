@@ -14,7 +14,18 @@ const font = {
   },
 };
 
+const shareCSS = {
+  noDrag: `
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+  `,
+};
+
 export const Theme = {
+  shareCSS,
   background,
   font,
 };

@@ -13,6 +13,8 @@ export const Container = styled.div`
 `;
 
 export const TimeText = styled.div<{ onZoom: boolean }>`
+  ${({ theme }) => theme.shareCSS.noDrag};
+
   font-size: 60px;
   line-height: 60px;
   font-weight: 100;

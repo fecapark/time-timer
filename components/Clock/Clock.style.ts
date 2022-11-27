@@ -3,6 +3,8 @@ import { IGraduationStyleProps } from "./Clock.type";
 import { getRotatedPosition } from "./Clock.util";
 
 export const Container = styled.div`
+  ${({ theme }) => theme.shareCSS.noDrag};
+
   width: 100%;
   height: 100%;
 
@@ -10,11 +12,6 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
 `;
 
 export const MainClock = styled.div`

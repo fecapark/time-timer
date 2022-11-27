@@ -23,19 +23,14 @@ export const Container = styled.header<{ triggerHide: boolean }>`
   transition-delay: 0.4s;
 
   .logo {
+    ${({ theme }) => theme.shareCSS.noDrag};
+
     display: flex;
     gap: 2px;
 
     font-family: "Raleway", sans-serif;
     font-weight: 600;
     letter-spacing: 0.3px;
-
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
-
-    cursor: default;
 
     .word {
       padding: 3px 6px;
