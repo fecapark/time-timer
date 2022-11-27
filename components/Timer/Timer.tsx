@@ -88,7 +88,7 @@ export default function Timer() {
             }}
           />
         </OptionSwitchRow>
-        <OptionSwitchRow isOn={isSendPushNotificationOn || isTimingNow}>
+        <OptionSwitchRow isOn={isSendPushNotificationOn}>
           <span>종료시 푸쉬 알림 켜기</span>
           <Switch
             defaultState="off"
