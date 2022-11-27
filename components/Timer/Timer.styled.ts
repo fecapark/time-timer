@@ -55,10 +55,21 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
     opacity: ${(props) => (props.onHide ? "0" : "1")};
     visibility: ${(props) => (props.onHide ? "hidden" : "visible")};
     transform: translate3d(0, ${(props) => (props.onHide ? "-40" : "0")}px, 0);
-    transition: ${(props) =>
-      props.onHide
-        ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
-        : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"};
+    transition: all
+        ${(props) =>
+          props.onHide
+            ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
+            : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"},
+      border
+        ${(props) =>
+          props.onHide
+            ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+            : "0.2s cubic-bezier(0, 0, 0, 1)"},
+      background
+        ${(props) =>
+          props.onHide
+            ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+            : "0.2s cubic-bezier(0, 0, 0, 1)"};
 
     cursor: pointer;
 
@@ -67,6 +78,11 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
 
       border-color: grey;
       color: grey;
+    }
+
+    &:not(:disabled):hover {
+      border-color: ${({ theme }) => theme.background.hoverAccent};
+      background-color: ${({ theme }) => theme.background.hoverAccent};
     }
   }
 `;

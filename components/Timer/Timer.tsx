@@ -15,6 +15,8 @@ import {
 } from "./Timer.styled";
 import { getTimeFromDegree } from "./Timer.util";
 
+let timerInterval: NodeJS.Timer | null = null;
+
 export default function Timer() {
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
   const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
@@ -28,7 +30,7 @@ export default function Timer() {
     setIsTimingNow((prev) => !prev);
 
     let prevTime = new Date().getTime();
-    const timerInterval = setInterval(() => {
+    timerInterval = setInterval(() => {
       const curTime = new Date().getTime();
       const elapsed = (curTime - prevTime) / 1000;
       prevTime = curTime;
@@ -36,12 +38,23 @@ export default function Timer() {
       setClockDegree((prevDegree) => {
         const nextDegree = prevDegree + elapsed / 10;
         if (nextDegree > 360) {
-          clearInterval(timerInterval);
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
           return 360;
         }
         return nextDegree;
       });
     }, 1000);
+  };
+
+  const pauseTimer = () => {
+    if (!timerInterval) return;
+
+    clearInterval(timerInterval);
+    timerInterval = null;
+    setIsTimingNow(false);
   };
 
   useEffect(() => {
@@ -52,6 +65,11 @@ export default function Timer() {
 
   return (
     <Container>
+      <TimerButtonContainer onHide={!isTimingNow}>
+        <button disabled={!isTimingNow} onClick={pauseTimer}>
+          일시정지
+        </button>
+      </TimerButtonContainer>
       <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
         <button disabled={clockDegree >= 360} onClick={startTimer}>
           시작하기
