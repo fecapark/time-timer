@@ -61,6 +61,13 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
         : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"};
 
     cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+
+      border-color: grey;
+      color: grey;
+    }
   }
 `;
 

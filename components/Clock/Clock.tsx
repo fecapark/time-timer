@@ -23,6 +23,9 @@ import {
   isTimingNowAtom,
 } from "../../shared/atom";
 
+let canSetClockDegree = false;
+let isOverLimited = false;
+
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
@@ -35,68 +38,57 @@ export default function Clock() {
   useEffect(() => {
     if (!handlerRef.current) return;
     if (!backgroundRef.current) return;
-    if (!isTimingNow) return;
 
     updateClockShapeByDegree(
       clockDegree,
       handlerRef.current!,
       backgroundRef.current!
     );
-  }, [isTimingNow, clockDegree, handlerRef.current, backgroundRef.current]);
+  }, [clockDegree, handlerRef.current, backgroundRef.current]);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
-    if (!backgroundRef.current) return;
 
     const pointerDownHandler = (e: PointerEvent) => {
-      canSet = true;
-      stop = false;
+      canSetClockDegree = true;
+      isOverLimited = false;
 
       if (isTimingNow) return;
 
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
       const degree = getRotationDegree(relPos);
-      updateClockShapeByDegree(
-        degree,
-        handlerRef.current!,
-        backgroundRef.current!
-      );
+
       setIsClockPointerDown(true);
       setClockDegree(degree);
     };
 
     const pointerMoveHandler = (e: PointerEvent) => {
-      if (!canSet) return;
+      if (!canSetClockDegree) return;
       if (isTimingNow) return;
 
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-      let degree = stop ? 0 : getRotationDegree(relPos);
+      let degree = isOverLimited ? 0 : getRotationDegree(relPos);
 
       if (isRotatedOverOneRound(relPos, prevRelPos)) {
-        stop = true;
+        isOverLimited = true;
         degree = 0;
-      } else if (isMovedToRightWhenStoped(relPos, stop)) {
-        stop = false;
+      } else if (isMovedToRightWhenStoped(relPos, isOverLimited)) {
+        isOverLimited = false;
       }
 
       prevRelPos = relPos.copy();
-      updateClockShapeByDegree(
-        degree,
-        handlerRef.current!,
-        backgroundRef.current!
-      );
       setClockDegree(degree);
     };
 
     const pointerEndHandler = () => {
-      if (!canSet) return;
+      if (!canSetClockDegree) return;
       if (isTimingNow) return;
 
-      canSet = false;
-      stop = false;
+      canSetClockDegree = false;
+      isOverLimited = false;
       setIsClockPointerDown(false);
     };
 
@@ -108,9 +100,6 @@ export default function Clock() {
       moveAreaPos = new Vector2(ax, ay);
       centerPos = new Vector2(x + width / 2, y + height / 2);
     };
-
-    let canSet = false;
-    let stop = false;
 
     let centerPos = new Vector2(0, 0);
     let moveAreaPos = new Vector2(0, 0);
@@ -135,12 +124,7 @@ export default function Clock() {
       );
       document.removeEventListener("pointerup", pointerEndHandler);
     };
-  }, [
-    moveAreaRef.current,
-    backgroundRef.current,
-    handlerRef.current,
-    isTimingNow,
-  ]);
+  }, [moveAreaRef.current, handlerRef.current, isTimingNow]);
 
   return (
     <Container>

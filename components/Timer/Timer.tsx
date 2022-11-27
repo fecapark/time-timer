@@ -44,9 +44,6 @@ export default function Timer() {
     }, 1000);
   };
 
-  /*
-    Timing이 끝나면 실행되는 Effect.
-  */
   useEffect(() => {
     if (!isClockPointerDown && clockDegree >= 360) {
       setIsTimingNow(false);
@@ -56,7 +53,9 @@ export default function Timer() {
   return (
     <Container>
       <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
-        <button onClick={startTimer}>시작하기</button>
+        <button disabled={clockDegree >= 360} onClick={startTimer}>
+          시작하기
+        </button>
       </TimerButtonContainer>
       <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
         <OptionSwitchRow isOn={isAlarmSoundOn}>
