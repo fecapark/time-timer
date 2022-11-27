@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockDegreeAtom,
@@ -24,16 +24,35 @@ export default function Timer() {
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
   const { min, sec } = getTimeFromDegree(clockDegree);
 
+  const startTimer = () => {
+    setIsTimingNow((prev) => !prev);
+
+    let prevTime = new Date().getSeconds();
+    const timerInterval = setInterval(() => {
+      const curTime = new Date().getSeconds();
+      const elapsed = curTime - prevTime;
+      prevTime = curTime;
+      setClockDegree((prevDegree) => {
+        const nextDegree = prevDegree + elapsed / 10;
+        if (nextDegree > 360) {
+          clearInterval(timerInterval);
+          return 360;
+        }
+        return nextDegree;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isClockPointerDown && clockDegree >= 360) {
+      setIsTimingNow(false);
+    }
+  }, [clockDegree, isClockPointerDown]);
+
   return (
     <Container>
       <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
-        <button
-          onClick={() => {
-            setIsTimingNow((prev) => !prev);
-          }}
-        >
-          시작하기
-        </button>
+        <button onClick={startTimer}>시작하기</button>
       </TimerButtonContainer>
       <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
         <OptionSwitchRow isOn={isAlarmSoundOn}>
