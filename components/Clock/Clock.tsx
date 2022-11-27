@@ -85,7 +85,6 @@ export default function Clock() {
 
     const pointerEndHandler = () => {
       if (!canSetClockDegree) return;
-      if (isTimingNow) return;
 
       canSetClockDegree = false;
       isOverLimited = false;
