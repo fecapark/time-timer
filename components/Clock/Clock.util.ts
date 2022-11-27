@@ -1,3 +1,4 @@
+import { Theme } from "../../styles/theme";
 import { Vector2 } from "../../utils/vector";
 
 export function getRotatedPosition(radius: number, degree: number) {
@@ -48,4 +49,20 @@ export const isRotatedOverOneRound = (
 
 export const isMovedToRightWhenStoped = (pos: Vector2, isStopped: boolean) => {
   return isStopped && pos.x >= 0 && pos.y <= 0;
+};
+
+export const updateClockShapeByDegree = (
+  degree: number,
+  handler: HTMLElement,
+  background: HTMLElement
+) => {
+  requestAnimationFrame(() => {
+    handler.style.transform = `
+      translate3d(-50%, -50%, 0) 
+      rotate3d(0, 0, 1, ${degree}deg)
+    `;
+    background.style.background = `
+      conic-gradient(#0000001e ${degree}deg, ${Theme.background.accent}dd ${degree}deg)
+    `;
+  });
 };

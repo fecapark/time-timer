@@ -13,15 +13,15 @@ import {
   isMovedToRightWhenStoped,
   isRotatedOverOneRound,
   range,
+  updateClockShapeByDegree,
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   clockDegreeAtom,
   isClockPointerDownAtom,
   isTimingNowAtom,
 } from "../../shared/atom";
-import { Theme } from "../../styles/theme";
 
 export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
@@ -30,24 +30,24 @@ export default function Clock() {
 
   const isTimingNow = useRecoilValue(isTimingNowAtom);
   const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
-  const setClockDegree = useSetRecoilState(clockDegreeAtom);
+  const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
+
+  useEffect(() => {
+    if (!handlerRef.current) return;
+    if (!backgroundRef.current) return;
+    if (!isTimingNow) return;
+
+    updateClockShapeByDegree(
+      clockDegree,
+      handlerRef.current!,
+      backgroundRef.current!
+    );
+  }, [isTimingNow, clockDegree, handlerRef.current, backgroundRef.current]);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
     if (!backgroundRef.current) return;
-
-    const updateClockShapeByDegree = (degree: number) => {
-      requestAnimationFrame(() => {
-        handlerRef.current!.style.transform = `
-          translate3d(-50%, -50%, 0) 
-          rotate3d(0, 0, 1, ${degree}deg)
-        `;
-        backgroundRef.current!.style.background = `
-          conic-gradient(#0000001e ${degree}deg, ${Theme.background.accent}dd ${degree}deg)
-        `;
-      });
-    };
 
     const pointerDownHandler = (e: PointerEvent) => {
       canSet = true;
@@ -58,7 +58,11 @@ export default function Clock() {
       const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
       const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
       const degree = getRotationDegree(relPos);
-      updateClockShapeByDegree(degree);
+      updateClockShapeByDegree(
+        degree,
+        handlerRef.current!,
+        backgroundRef.current!
+      );
       setIsClockPointerDown(true);
       setClockDegree(degree);
     };
@@ -79,7 +83,11 @@ export default function Clock() {
       }
 
       prevRelPos = relPos.copy();
-      updateClockShapeByDegree(degree);
+      updateClockShapeByDegree(
+        degree,
+        handlerRef.current!,
+        backgroundRef.current!
+      );
       setClockDegree(degree);
     };
 

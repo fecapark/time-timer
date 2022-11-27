@@ -27,11 +27,12 @@ export default function Timer() {
   const startTimer = () => {
     setIsTimingNow((prev) => !prev);
 
-    let prevTime = new Date().getSeconds();
+    let prevTime = new Date().getTime();
     const timerInterval = setInterval(() => {
-      const curTime = new Date().getSeconds();
-      const elapsed = curTime - prevTime;
+      const curTime = new Date().getTime();
+      const elapsed = (curTime - prevTime) / 1000;
       prevTime = curTime;
+
       setClockDegree((prevDegree) => {
         const nextDegree = prevDegree + elapsed / 10;
         if (nextDegree > 360) {
@@ -43,6 +44,9 @@ export default function Timer() {
     }, 1000);
   };
 
+  /*
+    Timing이 끝나면 실행되는 Effect.
+  */
   useEffect(() => {
     if (!isClockPointerDown && clockDegree >= 360) {
       setIsTimingNow(false);
