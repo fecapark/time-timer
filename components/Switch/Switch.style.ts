@@ -22,6 +22,10 @@ export const MovingBall = styled.div<IStyleProps>`
   height: 20px;
   border-radius: 50%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
   transform: translate3d(
       ${(props) =>
@@ -31,4 +35,9 @@ export const MovingBall = styled.div<IStyleProps>`
     )
     scale(${(props) => (props.state === "on" ? "1" : "0.75")});
   background-color: ${(props) => (props.state === "on" ? "white" : "grey")};
+
+  svg {
+    visibility: ${(props) => (props.state === "on" ? "visible" : "hidden")};
+    color: #212121;
+  }
 `;
