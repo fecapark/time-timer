@@ -50,6 +50,8 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
   button {
     all: unset;
 
+    ${({ theme }) => theme.shareCSS.noDrag};
+
     border: 2px solid white;
     padding: 0.8em 1.6em;
     border-radius: 1000px;
