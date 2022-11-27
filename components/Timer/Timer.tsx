@@ -24,6 +24,7 @@ export default function Timer() {
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
+
   const { min, sec } = getTimeFromDegree(clockDegree);
 
   const startTimer = () => {
@@ -72,7 +73,7 @@ export default function Timer() {
       </TimerButtonContainer>
       <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
         <button disabled={clockDegree >= 360} onClick={startTimer}>
-          시작하기
+          {clockDegree >= 360 ? "시간을 설정해주세요" : "집중 시작하기"}
         </button>
       </TimerButtonContainer>
       <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
