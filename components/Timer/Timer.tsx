@@ -26,6 +26,7 @@ export default function Timer() {
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
 
   const { min, sec } = getTimeFromDegree(clockDegree);
+  const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
     setIsTimingNow((prev) => !prev);
@@ -59,7 +60,7 @@ export default function Timer() {
   };
 
   useEffect(() => {
-    if (!isClockPointerDown && clockDegree >= 360) {
+    if (!isClockPointerDown && isEmptyClockDegree) {
       setIsTimingNow(false);
     }
   }, [clockDegree, isClockPointerDown]);
@@ -72,8 +73,8 @@ export default function Timer() {
         </button>
       </TimerButtonContainer>
       <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
-        <button disabled={clockDegree >= 360} onClick={startTimer}>
-          {clockDegree >= 360 ? "시간을 설정해주세요" : "집중 시작하기"}
+        <button disabled={isEmptyClockDegree} onClick={startTimer}>
+          {isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
         </button>
       </TimerButtonContainer>
       <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
