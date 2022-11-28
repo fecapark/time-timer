@@ -72,7 +72,7 @@ export default function Timer() {
 
   useEffect(() => {
     if (!isClockPointerDown && isEmptyClockDegree) {
-      if (isSoundEffectLoaded) {
+      if (isSoundEffectLoaded && isAlarmSoundOn) {
         sampleAudio.play();
       }
       setIsTimingNow(false);
