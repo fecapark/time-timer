@@ -15,3 +15,13 @@ export const isTimingNowAtom = atom<boolean>({
   key: `is-timing-now/${v1()}`,
   default: false,
 });
+
+export const soundEffectLoadedAtom = atom<boolean>({
+  key: `sound-effect-loaded/${v1()}`,
+  default: false,
+});
+
+export const soundEffectAudiosAtom = atom<Record<string, HTMLAudioElement>>({
+  key: `sound-effect-audios/${v1()}`,
+  default: {},
+});

@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { loadAudios } from "../backend/loadAudios";
 import Clock from "../components/Clock/Clock";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import Timer from "../components/Timer/Timer";
+import { soundEffectAudiosAtom, soundEffectLoadedAtom } from "../shared/atom";
 
 const Container = styled.div`
   width: 100%;
@@ -24,6 +28,18 @@ const Main = styled.main`
 `;
 
 export default function Home() {
+  const setSoundEffectLoaded = useSetRecoilState(soundEffectLoadedAtom);
+  const setSoundEffectAudios = useSetRecoilState(soundEffectAudiosAtom);
+
+  useEffect(() => {
+    loadAudios({
+      onAllLoad: (audios) => {
+        setSoundEffectLoaded(true);
+        setSoundEffectAudios(audios);
+      },
+    });
+  }, []);
+
   return (
     <Container>
       <Header />

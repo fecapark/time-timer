@@ -2,26 +2,31 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { fbStorage } from "./firebaseConfig";
 
 interface ILoadAudios {
-  onAllLoad: (audios: Array<HTMLAudioElement>) => void;
+  onAllLoad: (audios: Record<string, HTMLAudioElement>) => void;
 }
 
-const audioFileNames = ["attention-bell.wav", "achievement-bell.wav"];
+const audioFileNames = [
+  "attention-bell",
+  // "achievement-bell"
+];
 
 export function loadAudios({ onAllLoad }: ILoadAudios) {
   function isAllLoaded() {
-    return loadedAudios.length >= audioFileNames.length;
+    return Object.keys(loadedAudios).length >= audioFileNames.length;
   }
 
-  const loadedAudios: Array<HTMLAudioElement> = [];
+  const loadedAudios: Record<string, HTMLAudioElement> = {};
 
   audioFileNames.forEach((aAudioFileName) => {
-    getDownloadURL(ref(fbStorage, `audio/${aAudioFileName}`)).then((url) => {
-      const audio = new Audio();
-      audio.src = url;
-      audio.onloadeddata = () => {
-        loadedAudios.push(audio);
-        if (isAllLoaded()) onAllLoad(loadedAudios);
-      };
-    });
+    getDownloadURL(ref(fbStorage, `audio/${aAudioFileName}.wav`)).then(
+      (url) => {
+        const audio = new Audio();
+        audio.src = url;
+        audio.onloadeddata = () => {
+          loadedAudios[aAudioFileName] = audio;
+          if (isAllLoaded()) onAllLoad(loadedAudios);
+        };
+      }
+    );
   });
 }

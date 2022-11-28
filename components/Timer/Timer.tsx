@@ -4,6 +4,8 @@ import {
   clockDegreeAtom,
   isClockPointerDownAtom,
   isTimingNowAtom,
+  soundEffectAudiosAtom,
+  soundEffectLoadedAtom,
 } from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import {
@@ -22,14 +24,23 @@ export default function Timer() {
   const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
     useState(false);
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
-  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
+  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
+  const isSoundEffectLoaded = useRecoilValue(soundEffectLoadedAtom);
+  const soundEffectAudios = useRecoilValue(soundEffectAudiosAtom);
 
   const { min, sec } = getTimeFromDegree(clockDegree);
   const isEmptyClockDegree = clockDegree >= 360;
 
+  const sampleAudio = Object.values(soundEffectAudios)[0];
+  if (sampleAudio) sampleAudio.volume = 0;
+
   const startTimer = () => {
     setIsTimingNow((prev) => !prev);
+
+    if (isSoundEffectLoaded) {
+      sampleAudio.volume = 1;
+    }
 
     let prevTime = new Date().getTime();
     timerInterval = setInterval(() => {
@@ -61,6 +72,9 @@ export default function Timer() {
 
   useEffect(() => {
     if (!isClockPointerDown && isEmptyClockDegree) {
+      if (isSoundEffectLoaded) {
+        sampleAudio.play();
+      }
       setIsTimingNow(false);
     }
   }, [clockDegree, isClockPointerDown]);
