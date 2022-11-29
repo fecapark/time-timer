@@ -47,6 +47,7 @@ export default function Home() {
 
   useEffect(() => {
     async function token() {
+      console.log("#0 Is token async function executed?");
       const tk = await getMessagingToken();
       console.log("messaging token: ", tk);
     }
