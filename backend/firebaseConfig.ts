@@ -1,9 +1,8 @@
-import { initializeApp, FirebaseOptions } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import firebase from "firebase";
 
-const firebaseConfig: FirebaseOptions = {
-  storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_URL,
+const firebaseConfig = {
+  storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
 };
 
-export const fbApp = initializeApp(firebaseConfig);
-export const fbStorage = getStorage(fbApp);
+export const fbApp = firebase.initializeApp(firebaseConfig);
+export const fbStorage = firebase.storage();

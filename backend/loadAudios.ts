@@ -1,4 +1,3 @@
-import { getDownloadURL, ref } from "firebase/storage";
 import { fbStorage } from "./firebaseConfig";
 
 interface ILoadAudios {
@@ -16,17 +15,19 @@ export function loadAudios({ onAllLoad }: ILoadAudios) {
   }
 
   const loadedAudios: Record<string, HTMLAudioElement> = {};
+  const fbStorageRef = fbStorage.ref();
 
   audioFileNames.forEach((aAudioFileName) => {
-    getDownloadURL(ref(fbStorage, `audio/${aAudioFileName}.wav`)).then(
-      (url) => {
+    fbStorageRef
+      .child(`audio/${aAudioFileName}.wav`)
+      .getDownloadURL()
+      .then((url) => {
         const audio = new Audio();
         audio.src = url;
         audio.onloadeddata = () => {
           loadedAudios[aAudioFileName] = audio;
           if (isAllLoaded()) onAllLoad(loadedAudios);
         };
-      }
-    );
+      });
   });
 }
