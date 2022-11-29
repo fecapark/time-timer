@@ -33,18 +33,25 @@ export default function Home() {
   const setSoundEffectAudios = useSetRecoilState(soundEffectAudiosAtom);
 
   useEffect(() => {
+    console.log("start get audios from firebase storage");
+
     loadAudios({
       onAllLoad: (audios) => {
         setSoundEffectLoaded(true);
         setSoundEffectAudios(audios);
+
+        console.log("audio src: ", Object.values(audios)[0].src);
       },
     });
   }, []);
 
   useEffect(() => {
     async function token() {
-      console.log(await getMessagingToken());
+      const tk = await getMessagingToken();
+      console.log("messaging token: ", tk);
     }
+
+    console.log("start get messaging token effect");
     token();
   }, []);
 
