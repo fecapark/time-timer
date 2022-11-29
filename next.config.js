@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
+const withPWA = require("next-pwa")({ dest: "public" });
 const isDevServer = process.env.NODE_ENV === "development";
 
 const nextConfig = {
@@ -8,4 +9,4 @@ const nextConfig = {
   basePath: isDevServer ? "/absproxy/3000" : "",
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);

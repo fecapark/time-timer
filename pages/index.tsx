@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
+import { getMessagingToken } from "../backend/getMessagingToken";
 import { loadAudios } from "../backend/loadAudios";
 import Clock from "../components/Clock/Clock";
 import Footer from "../components/Layouts/Footer/Footer";
@@ -38,6 +39,13 @@ export default function Home() {
         setSoundEffectAudios(audios);
       },
     });
+  }, []);
+
+  useEffect(() => {
+    async function token() {
+      console.log(await getMessagingToken());
+    }
+    token();
   }, []);
 
   return (
