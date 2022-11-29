@@ -9,6 +9,9 @@ import Header from "../components/Layouts/Header/Header";
 import Timer from "../components/Timer/Timer";
 import { soundEffectAudiosAtom, soundEffectLoadedAtom } from "../shared/atom";
 
+import firebase from "firebase/app";
+import "firebase/messaging";
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -48,8 +51,17 @@ export default function Home() {
   useEffect(() => {
     async function token() {
       console.log("#0 Is token async function executed?");
-      const tk = await getMessagingToken();
-      console.log("messaging token: ", tk);
+      // const tk = await getMessagingToken();
+
+      const messaging = firebase.messaging();
+
+      console.log("#1 messaging obj: ", messaging);
+
+      const token = await messaging.getToken({
+        vapidKey: process.env.NEXT_PUBLIC_FB_MESSAGING_KEY,
+      });
+
+      console.log("#2 messaging token: ", token);
     }
 
     console.log("start get messaging token effect");
