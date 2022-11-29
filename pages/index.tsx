@@ -11,6 +11,7 @@ import { soundEffectAudiosAtom, soundEffectLoadedAtom } from "../shared/atom";
 
 import firebase from "firebase/app";
 import "firebase/messaging";
+import { firebaseConfig } from "../backend/firebaseConfig";
 
 const Container = styled.div`
   width: 100%;
@@ -53,6 +54,9 @@ export default function Home() {
       console.log("#0 Is token async function executed?");
       // const tk = await getMessagingToken();
 
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
       const messaging = firebase.messaging();
 
       console.log("#1 messaging obj: ", messaging);
