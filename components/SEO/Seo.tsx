@@ -3,8 +3,13 @@ import Script from "next/script";
 function Eruda() {
   return (
     <>
-      <Script src="//cdn.jsdelivr.net/npm/eruda" strategy="beforeInteractive" />
       <Script
+        id="eruda-script"
+        src="//cdn.jsdelivr.net/npm/eruda"
+        strategy="beforeInteractive"
+      />
+      <Script
+        id="eruda-init"
         type="text/javascript"
         dangerouslySetInnerHTML={{ __html: `eruda.init();` }}
       ></Script>
