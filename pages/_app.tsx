@@ -21,11 +21,11 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     async function requestNotificationPermission() {
       const permission = await Notification.requestPermission();
-      if (permission === "granted") setIsNotificationPermissionGranted(true);
+      setIsNotificationPermissionGranted(permission === "granted");
     }
 
     if (!Notification) setIsNotificationSupportEnvironment(false);
-    requestNotificationPermission();
+    else requestNotificationPermission();
   }, []);
 
   return (
