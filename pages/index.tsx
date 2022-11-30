@@ -7,7 +7,11 @@ import Clock from "../components/Clock/Clock";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import Timer from "../components/Timer/Timer";
-import { soundEffectAudiosAtom, soundEffectLoadedAtom } from "../shared/atom";
+import {
+  isNotificationSupportEnvironmentAtom,
+  soundEffectAudiosAtom,
+  soundEffectLoadedAtom,
+} from "../shared/atom";
 
 import firebase from "firebase/app";
 import "firebase/messaging";

@@ -25,3 +25,13 @@ export const soundEffectAudiosAtom = atom<Record<string, HTMLAudioElement>>({
   key: `sound-effect-audios/${v1()}`,
   default: {},
 });
+
+export const isNotificationSupportEnvironmentAtom = atom<boolean>({
+  key: `is-notification-support-environment/${v1()}`,
+  default: true,
+});
+
+export const isNotificationPermissionGranted = atom<boolean>({
+  key: `is-notification-permission-granted/${v1()}`,
+  default: false,
+});
