@@ -8,6 +8,7 @@ import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import Timer from "../components/Timer/Timer";
 import {
+  isNotificationPermissionGranted,
   isNotificationSupportEnvironmentAtom,
   soundEffectAudiosAtom,
   soundEffectLoadedAtom,
@@ -39,6 +40,31 @@ const Main = styled.main`
 export default function Home() {
   const setSoundEffectLoaded = useSetRecoilState(soundEffectLoadedAtom);
   const setSoundEffectAudios = useSetRecoilState(soundEffectAudiosAtom);
+  const setIsNotificationSupportEnvironment = useSetRecoilState(
+    isNotificationSupportEnvironmentAtom
+  );
+  const setIsNotificationPermissionGranted = useSetRecoilState(
+    isNotificationPermissionGranted
+  );
+
+  useEffect(() => {
+    function isClientSupportNotification() {
+      return (
+        "Notification" in window &&
+        "serviceWorker" in navigator &&
+        "PushManager" in window
+      );
+    }
+
+    async function requestNotificationPermission() {
+      const permission = await Notification.requestPermission();
+      setIsNotificationPermissionGranted(permission === "granted");
+    }
+
+    if (!isClientSupportNotification())
+      setIsNotificationSupportEnvironment(false);
+    else requestNotificationPermission();
+  }, []);
 
   useEffect(() => {
     console.log("start get audios from firebase storage");
@@ -56,19 +82,11 @@ export default function Home() {
   useEffect(() => {
     async function token() {
       console.log("#0 Is token async function executed?");
-      // const tk = await getMessagingToken();
-
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
       const messaging = firebase.messaging();
-
       console.log("#1 messaging obj: ", messaging);
-
       const token = await messaging.getToken({
         vapidKey: process.env.NEXT_PUBLIC_FB_MESSAGING_KEY,
       });
-
       console.log("#2 messaging token: ", token);
     }
 

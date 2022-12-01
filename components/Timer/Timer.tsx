@@ -81,17 +81,17 @@ export default function Timer() {
 
   return (
     <Container>
-      <TimerButtonContainer onHide={!isTimingNow}>
+      <TimerButtonContainer triggerHide={!isTimingNow}>
         <button disabled={!isTimingNow} onClick={pauseTimer}>
           일시정지
         </button>
       </TimerButtonContainer>
-      <TimerButtonContainer onHide={isClockPointerDown || isTimingNow}>
+      <TimerButtonContainer triggerHide={isClockPointerDown || isTimingNow}>
         <button disabled={isEmptyClockDegree} onClick={startTimer}>
           {isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
         </button>
       </TimerButtonContainer>
-      <OptionSwitchContainer onHide={isClockPointerDown || isTimingNow}>
+      <OptionSwitchContainer triggerHide={isClockPointerDown || isTimingNow}>
         <OptionSwitchRow isOn={isAlarmSoundOn}>
           <span>종료시 알람 소리 켜기</span>
           <Switch
@@ -117,7 +117,7 @@ export default function Timer() {
           />
         </OptionSwitchRow>
       </OptionSwitchContainer>
-      <TimeText onZoom={isClockPointerDown || isTimingNow}>
+      <TimeText triggerZoom={isClockPointerDown || isTimingNow}>
         <div className="row">
           <span className="min">{min}</span>
         </div>

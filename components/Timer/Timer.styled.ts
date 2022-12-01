@@ -12,7 +12,7 @@ export const Container = styled.div`
   bottom: 0px;
 `;
 
-export const TimeText = styled.div<{ onZoom: boolean }>`
+export const TimeText = styled.div<{ triggerZoom: boolean }>`
   ${({ theme }) => theme.shareCSS.noDrag};
 
   font-size: 60px;
@@ -24,10 +24,10 @@ export const TimeText = styled.div<{ onZoom: boolean }>`
   align-items: flex-end;
 
   transform-origin: right bottom;
-  transform: scale(${(props) => (props.onZoom ? 2.5 : 1)});
+  transform: scale(${(props) => (props.triggerZoom ? 2.5 : 1)});
   transition: transform
     ${(props) =>
-      props.onZoom
+      props.triggerZoom
         ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
         : "0.15s cubic-bezier(0, 0, 0, 1)"};
   transition-delay: 0.3s;
@@ -44,7 +44,7 @@ export const TimeText = styled.div<{ onZoom: boolean }>`
   }
 `;
 
-export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
+export const TimerButtonContainer = styled.div<{ triggerHide: boolean }>`
   font-size: 14px;
 
   button {
@@ -56,22 +56,26 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
     padding: 0.8em 1.6em;
     border-radius: 1000px;
 
-    opacity: ${(props) => (props.onHide ? "0" : "1")};
-    visibility: ${(props) => (props.onHide ? "hidden" : "visible")};
-    transform: translate3d(0, ${(props) => (props.onHide ? "-40" : "0")}px, 0);
+    opacity: ${(props) => (props.triggerHide ? "0" : "1")};
+    visibility: ${(props) => (props.triggerHide ? "hidden" : "visible")};
+    transform: translate3d(
+      0,
+      ${(props) => (props.triggerHide ? "-40" : "0")}px,
+      0
+    );
     transition: all
         ${(props) =>
-          props.onHide
+          props.triggerHide
             ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
             : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"},
       border
         ${(props) =>
-          props.onHide
+          props.triggerHide
             ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
             : "0.2s cubic-bezier(0, 0, 0, 1)"},
       background
         ${(props) =>
-          props.onHide
+          props.triggerHide
             ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
             : "0.2s cubic-bezier(0, 0, 0, 1)"};
 
@@ -91,17 +95,21 @@ export const TimerButtonContainer = styled.div<{ onHide: boolean }>`
   }
 `;
 
-export const OptionSwitchContainer = styled.div<{ onHide: boolean }>`
+export const OptionSwitchContainer = styled.div<{ triggerHide: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
 
-  opacity: ${(props) => (props.onHide ? "0" : "1")};
-  visibility: ${(props) => (props.onHide ? "hidden" : "visible")};
-  transform: translate3d(0, ${(props) => (props.onHide ? "-20" : "0")}px, 0);
+  opacity: ${(props) => (props.triggerHide ? "0" : "1")};
+  visibility: ${(props) => (props.triggerHide ? "hidden" : "visible")};
+  transform: translate3d(
+    0,
+    ${(props) => (props.triggerHide ? "-20" : "0")}px,
+    0
+  );
   transition: ${(props) =>
-    props.onHide
+    props.triggerHide
       ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
       : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"};
 `;
