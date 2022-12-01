@@ -67,31 +67,23 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    console.log("start get audios from firebase storage");
-
     loadAudios({
       onAllLoad: (audios) => {
         setSoundEffectLoaded(true);
         setSoundEffectAudios(audios);
-
-        console.log("audio src: ", Object.values(audios)[0].src);
       },
     });
   }, []);
 
   useEffect(() => {
-    async function token() {
-      console.log("#0 Is token async function executed?");
+    async function getToken() {
       const messaging = firebase.messaging();
-      console.log("#1 messaging obj: ", messaging);
       const token = await messaging.getToken({
         vapidKey: process.env.NEXT_PUBLIC_FB_MESSAGING_KEY,
       });
-      console.log("#2 messaging token: ", token);
     }
 
-    console.log("start get messaging token effect");
-    token();
+    getToken();
   }, []);
 
   return (

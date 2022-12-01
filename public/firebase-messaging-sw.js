@@ -2,9 +2,10 @@ importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
 importScripts(
   "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
 );
-// importScripts("https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js");
-// importScripts("https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging.js");
 
+/*
+These keys are secured by firebase security rules
+*/
 firebase.initializeApp({
   apiKey: "AIzaSyD21vD66EKhrhmn_tMSYDDGTFmSVgdyk1o",
   projectId: "time-timer-2dfc2",
