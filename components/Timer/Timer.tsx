@@ -109,18 +109,20 @@ export default function Timer() {
 
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
-    const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
-
     if (!isTimingEnd) return;
-
-    if (canPlayAudio) {
-      sampleAudio.volume = 1;
-      sampleAudio.play();
-      console.log("play");
-    }
 
     setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
+
+  useEffect(() => {
+    const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
+
+    if (!isTimingNow && canPlayAudio) {
+      sampleAudio.volume = 1;
+      sampleAudio.currentTime = 0;
+      sampleAudio.play();
+    }
+  }, [isTimingNow]);
 
   return (
     <Container>
