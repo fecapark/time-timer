@@ -18,6 +18,7 @@ import {
 import { getTimeFromDegree } from "./Timer.util";
 
 let timerInterval: NodeJS.Timer | null = null;
+let audio: HTMLAudioElement | null = null;
 
 export default function Timer() {
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
@@ -32,14 +33,19 @@ export default function Timer() {
   const { min, sec } = getTimeFromDegree(clockDegree);
   const isEmptyClockDegree = clockDegree >= 360;
 
-  const sampleAudio = Object.values(soundEffectAudios)[0];
-  if (sampleAudio) sampleAudio.volume = 0;
+  if (!audio) {
+    const sample = Object.values(soundEffectAudios)[0];
+    if (sample) {
+      audio = sample;
+      audio.volume = 0;
+    }
+  }
 
   const startTimer = () => {
     setIsTimingNow((prev) => !prev);
 
-    if (isSoundEffectLoaded) {
-      sampleAudio.volume = 1;
+    if (audio && isSoundEffectLoaded) {
+      audio.volume = 1;
     }
 
     let prevTime = new Date().getTime();
@@ -72,12 +78,21 @@ export default function Timer() {
 
   useEffect(() => {
     if (!isClockPointerDown && isEmptyClockDegree) {
-      if (isSoundEffectLoaded && isAlarmSoundOn) {
-        sampleAudio.play();
-      }
       setIsTimingNow(false);
     }
   }, [clockDegree, isClockPointerDown]);
+
+  useEffect(() => {
+    if (
+      !isTimingNow &&
+      isEmptyClockDegree &&
+      isSoundEffectLoaded &&
+      isAlarmSoundOn
+    ) {
+      console.log(audio!.volume);
+      audio!.play();
+    }
+  }, [isTimingNow]);
 
   return (
     <Container>

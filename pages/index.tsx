@@ -47,24 +47,24 @@ export default function Home() {
     isNotificationPermissionGranted
   );
 
-  useEffect(() => {
-    function isClientSupportNotification() {
-      return (
-        "Notification" in window &&
-        "serviceWorker" in navigator &&
-        "PushManager" in window
-      );
-    }
+  // useEffect(() => {
+  //   function isClientSupportNotification() {
+  //     return (
+  //       "Notification" in window &&
+  //       "serviceWorker" in navigator &&
+  //       "PushManager" in window
+  //     );
+  //   }
 
-    async function requestNotificationPermission() {
-      const permission = await Notification.requestPermission();
-      setIsNotificationPermissionGranted(permission === "granted");
-    }
+  //   async function requestNotificationPermission() {
+  //     const permission = await Notification.requestPermission();
+  //     setIsNotificationPermissionGranted(permission === "granted");
+  //   }
 
-    if (!isClientSupportNotification())
-      setIsNotificationSupportEnvironment(false);
-    else requestNotificationPermission();
-  }, []);
+  //   if (!isClientSupportNotification())
+  //     setIsNotificationSupportEnvironment(false);
+  //   else requestNotificationPermission();
+  // }, []);
 
   useEffect(() => {
     loadAudios({
@@ -75,16 +75,16 @@ export default function Home() {
     });
   }, []);
 
-  useEffect(() => {
-    async function getToken() {
-      const messaging = firebase.messaging();
-      const token = await messaging.getToken({
-        vapidKey: process.env.NEXT_PUBLIC_FB_MESSAGING_KEY,
-      });
-    }
+  // useEffect(() => {
+  //   async function getToken() {
+  //     const messaging = firebase.messaging();
+  //     const token = await messaging.getToken({
+  //       vapidKey: process.env.NEXT_PUBLIC_FB_MESSAGING_KEY,
+  //     });
+  //   }
 
-    getToken();
-  }, []);
+  //   getToken();
+  // }, []);
 
   return (
     <Container>
