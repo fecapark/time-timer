@@ -72,7 +72,7 @@ define(['./workbox-327c579b'], (function (workbox) { 'use strict';
   importScripts();
   self.skipWaiting();
   workbox.clientsClaim();
-  workbox.registerRoute("/absproxy/3000", new workbox.NetworkFirst({
+  workbox.registerRoute("/", new workbox.NetworkFirst({
     "cacheName": "start-url",
     plugins: [{
       cacheWillUpdate: async ({
