@@ -1,8 +1,11 @@
+import { requestToBodyStream } from "next/dist/server/body-streams";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   clockDegreeAtom,
   isClockPointerDownAtom,
+  isNotificationPermissionGranted,
+  isNotificationSupportEnvironmentAtom,
   isTimingNowAtom,
   soundEffectAudiosAtom,
   soundEffectLoadedAtom,
@@ -28,6 +31,12 @@ export default function Timer() {
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const isSoundEffectLoaded = useRecoilValue(soundEffectLoadedAtom);
   const soundEffectAudios = useRecoilValue(soundEffectAudiosAtom);
+  const setIsNotificationSupportEnvironment = useSetRecoilState(
+    isNotificationSupportEnvironmentAtom
+  );
+  const setIsNotificationPermissionGranted = useSetRecoilState(
+    isNotificationPermissionGranted
+  );
 
   const { min, sec } = getTimeFromDegree(clockDegree);
   const isEmptyClockDegree = clockDegree >= 360;
@@ -70,6 +79,29 @@ export default function Timer() {
     setIsTimingNow(false);
   };
 
+  const requestNotificationPermission = () => {
+    const isClientSupportNotification = () => {
+      return (
+        "Notification" in window &&
+        "serviceWorker" in navigator &&
+        "PushManager" in window
+      );
+    };
+
+    const request = async () => {
+      const permission = await Notification.requestPermission();
+      setIsNotificationPermissionGranted(permission === "granted");
+      return permission === "granted";
+    };
+
+    if (!isClientSupportNotification()) {
+      setIsNotificationSupportEnvironment(false);
+      return;
+    }
+
+    return request();
+  };
+
   useEffect(() => {
     if (!isClockPointerDown && isEmptyClockDegree) {
       if (isSoundEffectLoaded && isAlarmSoundOn) {
@@ -108,8 +140,15 @@ export default function Timer() {
           <span>종료시 푸쉬 알림 켜기</span>
           <Switch
             defaultState="off"
-            onOn={() => {
-              setIsSendPushNotificationOn(true);
+            onOn={async (setSwitchState) => {
+              const isPermissionGranted =
+                await requestNotificationPermission()!;
+
+              if (!isPermissionGranted) {
+                setSwitchState("off");
+              } else {
+                setIsSendPushNotificationOn(true);
+              }
             }}
             onOff={() => {
               setIsSendPushNotificationOn(false);
