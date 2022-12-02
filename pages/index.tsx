@@ -40,12 +40,6 @@ const Main = styled.main`
 export default function Home() {
   const setSoundEffectLoaded = useSetRecoilState(soundEffectLoadedAtom);
   const setSoundEffectAudios = useSetRecoilState(soundEffectAudiosAtom);
-  const setIsNotificationSupportEnvironment = useSetRecoilState(
-    isNotificationSupportEnvironmentAtom
-  );
-  const setIsNotificationPermissionGranted = useSetRecoilState(
-    isNotificationPermissionGranted
-  );
 
   // useEffect(() => {
   //   function isClientSupportNotification() {

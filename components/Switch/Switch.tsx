@@ -14,8 +14,8 @@ export default function Switch({ defaultState, onOn, onOff }: ISwitchProps) {
   };
 
   useEffect(() => {
-    if (switchState === "on") onOn();
-    else onOff();
+    if (switchState === "on") onOn(setSwitchState);
+    else onOff(setSwitchState);
   }, [switchState]);
 
   return (

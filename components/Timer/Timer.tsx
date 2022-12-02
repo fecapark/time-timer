@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   clockDegreeAtom,
   isClockPointerDownAtom,
+  isNotificationPermissionGranted,
+  isNotificationSupportEnvironmentAtom,
   isTimingNowAtom,
   soundEffectAudiosAtom,
   soundEffectLoadedAtom,
@@ -29,19 +31,44 @@ export default function Timer() {
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const isSoundEffectLoaded = useRecoilValue(soundEffectLoadedAtom);
   const soundEffectAudios = useRecoilValue(soundEffectAudiosAtom);
+  const setIsNotificationSupportEnvironment = useSetRecoilState(
+    isNotificationSupportEnvironmentAtom
+  );
+  const setIsNotificationPermissionGranted = useSetRecoilState(
+    isNotificationPermissionGranted
+  );
 
   const { min, sec } = getTimeFromDegree(clockDegree);
   const isEmptyClockDegree = clockDegree >= 360;
 
   if (!audio) {
-    const sample = Object.values(soundEffectAudios)[0];
-    if (sample) {
-      audio = sample;
+    const sampleAudio = Object.values(soundEffectAudios)[0];
+    if (sampleAudio) {
+      audio = sampleAudio;
       audio.volume = 0;
     }
   }
 
   const startTimer = () => {
+    const getNextDegree = (prevDegree: number, elapsedTime: number) => {
+      const result = prevDegree + elapsedTime / 10;
+      const degreeOvered = result > 360;
+
+      if (degreeOvered && timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      return Math.min(360, result);
+    };
+
+    const onInterval = () => {
+      const curTime = new Date().getTime();
+      const elapsed = (curTime - prevTime) / 1000;
+      setClockDegree((prevDegree) => getNextDegree(prevDegree, elapsed));
+      prevTime = curTime;
+    };
+
     setIsTimingNow((prev) => !prev);
 
     if (audio && isSoundEffectLoaded) {
@@ -49,23 +76,7 @@ export default function Timer() {
     }
 
     let prevTime = new Date().getTime();
-    timerInterval = setInterval(() => {
-      const curTime = new Date().getTime();
-      const elapsed = (curTime - prevTime) / 1000;
-      prevTime = curTime;
-
-      setClockDegree((prevDegree) => {
-        const nextDegree = prevDegree + elapsed / 10;
-        if (nextDegree > 360) {
-          if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-          }
-          return 360;
-        }
-        return nextDegree;
-      });
-    }, 1000);
+    timerInterval = setInterval(onInterval, 1000);
   };
 
   const pauseTimer = () => {
@@ -76,20 +87,40 @@ export default function Timer() {
     setIsTimingNow(false);
   };
 
-  useEffect(() => {
-    if (!isClockPointerDown && isEmptyClockDegree) {
-      setIsTimingNow(false);
+  const requestNotificationPermission = () => {
+    const isClientSupportNotification = () => {
+      return (
+        "Notification" in window &&
+        "serviceWorker" in navigator &&
+        "PushManager" in window
+      );
+    };
+
+    const request = async () => {
+      const permission = await Notification.requestPermission();
+      setIsNotificationPermissionGranted(permission === "granted");
+      return permission === "granted";
+    };
+
+    if (!isClientSupportNotification()) {
+      setIsNotificationSupportEnvironment(false);
+      return;
     }
+
+    return request();
+  };
+
+  useEffect(() => {
+    const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
+    if (!isTimingEnd) return;
+
+    setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
 
   useEffect(() => {
-    if (
-      !isTimingNow &&
-      isEmptyClockDegree &&
-      isSoundEffectLoaded &&
-      isAlarmSoundOn
-    ) {
-      console.log(audio!.volume);
+    const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
+
+    if (!isTimingNow && isEmptyClockDegree && canPlayAudio) {
       audio!.play();
     }
   }, [isTimingNow]);
@@ -123,8 +154,15 @@ export default function Timer() {
           <span>종료시 푸쉬 알림 켜기</span>
           <Switch
             defaultState="off"
-            onOn={() => {
-              setIsSendPushNotificationOn(true);
+            onOn={async (setSwitchState) => {
+              const isPermissionGranted =
+                await requestNotificationPermission()!;
+
+              if (!isPermissionGranted) {
+                setSwitchState("off");
+              } else {
+                setIsSendPushNotificationOn(true);
+              }
             }}
             onOff={() => {
               setIsSendPushNotificationOn(false);
