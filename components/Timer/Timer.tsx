@@ -66,6 +66,7 @@ export default function Timer() {
     setIsTimingNow((prev) => !prev);
 
     if (isSoundEffectLoaded) {
+      console.log("pause but volume 1");
       sampleAudio.pause();
       sampleAudio.currentTime = 0;
       sampleAudio.volume = 1;
@@ -115,6 +116,7 @@ export default function Timer() {
     if (canPlayAudio) {
       sampleAudio.volume = 1;
       sampleAudio.play();
+      console.log("play");
     }
 
     setIsTimingNow(false);
