@@ -1,4 +1,3 @@
-import { requestToBodyStream } from "next/dist/server/body-streams";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
@@ -45,30 +44,35 @@ export default function Timer() {
   if (sampleAudio) sampleAudio.volume = 0;
 
   const startTimer = () => {
+    const getNextDegree = (prevDegree: number, elapsedTime: number) => {
+      const result = prevDegree + elapsedTime / 10;
+      const degreeOvered = result > 360;
+
+      if (degreeOvered && timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      return Math.min(360, result);
+    };
+
+    const onInterval = () => {
+      const curTime = new Date().getTime();
+      const elapsed = (curTime - prevTime) / 1000;
+      setClockDegree((prevDegree) => getNextDegree(prevDegree, elapsed));
+      prevTime = curTime;
+    };
+
     setIsTimingNow((prev) => !prev);
 
     if (isSoundEffectLoaded) {
+      sampleAudio.pause();
+      sampleAudio.currentTime = 0;
       sampleAudio.volume = 1;
     }
 
     let prevTime = new Date().getTime();
-    timerInterval = setInterval(() => {
-      const curTime = new Date().getTime();
-      const elapsed = (curTime - prevTime) / 1000;
-      prevTime = curTime;
-
-      setClockDegree((prevDegree) => {
-        const nextDegree = prevDegree + elapsed / 10;
-        if (nextDegree > 360) {
-          if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-          }
-          return 360;
-        }
-        return nextDegree;
-      });
-    }, 1000);
+    timerInterval = setInterval(onInterval, 1000);
   };
 
   const pauseTimer = () => {
@@ -103,12 +107,17 @@ export default function Timer() {
   };
 
   useEffect(() => {
-    if (!isClockPointerDown && isEmptyClockDegree) {
-      if (isSoundEffectLoaded && isAlarmSoundOn) {
-        sampleAudio.play();
-      }
-      setIsTimingNow(false);
+    const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
+    const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
+
+    if (!isTimingEnd) return;
+
+    if (canPlayAudio) {
+      sampleAudio.volume = 1;
+      sampleAudio.play();
     }
+
+    setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
 
   return (

@@ -8,7 +8,7 @@ export const isClockPointerDownAtom = atom<boolean>({
 
 export const clockDegreeAtom = atom<number>({
   key: `clock-degree/${v1()}`,
-  default: 360,
+  default: 359.8,
 });
 
 export const isTimingNowAtom = atom<boolean>({
