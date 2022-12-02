@@ -66,7 +66,6 @@ export default function Timer() {
     setIsTimingNow((prev) => !prev);
 
     if (isSoundEffectLoaded) {
-      console.log("pause but volume 1");
       sampleAudio.pause();
       sampleAudio.currentTime = 0;
       sampleAudio.volume = 1;
@@ -117,7 +116,7 @@ export default function Timer() {
   useEffect(() => {
     const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
 
-    if (!isTimingNow && canPlayAudio) {
+    if (!isTimingNow && isEmptyClockDegree && canPlayAudio) {
       sampleAudio.volume = 1;
       sampleAudio.currentTime = 0;
       sampleAudio.play();
