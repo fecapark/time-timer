@@ -19,6 +19,8 @@ import {
 } from "./Timer.styled";
 import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
 import { getMessagingToken } from "../../backend/getMessagingToken";
+import firebase from "firebase/app";
+import "firebase/messaging";
 
 let timerInterval: NodeJS.Timer | null = null;
 let audio: HTMLAudioElement | null = null;
@@ -138,7 +140,12 @@ export default function Timer() {
 
               if (requestPermissionResult === "granted") {
                 setIsNotificationPermissionGranted(true);
-                console.log(await getMessagingToken());
+                const token = await getMessagingToken();
+
+                firebase.messaging().onMessage((payload) => {
+                  alert("messaged!");
+                  console.log(payload);
+                });
               } else if (requestPermissionResult === "denied") {
                 setSwitchState("off");
               } else {
