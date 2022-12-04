@@ -10,8 +10,7 @@ import Timer from "../components/Timer/Timer";
 import {
   isNotificationPermissionGranted,
   isNotificationSupportEnvironmentAtom,
-  soundEffectAudiosAtom,
-  soundEffectLoadedAtom,
+  soundEffectAudioAtom,
 } from "../shared/atom";
 
 import firebase from "firebase/app";
@@ -38,8 +37,7 @@ const Main = styled.main`
 `;
 
 export default function Home() {
-  const setSoundEffectLoaded = useSetRecoilState(soundEffectLoadedAtom);
-  const setSoundEffectAudios = useSetRecoilState(soundEffectAudiosAtom);
+  const setSoundEffectAudios = useSetRecoilState(soundEffectAudioAtom);
 
   // useEffect(() => {
   //   function isClientSupportNotification() {
@@ -62,9 +60,8 @@ export default function Home() {
 
   useEffect(() => {
     loadAudios({
-      onAllLoad: (audios) => {
-        setSoundEffectLoaded(true);
-        setSoundEffectAudios(audios);
+      onLoad: (audio) => {
+        setSoundEffectAudios(audio);
       },
     });
   }, []);

@@ -6,9 +6,9 @@ import {
   isNotificationPermissionGranted,
   isNotificationSupportEnvironmentAtom,
   isTimingNowAtom,
-  soundEffectAudiosAtom,
-  soundEffectLoadedAtom,
+  soundEffectAudioAtom,
 } from "../../shared/atom";
+import { audioSrc } from "../../shared/const";
 import Switch from "../Switch/Switch";
 import {
   Container,
@@ -17,10 +17,11 @@ import {
   TimerButtonContainer,
   TimeText,
 } from "./Timer.styled";
-import { getTimeFromDegree } from "./Timer.util";
+import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
 
 let timerInterval: NodeJS.Timer | null = null;
 let audio: HTMLAudioElement | null = null;
+let realAudioSrc: string | null = null;
 
 export default function Timer() {
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
@@ -29,25 +30,14 @@ export default function Timer() {
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
-  const isSoundEffectLoaded = useRecoilValue(soundEffectLoadedAtom);
-  const soundEffectAudios = useRecoilValue(soundEffectAudiosAtom);
+  const soundEffectAudio = useRecoilValue(soundEffectAudioAtom);
   const setIsNotificationSupportEnvironment = useSetRecoilState(
     isNotificationSupportEnvironmentAtom
   );
   const setIsNotificationPermissionGranted = useSetRecoilState(
     isNotificationPermissionGranted
   );
-
-  const { min, sec } = getTimeFromDegree(clockDegree);
   const isEmptyClockDegree = clockDegree >= 360;
-
-  if (!audio) {
-    const sampleAudio = Object.values(soundEffectAudios)[0];
-    if (sampleAudio) {
-      audio = sampleAudio;
-      audio.volume = 0;
-    }
-  }
 
   const startTimer = () => {
     const getNextDegree = (prevDegree: number, elapsedTime: number) => {
@@ -71,8 +61,14 @@ export default function Timer() {
 
     setIsTimingNow((prev) => !prev);
 
-    if (audio && isSoundEffectLoaded) {
-      audio.volume = 1;
+    if (audio && audio.src === "") {
+      audio.src = audioSrc.dummyAudioSrc;
+      audio.play();
+
+      audio.onended = () => {
+        audio!.src = realAudioSrc!;
+        audio!.onended = null;
+      };
     }
 
     let prevTime = new Date().getTime();
@@ -87,43 +83,24 @@ export default function Timer() {
     setIsTimingNow(false);
   };
 
-  const requestNotificationPermission = () => {
-    const isClientSupportNotification = () => {
-      return (
-        "Notification" in window &&
-        "serviceWorker" in navigator &&
-        "PushManager" in window
-      );
-    };
-
-    const request = async () => {
-      const permission = await Notification.requestPermission();
-      setIsNotificationPermissionGranted(permission === "granted");
-      return permission === "granted";
-    };
-
-    if (!isClientSupportNotification()) {
-      setIsNotificationSupportEnvironment(false);
-      return;
-    }
-
-    return request();
-  };
+  useEffect(() => {
+    if (audio) return;
+    if (!soundEffectAudio) return;
+    audio = soundEffectAudio.audio;
+    realAudioSrc = soundEffectAudio.src;
+  }, [soundEffectAudio]);
 
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
+    const canPlayAudio = audio && isAlarmSoundOn;
+
     if (!isTimingEnd) return;
+    if (isEmptyClockDegree && canPlayAudio) {
+      audio!.play();
+    }
 
     setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
-
-  useEffect(() => {
-    const canPlayAudio = isSoundEffectLoaded && isAlarmSoundOn;
-
-    if (!isTimingNow && isEmptyClockDegree && canPlayAudio) {
-      audio!.play();
-    }
-  }, [isTimingNow]);
 
   return (
     <Container>
@@ -155,13 +132,16 @@ export default function Timer() {
           <Switch
             defaultState="off"
             onOn={async (setSwitchState) => {
-              const isPermissionGranted =
+              const requestPermissionResult =
                 await requestNotificationPermission()!;
 
-              if (!isPermissionGranted) {
+              if (requestPermissionResult === "granted") {
+                setIsNotificationPermissionGranted(true);
+              } else if (requestPermissionResult === "denied") {
                 setSwitchState("off");
               } else {
-                setIsSendPushNotificationOn(true);
+                setIsNotificationSupportEnvironment(false);
+                setSwitchState("off");
               }
             }}
             onOff={() => {
@@ -172,10 +152,10 @@ export default function Timer() {
       </OptionSwitchContainer>
       <TimeText triggerZoom={isClockPointerDown || isTimingNow}>
         <div className="row">
-          <span className="min">{min}</span>
+          <span className="min">{getTimeFromDegree(clockDegree).min}</span>
         </div>
         <div className="row">
-          <span className="sec">{sec}</span>
+          <span className="sec">{getTimeFromDegree(clockDegree).sec}</span>
         </div>
       </TimeText>
     </Container>

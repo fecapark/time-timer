@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { v1 } from "uuid";
+import { IAudioData } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
   key: `on-clock-pointer-down/${v1()}`,
@@ -8,7 +9,7 @@ export const isClockPointerDownAtom = atom<boolean>({
 
 export const clockDegreeAtom = atom<number>({
   key: `clock-degree/${v1()}`,
-  default: 359.8,
+  default: 359.6,
 });
 
 export const isTimingNowAtom = atom<boolean>({
@@ -16,14 +17,9 @@ export const isTimingNowAtom = atom<boolean>({
   default: false,
 });
 
-export const soundEffectLoadedAtom = atom<boolean>({
-  key: `sound-effect-loaded/${v1()}`,
-  default: false,
-});
-
-export const soundEffectAudiosAtom = atom<Record<string, HTMLAudioElement>>({
+export const soundEffectAudioAtom = atom<IAudioData | null>({
   key: `sound-effect-audios/${v1()}`,
-  default: {},
+  default: null,
 });
 
 export const isNotificationSupportEnvironmentAtom = atom<boolean>({
