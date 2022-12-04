@@ -141,6 +141,7 @@ export default function Timer() {
               if (requestPermissionResult === "granted") {
                 setIsNotificationPermissionGranted(true);
                 const token = await getMessagingToken();
+                console.log(token);
 
                 firebase.messaging().onMessage((payload) => {
                   alert("messaged!");
