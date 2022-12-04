@@ -39,25 +39,6 @@ const Main = styled.main`
 export default function Home() {
   const setSoundEffectAudios = useSetRecoilState(soundEffectAudioAtom);
 
-  // useEffect(() => {
-  //   function isClientSupportNotification() {
-  //     return (
-  //       "Notification" in window &&
-  //       "serviceWorker" in navigator &&
-  //       "PushManager" in window
-  //     );
-  //   }
-
-  //   async function requestNotificationPermission() {
-  //     const permission = await Notification.requestPermission();
-  //     setIsNotificationPermissionGranted(permission === "granted");
-  //   }
-
-  //   if (!isClientSupportNotification())
-  //     setIsNotificationSupportEnvironment(false);
-  //   else requestNotificationPermission();
-  // }, []);
-
   useEffect(() => {
     loadAudios({
       onLoad: (audio) => {

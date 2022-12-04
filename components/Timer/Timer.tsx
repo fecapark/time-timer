@@ -18,6 +18,7 @@ import {
   TimeText,
 } from "./Timer.styled";
 import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
+import { getMessagingToken } from "../../backend/getMessagingToken";
 
 let timerInterval: NodeJS.Timer | null = null;
 let audio: HTMLAudioElement | null = null;
@@ -137,6 +138,7 @@ export default function Timer() {
 
               if (requestPermissionResult === "granted") {
                 setIsNotificationPermissionGranted(true);
+                console.log(await getMessagingToken());
               } else if (requestPermissionResult === "denied") {
                 setSwitchState("off");
               } else {
