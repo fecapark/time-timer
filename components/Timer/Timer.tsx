@@ -120,7 +120,8 @@ export default function Timer() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: process.env.NEXT_PUBLIC_FB_MESSAGING_REST_AUTH_HEADER,
+        Authorization:
+          process.env.NEXT_PUBLIC_FB_MESSAGING_REST_AUTH_HEADER ?? "",
       },
       body: JSON.stringify({
         to: pushToken,
