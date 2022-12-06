@@ -1,3 +1,5 @@
+import { credential } from "firebase-admin";
+import { initializeApp as initialAdminApp } from "firebase-admin/app";
 import firebase from "firebase/app";
 import "firebase/storage";
 
@@ -12,5 +14,11 @@ export const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
+
+initialAdminApp({
+  credential: credential.cert(
+    JSON.parse(process.env.NEXT_PUBLIC_FB_ADMIN_SDK_JSON)
+  ),
+});
 
 export const fbStorage = firebase.storage();

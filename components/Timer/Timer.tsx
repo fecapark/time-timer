@@ -19,14 +19,15 @@ import {
 } from "./Timer.styled";
 import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
 import { getMessagingToken } from "../../backend/getMessagingToken";
-import firebase from "firebase/app";
 import "firebase/messaging";
+import { messaging } from "firebase-admin";
 
 let timerInterval: NodeJS.Timer | null = null;
 let audio: HTMLAudioElement | null = null;
 let realAudioSrc: string | null = null;
 
 export default function Timer() {
+  const [pushToken, setPushToken] = useState("");
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
   const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
     useState(false);
@@ -102,8 +103,17 @@ export default function Timer() {
       audio!.play();
     }
 
+    if (pushToken !== "") {
+      messaging().send({
+        notification: {
+          title: "test notification",
+          body: "hi there!",
+        },
+        token: pushToken,
+      });
+    }
     setIsTimingNow(false);
-  }, [clockDegree, isClockPointerDown]);
+  }, [clockDegree, isClockPointerDown, pushToken]);
 
   return (
     <Container>
@@ -141,12 +151,8 @@ export default function Timer() {
               if (requestPermissionResult === "granted") {
                 setIsNotificationPermissionGranted(true);
                 const token = await getMessagingToken();
-                console.log(token);
-
-                firebase.messaging().onMessage((payload) => {
-                  alert("messaged!");
-                  console.log(payload);
-                });
+                alert(token);
+                setPushToken(token);
               } else if (requestPermissionResult === "denied") {
                 setSwitchState("off");
               } else {
