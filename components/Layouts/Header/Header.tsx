@@ -10,7 +10,7 @@ export default function Header() {
     <Container triggerHide={isClockPointerDown || isTimingNow}>
       <div className="logo">
         <div className="left word">Time</div>
-        <div className="right word">Timer2</div>
+        <div className="right word">Timer</div>
       </div>
     </Container>
   );
