@@ -27,7 +27,7 @@ export const isNotificationSupportEnvironmentAtom = atom<boolean>({
   default: true,
 });
 
-export const isNotificationPermissionGranted = atom<boolean>({
+export const isNotificationPermissionGrantedAtom = atom<boolean>({
   key: `is-notification-permission-granted/${v1()}`,
   default: false,
 });
