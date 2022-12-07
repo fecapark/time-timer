@@ -8,7 +8,7 @@ import {
   isTimingNowAtom,
   soundEffectAudioAtom,
 } from "../../shared/atom";
-import { audioSrc } from "../../shared/const";
+import { audioFileName } from "../../shared/const";
 import Switch from "../Switch/Switch";
 import {
   Container,
@@ -20,10 +20,9 @@ import {
 import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
 import { getMessagingToken } from "../../backend/getMessagingToken";
 import "firebase/messaging";
+import useAudio from "../../hooks/useAudio";
 
 let timerInterval: NodeJS.Timer | null = null;
-let audio: HTMLAudioElement | null = null;
-let realAudioSrc: string | null = null;
 
 /*
   1. 여기서 오디오하고 푸쉬메시지 하는거 그거 따로 떼내야함
@@ -49,6 +48,9 @@ export default function Timer() {
     useRecoilState(isNotificationPermissionGrantedAtom);
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const soundEffectAudio = useRecoilValue(soundEffectAudioAtom);
+  const [isAudioPlayable, getAudioPermission, playAudio] = useAudio(
+    soundEffectAudio?.src
+  );
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
@@ -71,18 +73,6 @@ export default function Timer() {
       prevTime = curTime;
     };
 
-    setIsTimingNow((prev) => !prev);
-
-    if (audio && audio.src === "") {
-      audio.src = audioSrc.dummyAudioSrc;
-      audio.play();
-
-      audio.onended = () => {
-        audio!.src = realAudioSrc!;
-        audio!.onended = null;
-      };
-    }
-
     let prevTime = new Date().getTime();
     timerInterval = setInterval(onInterval, 1000);
   };
@@ -96,24 +86,17 @@ export default function Timer() {
   };
 
   useEffect(() => {
-    if (audio) return;
-    if (!soundEffectAudio) return;
-    audio = soundEffectAudio.audio;
-    realAudioSrc = soundEffectAudio.src;
-  }, [soundEffectAudio]);
-
-  useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
-    const canPlayAudio = audio && isAlarmSoundOn;
+    const canPlayAudio = isAudioPlayable && isAlarmSoundOn;
 
     if (!isTimingEnd) return;
     if (isEmptyClockDegree && canPlayAudio) {
-      audio!.play();
+      playAudio();
     }
 
     sendPushMessage();
     setIsTimingNow(false);
-  }, [clockDegree, isClockPointerDown, pushToken]);
+  }, [clockDegree, isClockPointerDown, isAudioPlayable]);
 
   const sendPushMessage = useCallback(() => {
     if (pushToken === "") return;
@@ -151,7 +134,14 @@ export default function Timer() {
         </button>
       </TimerButtonContainer>
       <TimerButtonContainer triggerHide={isClockPointerDown || isTimingNow}>
-        <button disabled={isEmptyClockDegree} onClick={startTimer}>
+        <button
+          disabled={isEmptyClockDegree}
+          onClick={() => {
+            getAudioPermission();
+            setIsTimingNow(true);
+            startTimer();
+          }}
+        >
           {isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
         </button>
       </TimerButtonContainer>

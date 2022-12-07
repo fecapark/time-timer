@@ -1,6 +1,6 @@
 import { IAudioData } from "../shared/types";
 import { fbStorage } from "./firebaseConfig";
-import { audioSrc } from "../shared/const";
+import { audioFileName } from "../shared/const";
 
 interface ILoadAudios {
   onLoad: (audio: IAudioData) => void;
@@ -9,7 +9,7 @@ interface ILoadAudios {
 export function loadAudios({ onLoad }: ILoadAudios) {
   const fbStorageRef = fbStorage.ref();
 
-  [audioSrc.audioFileName].forEach((aAudioFileName) => {
+  [audioFileName].forEach((aAudioFileName) => {
     fbStorageRef
       .child(`audio/${aAudioFileName}.wav`)
       .getDownloadURL()
@@ -17,7 +17,6 @@ export function loadAudios({ onLoad }: ILoadAudios) {
         onLoad({
           name: aAudioFileName,
           src: url,
-          audio: new Audio(),
         });
       });
   });
