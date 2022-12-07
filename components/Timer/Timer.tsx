@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   clockDegreeAtom,
   isClockPointerDownAtom,
@@ -18,9 +18,9 @@ import {
   TimeText,
 } from "./Timer.styled";
 import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
-import { getMessagingToken } from "../../backend/getMessagingToken";
 import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
+import usePushNotification from "../../hooks/usePushNotification";
 
 let timerInterval: NodeJS.Timer | null = null;
 
@@ -34,23 +34,28 @@ let timerInterval: NodeJS.Timer | null = null;
 */
 
 export default function Timer() {
-  const [pushToken, setPushToken] = useState("");
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
   const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
     useState(false);
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
-  const [
-    isNotificationSupportEnvironment,
-    setIsNotificationSupportEnvironment,
-  ] = useRecoilState(isNotificationSupportEnvironmentAtom);
-  const [isNotificationPermissionGranted, setIsNotificationPermissionGranted] =
-    useRecoilState(isNotificationPermissionGrantedAtom);
+  const setIsNotificationSupportEnvironment = useSetRecoilState(
+    isNotificationSupportEnvironmentAtom
+  );
+  const setIsNotificationPermissionGranted = useSetRecoilState(
+    isNotificationPermissionGrantedAtom
+  );
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const soundEffectAudio = useRecoilValue(soundEffectAudioAtom);
+
+  const [requestPushToken, sendPushMessage] = usePushNotification({
+    title: "설정한 시간이 종료되었어요.",
+    body: "다시 집중해볼까요?",
+  });
   const [isAudioPlayable, getAudioPermission, playAudio] = useAudio(
     soundEffectAudio?.src
   );
+
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
@@ -94,36 +99,17 @@ export default function Timer() {
       playAudio();
     }
 
-    sendPushMessage();
+    if (isSendPushNotificationOn) {
+      sendPushMessage();
+    }
+
     setIsTimingNow(false);
-  }, [clockDegree, isClockPointerDown, isAudioPlayable]);
-
-  const sendPushMessage = useCallback(() => {
-    if (pushToken === "") return;
-    if (!isNotificationPermissionGranted) return;
-    if (!isNotificationSupportEnvironment) return;
-
-    const NOTIFICATION_CONTENT = {
-      title: "설정한 시간이 종료되었습니다.",
-      body: "잠시 쉬었다 다시 시작해볼까요?",
-    };
-
-    fetch("https://fcm.googleapis.com/fcm/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          process.env.NEXT_PUBLIC_FB_MESSAGING_REST_AUTH_HEADER ?? "",
-      },
-      body: JSON.stringify({
-        to: pushToken,
-        notification: NOTIFICATION_CONTENT,
-      }),
-    });
   }, [
-    pushToken,
-    isNotificationPermissionGranted,
-    isNotificationSupportEnvironment,
+    clockDegree,
+    isClockPointerDown,
+    isAudioPlayable,
+    isAlarmSoundOn,
+    isSendPushNotificationOn,
   ]);
 
   return (
@@ -168,8 +154,7 @@ export default function Timer() {
 
               if (requestPermissionResult === "granted") {
                 setIsNotificationPermissionGranted(true);
-                const token = await getMessagingToken();
-                setPushToken(token);
+                await requestPushToken();
               } else if (requestPermissionResult === "denied") {
                 setSwitchState("off");
               } else {
