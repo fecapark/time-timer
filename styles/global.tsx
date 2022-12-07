@@ -1,4 +1,4 @@
-import { Global, css, useTheme } from "@emotion/react";
+import { Global, css } from "@emotion/react";
 import { Theme } from "./theme";
 
 const GlobalStyle = css`
