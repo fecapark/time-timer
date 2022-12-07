@@ -5,7 +5,7 @@ const dummyAudioSrc =
 
 export default function useAudio(
   src: string | undefined | null
-): [boolean, () => void, () => void] {
+): [() => void, () => void] {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayable, setIsPlayable] = useState(false);
 
@@ -35,5 +35,5 @@ export default function useAudio(
     audio.play();
   };
 
-  return [isPlayable, getPermission, play];
+  return [getPermission, play];
 }

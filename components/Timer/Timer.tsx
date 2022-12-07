@@ -1,61 +1,26 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockDegreeAtom,
   isClockPointerDownAtom,
-  isNotificationPermissionGrantedAtom,
-  isNotificationSupportEnvironmentAtom,
   isTimingNowAtom,
   soundEffectAudioAtom,
 } from "../../shared/atom";
-import { audioFileName } from "../../shared/const";
-import Switch from "../Switch/Switch";
-import {
-  Container,
-  OptionSwitchContainer,
-  OptionSwitchRow,
-  TimerButtonContainer,
-  TimeText,
-} from "./Timer.styled";
-import { getTimeFromDegree, requestNotificationPermission } from "./Timer.util";
+import { Container, TimerButtonContainer, TimeText } from "./Timer.styled";
+import { getTimeFromDegree } from "./Timer.util";
 import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
-import usePushNotification from "../../hooks/usePushNotification";
+import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
 
 let timerInterval: NodeJS.Timer | null = null;
 
-/*
-  1. 여기서 오디오하고 푸쉬메시지 하는거 그거 따로 떼내야함
-
-  hooks?로 떼네는게 제일 베스트일듯
-
-  그리고
-  2. Option container 이거 하나 컴포넌트로 추출하는게 나을듯 함
-*/
 
 export default function Timer() {
-  const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
-  const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
-    useState(false);
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
-  const setIsNotificationSupportEnvironment = useSetRecoilState(
-    isNotificationSupportEnvironmentAtom
-  );
-  const setIsNotificationPermissionGranted = useSetRecoilState(
-    isNotificationPermissionGrantedAtom
-  );
   const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
   const soundEffectAudio = useRecoilValue(soundEffectAudioAtom);
-
-  const [requestPushToken, sendPushMessage] = usePushNotification({
-    title: "설정한 시간이 종료되었어요.",
-    body: "다시 집중해볼까요?",
-  });
-  const [isAudioPlayable, getAudioPermission, playAudio] = useAudio(
-    soundEffectAudio?.src
-  );
-
+  const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
@@ -92,25 +57,10 @@ export default function Timer() {
 
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
-    const canPlayAudio = isAudioPlayable && isAlarmSoundOn;
-
     if (!isTimingEnd) return;
-    if (isEmptyClockDegree && canPlayAudio) {
-      playAudio();
-    }
-
-    if (isSendPushNotificationOn) {
-      sendPushMessage();
-    }
 
     setIsTimingNow(false);
-  }, [
-    clockDegree,
-    isClockPointerDown,
-    isAudioPlayable,
-    isAlarmSoundOn,
-    isSendPushNotificationOn,
-  ]);
+  }, [clockDegree, isClockPointerDown]);
 
   return (
     <Container>
@@ -131,44 +81,10 @@ export default function Timer() {
           {isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
         </button>
       </TimerButtonContainer>
-      <OptionSwitchContainer triggerHide={isClockPointerDown || isTimingNow}>
-        <OptionSwitchRow isOn={isAlarmSoundOn}>
-          <span>종료시 알람 소리 켜기</span>
-          <Switch
-            defaultState="off"
-            onOn={() => {
-              setIsAlarmSoundOn(true);
-            }}
-            onOff={() => {
-              setIsAlarmSoundOn(false);
-            }}
-          />
-        </OptionSwitchRow>
-        <OptionSwitchRow isOn={isSendPushNotificationOn}>
-          <span>종료시 푸쉬 알림 켜기</span>
-          <Switch
-            defaultState="off"
-            onOn={async (setSwitchState) => {
-              const requestPermissionResult =
-                await requestNotificationPermission()!;
-
-              if (requestPermissionResult === "granted") {
-                setIsSendPushNotificationOn(true);
-                setIsNotificationPermissionGranted(true);
-                await requestPushToken();
-              } else if (requestPermissionResult === "denied") {
-                setSwitchState("off");
-              } else {
-                setIsNotificationSupportEnvironment(false);
-                setSwitchState("off");
-              }
-            }}
-            onOff={() => {
-              setIsSendPushNotificationOn(false);
-            }}
-          />
-        </OptionSwitchRow>
-      </OptionSwitchContainer>
+      <AlarmOptionContainer
+        timer={{ isEmptyClockDegree, isTimingNow }}
+        audio={{ playAudio }}
+      />
       <TimeText triggerZoom={isClockPointerDown || isTimingNow}>
         <div className="row">
           <span className="min">{getTimeFromDegree(clockDegree).min}</span>

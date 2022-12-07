@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useCallback, useState } from "react";
+import { useRecoilValue } from "recoil";
 import firebase from "firebase/app";
 import "firebase/messaging";
 import {
