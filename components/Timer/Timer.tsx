@@ -25,6 +25,15 @@ let timerInterval: NodeJS.Timer | null = null;
 let audio: HTMLAudioElement | null = null;
 let realAudioSrc: string | null = null;
 
+/*
+  1. 여기서 오디오하고 푸쉬메시지 하는거 그거 따로 떼내야함
+
+  hooks?로 떼네는게 제일 베스트일듯
+
+  그리고
+  2. Option container 이거 하나 컴포넌트로 추출하는게 나을듯 함
+*/
+
 export default function Timer() {
   const [pushToken, setPushToken] = useState("");
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
