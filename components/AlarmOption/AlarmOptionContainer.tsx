@@ -40,18 +40,16 @@ export default function AlarmOptionContainer({
     body: "다시 집중해볼까요?",
   });
 
+  const executeAlarmByOptions = () => {
+    if (isAlarmSoundOn) playAudio();
+    if (isSendPushNotificationOn) sendPushMessage();
+  };
+
   useEffect(() => {
     if (isTimingNow) return;
     if (!isEmptyClockDegree) return;
-
-    if (isAlarmSoundOn) playAudio();
-    if (isSendPushNotificationOn) sendPushMessage();
-  }, [
-    isTimingNow,
-    isEmptyClockDegree,
-    isAlarmSoundOn,
-    isSendPushNotificationOn,
-  ]);
+    executeAlarmByOptions();
+  }, [isTimingNow, isEmptyClockDegree]);
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>

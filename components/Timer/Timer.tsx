@@ -14,7 +14,6 @@ import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
 
 let timerInterval: NodeJS.Timer | null = null;
 
-
 export default function Timer() {
   const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);

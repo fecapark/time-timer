@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const dummyAudioSrc =
   "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
@@ -13,27 +13,30 @@ export default function useAudio(
     setAudio(new Audio());
   }, []);
 
-  const getPermission = () => {
+  const getPermission = useCallback(() => {
     if (!audio) return;
     if (isPlayable) return;
     if (!src || src === "") return;
 
+    audio.onloadeddata = () => {
+      audio.play();
+    };
+
     audio.onended = () => {
       audio.src = src;
+      audio.onloadeddata = null;
       audio.onended = null;
-
       setIsPlayable(true);
     };
 
     audio.src = dummyAudioSrc;
-    audio.play();
-  };
+  }, [audio, isPlayable, src]);
 
-  const play = () => {
+  const play = useCallback(() => {
     if (!audio) return;
     if (!isPlayable) return;
     audio.play();
-  };
+  }, [audio, isPlayable]);
 
   return [getPermission, play];
 }
