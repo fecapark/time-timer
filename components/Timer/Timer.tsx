@@ -153,6 +153,7 @@ export default function Timer() {
                 await requestNotificationPermission()!;
 
               if (requestPermissionResult === "granted") {
+                setIsSendPushNotificationOn(true);
                 setIsNotificationPermissionGranted(true);
                 await requestPushToken();
               } else if (requestPermissionResult === "denied") {
