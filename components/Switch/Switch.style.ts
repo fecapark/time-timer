@@ -15,6 +15,22 @@ export const Container = styled.div<IStyleProps>`
   -moz-user-select: none;
 
   cursor: pointer;
+
+  &:hover {
+    border-color: ${(props) => (props.state === "on" ? "white" : "#b0b0b0")};
+
+    div {
+      background-color: ${(props) =>
+        props.state === "on" ? "white" : "#b0b0b0"};
+      transform: translate3d(
+          ${(props) =>
+            props.state === "on" ? "calc(50px - (3 * 4px) - 20px)" : "4px"},
+          0,
+          0
+        )
+        scale(${(props) => (props.state === "on" ? "1" : "0.9")});
+    }
+  }
 `;
 
 export const MovingBall = styled.div<IStyleProps>`
