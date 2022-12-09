@@ -86,7 +86,7 @@ export const Graduation = styled.div<IGraduationStyleProps>`
   span {
     font-weight: 500;
     font-size: 22px;
-    color: ${(props) => (props.spanAccent ? "white" : "#a0a0a0")};
+    color: ${(props) => (props.spanAccent ? "white" : "#525252")};
 
     position: absolute;
     left: 50%;
