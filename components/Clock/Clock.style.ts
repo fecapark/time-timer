@@ -84,14 +84,19 @@ export const Graduation = styled.div<IGraduationStyleProps>`
   background-color: ${(props) => (props.accent ? "white" : "grey")};
 
   span {
-    font-size: 18px;
     font-weight: 500;
+    font-size: 22px;
+    color: ${(props) => (props.spanAccent ? "white" : "#a0a0a0")};
 
     position: absolute;
     left: 50%;
     bottom: 100%;
     transform-origin: center center;
     transform: translate3d(-50%, ${(props) => -props.gap}px, 0)
-      rotate3d(0, 0, 1, ${(props) => props.rotate}deg);
+      rotate3d(0, 0, 1, ${(props) => props.rotate}deg)
+      scale(${(props) => (props.spanAccent ? "1" : "0.85")});
+
+    transition: color 0.2s cubic-bezier(0.2, 0, 0, 1),
+      transform 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
 `;

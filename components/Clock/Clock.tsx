@@ -130,7 +130,13 @@ export default function Clock() {
       <MainClock ref={moveAreaRef}>
         <ClockCenter>
           {range(60).map((i) => (
-            <Graduation rotate={i * 6} accent={i % 5 == 0} gap={20} key={i}>
+            <Graduation
+              rotate={i * 6}
+              accent={i % 5 == 0}
+              gap={24}
+              key={i}
+              spanAccent={(360 - clockDegree) * 10 >= i * 60}
+            >
               {i % 5 == 0 ? <span>{i}</span> : null}
             </Graduation>
           ))}
