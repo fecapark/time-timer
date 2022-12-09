@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import usePushNotification from "../../hooks/usePushNotification";
 import {
@@ -8,7 +9,11 @@ import {
 } from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import { requestNotificationPermission } from "../Timer/Timer.util";
-import { Container, OptionSwitchRow } from "./AlarmOption.styled";
+import {
+  Container,
+  LoaderWrapper,
+  OptionSwitchRow,
+} from "./AlarmOption.styled";
 
 interface IProps {
   timer: {
@@ -16,13 +21,14 @@ interface IProps {
     isEmptyClockDegree: boolean;
   };
   audio: {
+    isAudioLoaded: boolean;
     playAudio: () => void;
   };
 }
 
 export default function AlarmOptionContainer({
   timer: { isTimingNow, isEmptyClockDegree },
-  audio: { playAudio },
+  audio: { isAudioLoaded, playAudio },
 }: IProps) {
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
   const [isSendPushNotificationOn, setIsSendPushNotificationOn] =
@@ -55,15 +61,21 @@ export default function AlarmOptionContainer({
     <Container triggerHide={isClockPointerDown || isTimingNow}>
       <OptionSwitchRow isOn={isAlarmSoundOn}>
         <span>종료시 알람 소리 켜기</span>
-        <Switch
-          defaultState="off"
-          onOn={() => {
-            setIsAlarmSoundOn(true);
-          }}
-          onOff={() => {
-            setIsAlarmSoundOn(false);
-          }}
-        />
+        {isAudioLoaded ? (
+          <Switch
+            defaultState="off"
+            onOn={() => {
+              setIsAlarmSoundOn(true);
+            }}
+            onOff={() => {
+              setIsAlarmSoundOn(false);
+            }}
+          />
+        ) : (
+          <LoaderWrapper>
+            <RotatingLines strokeColor="grey" width="20"></RotatingLines>
+          </LoaderWrapper>
+        )}
       </OptionSwitchRow>
       <OptionSwitchRow isOn={isSendPushNotificationOn}>
         <span>종료시 푸쉬 알림 켜기</span>

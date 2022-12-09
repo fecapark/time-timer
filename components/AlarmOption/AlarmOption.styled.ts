@@ -29,3 +29,12 @@ export const OptionSwitchRow = styled.div<{ isOn: boolean }>`
     color: ${(props) => (props.isOn ? "white" : "grey")};
   }
 `;
+
+export const LoaderWrapper = styled.div`
+  width: 50px;
+  height: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

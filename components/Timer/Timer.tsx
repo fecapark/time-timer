@@ -82,7 +82,7 @@ export default function Timer() {
       </TimerButtonContainer>
       <AlarmOptionContainer
         timer={{ isEmptyClockDegree, isTimingNow }}
-        audio={{ playAudio }}
+        audio={{ isAudioLoaded: soundEffectAudio !== null, playAudio }}
       />
       <TimeText triggerZoom={isClockPointerDown || isTimingNow}>
         <div className="row">

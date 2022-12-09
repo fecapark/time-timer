@@ -28,12 +28,12 @@ const Main = styled.main`
 `;
 
 export default function Home() {
-  const setSoundEffectAudios = useSetRecoilState(soundEffectAudioAtom);
+  const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);
 
   useEffect(() => {
     loadAudios({
       onLoad: (audio) => {
-        setSoundEffectAudios(audio);
+        setSoundEffectAudio(audio);
       },
     });
   }, []);
