@@ -16,7 +16,7 @@ import {
   LoaderWrapper,
   OptionSwitchRow,
 } from "./AlarmOption.styled";
-import NotSupportedInfoModal from "./NotSupportedInfoModal/NotSupportedInfoModal";
+import SupportingInfoModal from "./SupportingInfoModal/SupportingInfoModal";
 
 interface IProps {
   timer: {
@@ -51,7 +51,7 @@ export default function AlarmOptionContainer({
   });
   const setModalActive = useModal({
     title: "푸쉬 알림을 지원하지 않는 브라우저입니다",
-    content: <NotSupportedInfoModal />,
+    content: <SupportingInfoModal />,
   });
 
   const executeAlarmByOptions = () => {

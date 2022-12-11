@@ -27,7 +27,7 @@ function SupportItem({ name, icon, support = true }: ISupportItemProp) {
   );
 }
 
-export default function NotSupportedInfoModal() {
+export default function SupportingInfoModal() {
   return (
     <Container>
       <span>
