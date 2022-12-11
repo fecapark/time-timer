@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import useModal from "../../hooks/useModal";
 import usePushNotification from "../../hooks/usePushNotification";
 import {
   isClockPointerDownAtom,
   isNotificationPermissionGrantedAtom,
   isNotificationSupportEnvironmentAtom,
+  isModalActiveAtom,
 } from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import { requestNotificationPermission } from "../Timer/Timer.util";
@@ -14,6 +16,7 @@ import {
   LoaderWrapper,
   OptionSwitchRow,
 } from "./AlarmOption.styled";
+import NotSupportedInfoModal from "./NotSupportedInfoModal/NotSupportedInfoModal";
 
 interface IProps {
   timer: {
@@ -41,9 +44,14 @@ export default function AlarmOptionContainer({
   const setIsNotificationPermissionGranted = useSetRecoilState(
     isNotificationPermissionGrantedAtom
   );
+
   const [requestPushToken, sendPushMessage] = usePushNotification({
     title: "설정한 시간이 종료되었어요.",
     body: "다시 집중해볼까요?",
+  });
+  const setModalActive = useModal({
+    title: "푸쉬 알림을 지원하지 않는 브라우저입니다",
+    content: <NotSupportedInfoModal />,
   });
 
   const executeAlarmByOptions = () => {
@@ -93,6 +101,7 @@ export default function AlarmOptionContainer({
               setSwitchState("off");
             } else {
               setIsNotificationSupportEnvironment(false);
+              setModalActive(true);
               setSwitchState("off");
             }
           }}

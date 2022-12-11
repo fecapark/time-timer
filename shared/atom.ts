@@ -1,6 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
 import { atom } from "recoil";
 import { v1 } from "uuid";
-import { IAudioData } from "./types";
+import { IAudioData, IModalContentPayload } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
   key: `on-clock-pointer-down/${v1()}`,
@@ -30,4 +31,14 @@ export const isNotificationSupportEnvironmentAtom = atom<boolean>({
 export const isNotificationPermissionGrantedAtom = atom<boolean>({
   key: `is-notification-permission-granted/${v1()}`,
   default: false,
+});
+
+export const isModalActiveAtom = atom<boolean>({
+  key: `is-modal-active/${v1()}`,
+  default: true,
+});
+
+export const modalContentAtom = atom<IModalContentPayload | null>({
+  key: `modal-content/${v1()}`,
+  default: null,
 });

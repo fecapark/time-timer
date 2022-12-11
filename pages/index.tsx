@@ -5,6 +5,7 @@ import { loadAudios } from "../backend/loadAudios";
 import Clock from "../components/Clock/Clock";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
+import Modal from "../components/Modal/Modal";
 import Timer from "../components/Timer/Timer";
 import { soundEffectAudioAtom } from "../shared/atom";
 
@@ -46,6 +47,7 @@ export default function Home() {
         <Timer />
       </Main>
       <Footer />
+      <Modal />
     </Container>
   );
 }
