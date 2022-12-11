@@ -38,7 +38,7 @@ const ContentContainer = styled.div`
   z-index: 100;
   background-color: #212124;
 
-  padding: 36px 32px;
+  padding: 48px 32px;
   border-radius: 24px;
 `;
 

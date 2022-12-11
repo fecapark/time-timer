@@ -26,7 +26,7 @@ const SupportTitle = styled.div`
   font-size: 16px;
 `;
 
-const SupportItem = styled.div`
+const SupportItem = styled.div<{ support?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -52,6 +52,7 @@ const SupportItem = styled.div`
 
     svg {
       font-size: 18px;
+      color: ${({ support = true }) => (support ? "#b7f297" : "#db4544")};
     }
   }
 `;
@@ -102,7 +103,7 @@ export default function NotSupportedInfoModal() {
             <MdCheck />
           </div>
         </SupportItem>
-        <SupportItem>
+        <SupportItem support={false}>
           <div className="icon-wrapper">
             <FaInternetExplorer />
             <span>IE</span>
@@ -123,7 +124,7 @@ export default function NotSupportedInfoModal() {
             <MdCheck />
           </div>
         </SupportItem>
-        <SupportItem>
+        <SupportItem support={false}>
           <div className="icon-wrapper">
             <FaEdge />
             <span>Edge</span>
@@ -150,7 +151,7 @@ export default function NotSupportedInfoModal() {
             <MdClose />
           </div>
         </SupportItem> */}
-        <SupportItem>
+        <SupportItem support={false}>
           <div className="icon-wrapper">
             <FaApple />
             <span>IOS Browsers</span>
