@@ -35,7 +35,7 @@ export const isNotificationPermissionGrantedAtom = atom<boolean>({
 
 export const isModalActiveAtom = atom<boolean>({
   key: `is-modal-active/${v1()}`,
-  default: true,
+  default: false,
 });
 
 export const modalContentAtom = atom<IModalContentPayload | null>({

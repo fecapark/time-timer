@@ -26,7 +26,7 @@ const SupportTitle = styled.div`
   font-size: 16px;
 `;
 
-const SupportItem = styled.div<{ support?: boolean }>`
+const SupportItemContainer = styled.div<{ support?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -52,10 +52,28 @@ const SupportItem = styled.div<{ support?: boolean }>`
 
     svg {
       font-size: 18px;
-      color: ${({ support = true }) => (support ? "#b7f297" : "#db4544")};
+      color: ${(props) => (props.support ? "#b7f297" : "#db4544")};
     }
   }
 `;
+
+interface ISupportItemProp {
+  name: string;
+  icon: JSX.Element;
+  support?: boolean;
+}
+
+function SupportItem({ name, icon, support = true }: ISupportItemProp) {
+  return (
+    <SupportItemContainer support={support}>
+      <div className="icon-wrapper">
+        {icon}
+        <span>{name}</span>
+      </div>
+      <div className="status">{support ? <MdCheck /> : <MdClose />}</div>
+    </SupportItemContainer>
+  );
+}
 
 export default function NotSupportedInfoModal() {
   return (
@@ -67,99 +85,18 @@ export default function NotSupportedInfoModal() {
       <span>하단의 지원 항목을 참고해주세요.</span>
       <SupportTitle>데스크탑 지원</SupportTitle>
       <SupportContainer>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <FaFirefoxBrowser />
-            <span>Firefox</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <FaEdge />
-            <span>Edge</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <SiGooglechrome />
-            <span>Chrome</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <FaSafari />
-            <span>Safari</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        <SupportItem support={false}>
-          <div className="icon-wrapper">
-            <FaInternetExplorer />
-            <span>IE</span>
-          </div>
-          <div className="status">
-            <MdClose />
-          </div>
-        </SupportItem>
+        <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
+        <SupportItem name="Edge" icon={<FaEdge />} />
+        <SupportItem name="Chrome" icon={<SiGooglechrome />} />
+        <SupportItem name="Safari" icon={<FaSafari />} />
+        <SupportItem name="IE" icon={<FaInternetExplorer />} support={false} />
       </SupportContainer>
       <SupportTitle>모바일 지원</SupportTitle>
       <SupportContainer>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <FaFirefoxBrowser />
-            <span>Firefox</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        <SupportItem support={false}>
-          <div className="icon-wrapper">
-            <FaEdge />
-            <span>Edge</span>
-          </div>
-          <div className="status">
-            <MdClose />
-          </div>
-        </SupportItem>
-        <SupportItem>
-          <div className="icon-wrapper">
-            <SiGooglechrome />
-            <span>Chrome</span>
-          </div>
-          <div className="status">
-            <MdCheck />
-          </div>
-        </SupportItem>
-        {/* <SupportItem>
-          <div className="icon-wrapper">
-            <FaSafari />
-            <span>IOS Safari</span>
-          </div>
-          <div className="status">
-            <MdClose />
-          </div>
-        </SupportItem> */}
-        <SupportItem support={false}>
-          <div className="icon-wrapper">
-            <FaApple />
-            <span>IOS Browsers</span>
-          </div>
-          <div className="status">
-            <MdClose />
-          </div>
-        </SupportItem>
+        <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
+        <SupportItem name="Edge" icon={<FaEdge />} support={false} />
+        <SupportItem name="Chrome" icon={<SiGooglechrome />} />
+        <SupportItem name="IOS Browsers" icon={<FaApple />} support={false} />
       </SupportContainer>
     </Container>
   );
