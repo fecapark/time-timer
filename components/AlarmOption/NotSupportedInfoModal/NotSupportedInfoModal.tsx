@@ -36,7 +36,7 @@ const SupportItemContainer = styled.div<{ support?: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
 
     svg {
       font-size: 20px;
@@ -48,7 +48,7 @@ const SupportItemContainer = styled.div<{ support?: boolean }>`
   }
 
   .status {
-    margin-top: 12px;
+    margin-top: 16px;
 
     svg {
       font-size: 18px;
