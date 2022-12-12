@@ -78,7 +78,7 @@ export default function Clock() {
       } else if (isMovedToRightWhenStoped(relPos, isOverLimited)) {
         isOverLimited = false;
       }
-
+      
       prevRelPos = relPos.copy();
       setClockDegree(degree);
     };
@@ -124,6 +124,31 @@ export default function Clock() {
       document.removeEventListener("pointerup", pointerEndHandler);
     };
   }, [moveAreaRef.current, handlerRef.current, isTimingNow]);
+
+  useEffect(() => {
+    if (!moveAreaRef.current) return;
+
+    const onResize = () => {
+      const stageWidth = document.body.clientWidth;
+      const stageHeight = document.body.clientHeight;
+
+      const resizedWidth = Math.min(600, stageWidth);
+      const resizedHeight = Math.min(600, stageHeight);
+      const resultSize = Math.min(resizedWidth, resizedHeight);
+      const resultScaleRatio = Math.min(1, resultSize / 600);
+
+      moveAreaRef.current!.style.transform = `
+        scale(${resultScaleRatio})
+      `;
+    };
+
+    window.addEventListener("resize", onResize);
+    onResize();
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [moveAreaRef.current]);
 
   return (
     <Container>

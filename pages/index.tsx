@@ -41,13 +41,13 @@ export default function Home() {
 
   return (
     <Container>
-      <Header />
+      {/* <Header /> */}
       <Main>
         <Clock />
-        <Timer />
+        {/* <Timer /> */}
       </Main>
-      <Footer />
-      <Modal />
+      {/* <Footer /> */}
+      {/* <Modal /> */}
     </Container>
   );
 }

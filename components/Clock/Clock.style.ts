@@ -21,6 +21,8 @@ export const MainClock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  touch-action: none;
 `;
 
 export const ClockCenter = styled.div`
