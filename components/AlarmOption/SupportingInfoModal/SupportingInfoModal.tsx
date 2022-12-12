@@ -30,26 +30,36 @@ function SupportItem({ name, icon, support = true }: ISupportItemProp) {
 export default function SupportingInfoModal() {
   return (
     <Container>
-      <span>
-        현재 사용중이신 브라우저는 백그라운드 푸쉬 알림을 지원하지 않습니다.
-      </span>
-      <br />
-      <span>하단의 지원 항목을 참고해주세요.</span>
-      <SupportTitle>데스크탑 지원</SupportTitle>
-      <SupportContainer>
-        <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
-        <SupportItem name="Edge" icon={<FaEdge />} />
-        <SupportItem name="Chrome" icon={<SiGooglechrome />} />
-        <SupportItem name="Safari" icon={<FaSafari />} />
-        <SupportItem name="IE" icon={<FaInternetExplorer />} support={false} />
-      </SupportContainer>
-      <SupportTitle>모바일 지원</SupportTitle>
-      <SupportContainer>
-        <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
-        <SupportItem name="Edge" icon={<FaEdge />} support={false} />
-        <SupportItem name="Chrome" icon={<SiGooglechrome />} />
-        <SupportItem name="IOS Browsers" icon={<FaApple />} support={false} />
-      </SupportContainer>
+      <div>
+        <span>
+          현재 사용중이신 브라우저는 백그라운드 푸쉬 알림을 지원하지 않습니다.
+        </span>
+        <br />
+        <span>하단의 지원 항목을 참고해주세요.</span>
+      </div>
+      <div>
+        <SupportTitle>데스크탑 지원</SupportTitle>
+        <SupportContainer>
+          <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
+          <SupportItem name="Edge" icon={<FaEdge />} />
+          <SupportItem name="Chrome" icon={<SiGooglechrome />} />
+          <SupportItem name="Safari" icon={<FaSafari />} />
+          <SupportItem
+            name="IE"
+            icon={<FaInternetExplorer />}
+            support={false}
+          />
+        </SupportContainer>
+      </div>
+      <div>
+        <SupportTitle>모바일 지원</SupportTitle>
+        <SupportContainer>
+          <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
+          <SupportItem name="Edge" icon={<FaEdge />} support={false} />
+          <SupportItem name="Chrome" icon={<SiGooglechrome />} />
+          <SupportItem name="IOS Browsers" icon={<FaApple />} support={false} />
+        </SupportContainer>
+      </div>
     </Container>
   );
 }

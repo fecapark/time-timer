@@ -31,7 +31,7 @@ const Background = styled.div`
   background-color: #00000077;
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.div<{ active: boolean }>`
   width: 500px;
   background-color: white;
 
@@ -40,6 +40,10 @@ const ContentContainer = styled.div`
 
   padding: 48px 32px;
   border-radius: 24px;
+
+  opacity: ${(props) => (props.active ? "1" : "0")};
+  transform: scale(${(props) => (props.active ? "1" : "1.1")});
+  transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
 `;
 
 const ContentHeader = styled.div`
@@ -66,7 +70,7 @@ export default function Modal() {
   return (
     <Container active={isModalActive}>
       <Background onClick={closeModal} />
-      <ContentContainer>
+      <ContentContainer active={isModalActive}>
         <ContentHeader>
           <span>{modalContent?.title}</span>
         </ContentHeader>
