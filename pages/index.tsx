@@ -15,11 +15,11 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 
-const Main = styled.main`
+const Main = styled.div`
   width: 100%;
-  height: 100%;
 
   display: flex;
   justify-content: center;
@@ -41,13 +41,13 @@ export default function Home() {
 
   return (
     <Container>
-      {/* <Header /> */}
+      <Header />
       <Main>
         <Clock />
         {/* <Timer /> */}
       </Main>
-      {/* <Footer /> */}
-      {/* <Modal /> */}
+      <Footer />
+      <Modal />
     </Container>
   );
 }

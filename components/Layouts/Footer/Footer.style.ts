@@ -22,4 +22,6 @@ export const Container = styled.footer<{ triggerHide: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* @media screen and ; */
 `;

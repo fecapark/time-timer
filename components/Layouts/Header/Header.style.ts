@@ -26,14 +26,14 @@ export const Container = styled.header<{ triggerHide: boolean }>`
     ${({ theme }) => theme.shareCSS.noDrag};
 
     display: flex;
-    gap: 2px;
+    gap: 0.11em;
 
     font-family: "Raleway", sans-serif;
     font-weight: 600;
     letter-spacing: 0.3px;
 
     .word {
-      padding: 3px 6px;
+      padding: 0.16em 0.33em;
       line-height: 1em;
 
       &.right {
@@ -41,5 +41,9 @@ export const Container = styled.header<{ triggerHide: boolean }>`
         color: #212121;
       }
     }
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 15px;
   }
 `;

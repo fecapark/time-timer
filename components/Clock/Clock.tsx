@@ -30,6 +30,7 @@ export default function Clock() {
   const moveAreaRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
+  const resizeRef = useRef<HTMLDivElement>(null);
 
   const isTimingNow = useRecoilValue(isTimingNowAtom);
   const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
@@ -78,7 +79,7 @@ export default function Clock() {
       } else if (isMovedToRightWhenStoped(relPos, isOverLimited)) {
         isOverLimited = false;
       }
-      
+
       prevRelPos = relPos.copy();
       setClockDegree(degree);
     };
@@ -126,20 +127,22 @@ export default function Clock() {
   }, [moveAreaRef.current, handlerRef.current, isTimingNow]);
 
   useEffect(() => {
-    if (!moveAreaRef.current) return;
+    if (!resizeRef.current) return;
 
     const onResize = () => {
       const stageWidth = document.body.clientWidth;
       const stageHeight = document.body.clientHeight;
 
       const resizedWidth = Math.min(600, stageWidth);
-      const resizedHeight = Math.min(600, stageHeight);
+      const resizedHeight = Math.min(600 + 180, stageHeight - 180);
       const resultSize = Math.min(resizedWidth, resizedHeight);
       const resultScaleRatio = Math.min(1, resultSize / 600);
 
-      moveAreaRef.current!.style.transform = `
+      resizeRef.current!.style.transform = `
         scale(${resultScaleRatio})
       `;
+      moveAreaRef.current!.style.width = `${resultSize}px`;
+      moveAreaRef.current!.style.height = `${resultSize}px`;
     };
 
     window.addEventListener("resize", onResize);
@@ -148,10 +151,10 @@ export default function Clock() {
     return () => {
       window.removeEventListener("resize", onResize);
     };
-  }, [moveAreaRef.current]);
+  }, [resizeRef.current]);
 
   return (
-    <Container>
+    <Container ref={resizeRef}>
       <MainClock ref={moveAreaRef}>
         <ClockCenter>
           {range(60).map((i) => (
