@@ -20,8 +20,20 @@ export const Container = styled.footer<{ triggerHide: boolean }>`
   transition-delay: 0.4s;
 
   display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
   justify-content: center;
   align-items: center;
 
-  /* @media screen and ; */
+  u {
+    cursor: pointer;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 10px;
+  } ;
 `;

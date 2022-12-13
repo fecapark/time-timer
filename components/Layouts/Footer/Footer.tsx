@@ -8,7 +8,13 @@ export default function Footer() {
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
-      <span>Copyright &copy; 2022 Sanghyeok Park. All rights reserved.</span>
+      {/* <span>Copyright &copy; 2022 Sanghyeok Park. All rights reserved.</span> */}
+      <span>
+        Origin by <u>Time Timer</u>.
+      </span>
+      <span>
+        Redesigned by <u>Sanghyeok Park</u>, 2022.
+      </span>
     </Container>
   );
 }
