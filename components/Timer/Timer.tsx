@@ -6,11 +6,12 @@ import {
   isTimingNowAtom,
   soundEffectAudioAtom,
 } from "../../shared/atom";
-import { Container, TimerButtonContainer, TimeText } from "./Timer.styled";
+import { Container, TimeText } from "./Timer.styled";
 import { getTimeFromDegree } from "./Timer.util";
 import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
 import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
+import RoundButton from "../Button/RoundButton";
 
 let timerInterval: NodeJS.Timer | null = null;
 
@@ -63,23 +64,22 @@ export default function Timer() {
 
   return (
     <Container>
-      <TimerButtonContainer triggerHide={!isTimingNow}>
-        <button disabled={!isTimingNow} onClick={pauseTimer}>
-          일시정지
-        </button>
-      </TimerButtonContainer>
-      <TimerButtonContainer triggerHide={isClockPointerDown || isTimingNow}>
-        <button
-          disabled={isEmptyClockDegree}
-          onClick={() => {
-            getAudioPermission();
-            setIsTimingNow(true);
-            startTimer();
-          }}
-        >
-          {isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
-        </button>
-      </TimerButtonContainer>
+      <RoundButton
+        text="일시정지"
+        disabled={!isTimingNow}
+        onClick={pauseTimer}
+        triggerHide={!isTimingNow}
+      />
+      <RoundButton
+        text={isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
+        disabled={isEmptyClockDegree}
+        onClick={() => {
+          getAudioPermission();
+          setIsTimingNow(true);
+          startTimer();
+        }}
+        triggerHide={isClockPointerDown || isTimingNow}
+      />
       <AlarmOptionContainer
         timer={{ isEmptyClockDegree, isTimingNow }}
         audio={{ isAudioLoaded: soundEffectAudio !== null, playAudio }}
