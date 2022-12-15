@@ -7,6 +7,7 @@ import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import Modal from "../components/Modal/Modal";
 import Timer from "../components/Timer/Timer";
+import useMediaMatch from "../hooks/useMediaMatch";
 import { soundEffectAudioAtom } from "../shared/atom";
 
 const Container = styled.div`
@@ -20,6 +21,7 @@ const Container = styled.div`
 
 const Main = styled.div`
   width: 100%;
+  height: 100%;
 
   display: flex;
   justify-content: center;
@@ -30,6 +32,7 @@ const Main = styled.div`
 
 export default function Home() {
   const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);
+  const isHideTimer = useMediaMatch("screen and (max-width: 1050px)");
 
   useEffect(() => {
     loadAudios({
@@ -44,7 +47,7 @@ export default function Home() {
       <Header />
       <Main>
         <Clock />
-        {/* <Timer /> */}
+        {isHideTimer ? null : <Timer />}
       </Main>
       <Footer />
       <Modal />

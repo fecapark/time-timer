@@ -3,7 +3,7 @@ import Script from "next/script";
 function Eruda() {
   return (
     <>
-      <Script
+      {/* <Script
         id="eruda-script"
         src="//cdn.jsdelivr.net/npm/eruda"
         strategy="beforeInteractive"
@@ -12,7 +12,7 @@ function Eruda() {
         id="eruda-init"
         type="text/javascript"
         dangerouslySetInnerHTML={{ __html: `eruda.init();` }}
-      ></Script>
+      ></Script> */}
     </>
   );
 }
