@@ -24,8 +24,14 @@ const shareCSS = {
   `,
 };
 
+const responsiveSizes = {
+  hideTimer: 1100,
+  mobile: 768,
+};
+
 export const Theme = {
   shareCSS,
   background,
   font,
+  responsiveSizes,
 };

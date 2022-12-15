@@ -45,10 +45,10 @@ export const TimeText = styled.div<{ triggerZoom: boolean }>`
 `;
 
 export const TimerButtonContainer = styled.div<{ triggerHide: boolean }>`
-  font-size: 14px;
-
   button {
     all: unset;
+
+    font-size: 14px;
 
     ${({ theme }) => theme.shareCSS.noDrag};
 
@@ -63,7 +63,12 @@ export const TimerButtonContainer = styled.div<{ triggerHide: boolean }>`
       ${(props) => (props.triggerHide ? "-40" : "0")}px,
       0
     );
-    transition: all
+    transition: opacity
+        ${(props) =>
+          props.triggerHide
+            ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
+            : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"},
+      transform
         ${(props) =>
           props.triggerHide
             ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"

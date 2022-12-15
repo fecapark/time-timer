@@ -43,7 +43,8 @@ export const Container = styled.header<{ triggerHide: boolean }>`
     }
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: ${({ theme }) =>
+      theme.responsiveSizes.mobile}px) {
     font-size: 15px;
   }
 `;
