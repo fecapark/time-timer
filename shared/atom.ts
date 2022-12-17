@@ -42,3 +42,8 @@ export const modalContentAtom = atom<IModalContentPayload | null>({
   key: `modal-content/${v1()}`,
   default: null,
 });
+
+export const clockSizeAtom = atom<number>({
+  key: `clock-size/${v1()}`,
+  default: 0,
+});

@@ -25,8 +25,8 @@ const GlobalStyle = css`
   }
 
   body {
+    font-size: ${Theme.font.bodySize}px;
     font-family: ${Theme.font.family.primary};
-    font-size: 14px;
     color: ${Theme.font.color.primary};
     background-color: ${Theme.background.primary};
   }

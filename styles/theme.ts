@@ -8,10 +8,12 @@ const background = {
 const font = {
   family: {
     primary: "'Roboto', 'Noto Sans KR', sans-serif",
+    poppins: "'Poppins', sans-serif",
   },
   color: {
     primary: "#ffffff",
   },
+  bodySize: 14,
 };
 
 const shareCSS = {
@@ -27,6 +29,7 @@ const shareCSS = {
 const responsiveSizes = {
   hideTimer: 1100,
   mobile: 768,
+  resizeClockWidth: 600,
 };
 
 export const Theme = {

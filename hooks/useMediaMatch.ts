@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-export interface IMediaOption {}
-
 export default function useMediaMatch(media: string) {
   const [matched, setMatched] = useState(false);
 

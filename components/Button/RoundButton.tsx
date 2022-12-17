@@ -8,59 +8,61 @@ interface IRoundButtonProps {
   disabled?: boolean;
 }
 
-const Container = styled.div<{ triggerHide: boolean }>`
-  button {
-    all: unset;
+const Container = styled.button<{ triggerHide: boolean }>`
+  all: unset;
+  color: white;
 
-    font-size: 14px;
+  ${({ theme }) => theme.shareCSS.noDrag};
 
-    ${({ theme }) => theme.shareCSS.noDrag};
+  border: 2px solid white;
+  padding: 0.8em 1.6em;
+  border-radius: 1000px;
 
-    border: 2px solid white;
-    padding: 0.8em 1.6em;
-    border-radius: 1000px;
+  opacity: ${(props) => (props.triggerHide ? "0" : "1")};
+  visibility: ${(props) => (props.triggerHide ? "hidden" : "visible")};
+  transform: translate3d(
+    0,
+    ${(props) => (props.triggerHide ? "-40" : "0")}px,
+    0
+  );
+  transition: opacity
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1) 0.4s"},
+    visibility
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1) 0.4s"},
+    transform
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1) 0.4s"},
+    border
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1)"},
+    background
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1)"};
 
-    opacity: ${(props) => (props.triggerHide ? "0" : "1")};
-    visibility: ${(props) => (props.triggerHide ? "hidden" : "visible")};
-    transform: translate3d(
-      0,
-      ${(props) => (props.triggerHide ? "-40" : "0")}px,
-      0
-    );
-    transition: opacity
-        ${(props) =>
-          props.triggerHide
-            ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
-            : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"},
-      transform
-        ${(props) =>
-          props.triggerHide
-            ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
-            : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"},
-      border
-        ${(props) =>
-          props.triggerHide
-            ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
-            : "0.2s cubic-bezier(0, 0, 0, 1)"},
-      background
-        ${(props) =>
-          props.triggerHide
-            ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
-            : "0.2s cubic-bezier(0, 0, 0, 1)"};
+  cursor: pointer;
 
-    cursor: pointer;
+  &:disabled {
+    cursor: default;
 
-    &:disabled {
-      cursor: default;
+    border-color: grey;
+    color: grey;
+  }
 
-      border-color: grey;
-      color: grey;
-    }
-
-    &:not(:disabled):hover {
-      border-color: ${({ theme }) => theme.background.hoverAccent};
-      background-color: ${({ theme }) => theme.background.hoverAccent};
-    }
+  &:not(:disabled):hover {
+    border-color: ${({ theme }) => theme.background.hoverAccent};
+    background-color: ${({ theme }) => theme.background.hoverAccent};
   }
 `;
 
@@ -71,10 +73,8 @@ export default function RoundButton({
   triggerHide = false,
 }: IRoundButtonProps) {
   return (
-    <Container triggerHide={triggerHide}>
-      <button disabled={disabled} onClick={onClick}>
-        {text}
-      </button>
+    <Container triggerHide={triggerHide} disabled={disabled} onClick={onClick}>
+      {text}
     </Container>
   );
 }

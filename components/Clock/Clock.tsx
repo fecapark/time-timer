@@ -19,6 +19,7 @@ import { Vector2 } from "../../utils/vector";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   clockDegreeAtom,
+  clockSizeAtom,
   isClockPointerDownAtom,
   isTimingNowAtom,
 } from "../../shared/atom";
@@ -35,6 +36,7 @@ export default function Clock() {
   const isTimingNow = useRecoilValue(isTimingNowAtom);
   const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
   const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
+  const setClockSize = useSetRecoilState(clockSizeAtom);
 
   useEffect(() => {
     if (!handlerRef.current) return;
@@ -143,6 +145,8 @@ export default function Clock() {
       `;
       moveAreaRef.current!.style.width = `${resultSize}px`;
       moveAreaRef.current!.style.height = `${resultSize}px`;
+
+      setClockSize(resultSize);
     };
 
     window.addEventListener("resize", onResize);
