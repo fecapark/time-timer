@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -6,72 +5,18 @@ import {
   isBottomSheetActiveAtom,
 } from "../../shared/atom";
 import { useState, useEffect } from "react";
-import { Vector2 } from "../../utils/vector";
+import {
+  Background,
+  Container,
+  ContentContainer,
+  ContentHeader,
+} from "./BottomSheet.styled";
 
-const Container = styled.div<{ active: boolean }>`
-  ${({ theme }) => theme.shareCSS.noDrag};
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  opacity: ${(props) => (props.active ? "1" : "0")};
-  visibility: ${(props) => (props.active ? "visible" : "hidden")};
-`;
-
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-
-  background-color: #00000077;
-`;
-
-const ContentContainer = styled.div<{ active: boolean }>`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-
-  width: 100%;
-  height: 300px;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-
-  z-index: 100;
-  background-color: #212124;
-
-  transform: translate3d(0, ${(props) => (props.active ? "0" : "100%")}, 0);
-  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
-`;
-
-const ContentHeader = styled.div`
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-
-  width: 100%;
-  height: 24px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .mover {
-    width: 30px;
-    height: 4px;
-
-    border-radius: 1000px;
-    background-color: #626264;
-  }
-`;
-
-let originOffset: number = 0;
 let movement: number = 0;
 
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
-
+  const [originOffset, setOriginOffset] = useState(0);
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(
     isBottomSheetActiveAtom
@@ -96,14 +41,13 @@ export default function BottomSheet() {
 
   const onDown = () => {
     if (!contentRef.current) return;
-
-    originOffset =
-      document.body.clientHeight -
-      contentRef.current.getBoundingClientRect().height;
-
     contentRef.current!.style.transition = "none";
 
     setIsPointerDown(true);
+    setOriginOffset(
+      document.body.clientHeight -
+        contentRef.current.getBoundingClientRect().height
+    );
   };
 
   const onEnd = () => {
