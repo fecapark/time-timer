@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useRef, PointerEvent } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  bottomSheetContentAtom,
-  isBottomSheetActiveAtom,
+  bottomSheetContentAtom as BSC,
+  isBottomSheetActiveAtom as IBSA,
 } from "../../shared/atom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Background,
   Container,
@@ -12,88 +12,78 @@ import {
   ContentHeader,
 } from "./BottomSheet.styled";
 
-let movement: number = 0;
-
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isSticky, setIsSticky] = useState(false);
   const [originOffset, setOriginOffset] = useState(0);
   const [isPointerDown, setIsPointerDown] = useState(false);
-  const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(
-    isBottomSheetActiveAtom
-  );
-  const bottomSheetContent = useRecoilValue(bottomSheetContentAtom);
+  const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(IBSA);
+  const bottomSheetContent = useRecoilValue(BSC);
 
   const closeBottomSheet = () => {
     setIsBottomSheetActive(false);
   };
 
-  const onMove = (e: React.MouseEvent) => {
+  const setContentTransformY = (value: string) => {
     if (!contentRef.current) return;
-    if (!isPointerDown) return;
-
-    const { clientY } = e.nativeEvent;
-    movement = Math.max(clientY - originOffset, 0);
 
     requestAnimationFrame(() => {
-      contentRef.current!.style.transform = `translate3d(0, ${movement}px, 0)`;
+      contentRef.current!.style.transform = `translate3d(0, ${value}, 0)`;
     });
   };
 
-  const onDown = () => {
+  const onPointerMove = (e: PointerEvent) => {
+    if (!isPointerDown) return;
+
+    const { clientY } = e.nativeEvent;
+    const movement = Math.max(clientY - originOffset, 0);
+
+    setIsSticky(movement < 50);
+    setContentTransformY(`${movement}px`);
+  };
+
+  const onPointerDown = () => {
     if (!contentRef.current) return;
     contentRef.current!.style.transition = "none";
 
+    const stageHeight = document.body.clientHeight;
+    const { height } = contentRef.current.getBoundingClientRect();
+
     setIsPointerDown(true);
-    setOriginOffset(
-      document.body.clientHeight -
-        contentRef.current.getBoundingClientRect().height
-    );
+    setOriginOffset(stageHeight - height);
   };
 
-  const onEnd = () => {
+  const onPointerEnd = () => {
     if (!contentRef.current) return;
     if (!isPointerDown) return;
 
-    contentRef.current!.style.transition = "";
     setIsPointerDown(false);
 
-    if (movement < 50) {
-      requestAnimationFrame(() => {
-        contentRef.current!.style.transform = `translate3d(0, 0, 0)`;
-        contentRef.current!.ontransitionend = () => {
-          contentRef.current!.style.transform = "";
-          contentRef.current!.ontransitionend = null;
-        };
-      });
-      return;
-    }
-
+    contentRef.current!.style.transition = "";
     requestAnimationFrame(() => {
-      contentRef.current!.style.transform = `translate3d(0, 100%, 0)`;
+      setContentTransformY(isSticky ? "0" : "100%");
       contentRef.current!.ontransitionend = () => {
-        contentRef.current!.style.transform = "";
-        contentRef.current!.ontransitionend = null;
-        setIsBottomSheetActive(false);
+        if (!isSticky) setIsBottomSheetActive(false);
+        initContentTransition();
       };
     });
   };
 
-  useEffect(() => {
-    window.addEventListener("pointerup", onEnd);
-    return () => {
-      window.removeEventListener("pointerup", onEnd);
-    };
-  }, []);
+  const initContentTransition = () => {
+    if (!contentRef.current) return;
+    contentRef.current!.style.transform = "";
+    contentRef.current!.ontransitionend = null;
+  };
 
   return (
     <Container
       active={isBottomSheetActive}
-      onPointerMove={onMove}
-      onPointerUp={onEnd}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerEnd}
     >
       <Background onClick={closeBottomSheet} />
       <ContentContainer ref={contentRef} active={isBottomSheetActive}>
-        <ContentHeader onPointerDown={onDown}>
+        <ContentHeader onPointerDown={onPointerDown}>
           <div className="mover"></div>
         </ContentHeader>
         <div>{bottomSheetContent}</div>

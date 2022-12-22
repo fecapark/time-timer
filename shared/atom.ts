@@ -50,7 +50,7 @@ export const clockSizeAtom = atom<number>({
 
 export const isBottomSheetActiveAtom = atom<boolean>({
   key: `is-bottom-sheet-active/${v1()}`,
-  default: true,
+  default: false,
 });
 
 export const bottomSheetContentAtom = atom<JSX.Element | null>({

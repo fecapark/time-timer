@@ -3,26 +3,33 @@ import { useRecoilValue } from "recoil";
 import useBottomSheet from "../../../hooks/useBottomSheet";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import {
-  clockDegreeAtom,
-  clockSizeAtom,
-  isClockPointerDownAtom,
-  isTimingNowAtom,
+  clockDegreeAtom as CD,
+  clockSizeAtom as CS,
+  isClockPointerDownAtom as ICPD,
+  isTimingNowAtom as ITN,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
+import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
 import RoundButton from "../../Button/RoundButton";
 import { getTimeFromDegree } from "../../Timer/Timer.util";
 import { Container, TimeText } from "./Footer.style";
 
 export default function Footer() {
-  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
-  const isTimingNow = useRecoilValue(isTimingNowAtom);
+  const isClockPointerDown = useRecoilValue(ICPD);
+  const isTimingNow = useRecoilValue(ITN);
+  const clockSize = useRecoilValue(CS);
+  const clockDegree = useRecoilValue(CD);
+  const [timerFontSize, setTimerFontSize] = useState(55);
+  const setBottomSheetActive = useBottomSheet({
+    content: <BottomSheetTimer />,
+  });
   const isHideTimer = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
   );
-  const clockSize = useRecoilValue(clockSizeAtom);
-  const [timerFontSize, setTimerFontSize] = useState(55);
-  const clockDegree = useRecoilValue(clockDegreeAtom);
-  const setBottomSheetActive = useBottomSheet({ content: <></> });
+
+  const onClick = () => {
+    setBottomSheetActive(true);
+  };
 
   useEffect(() => {
     const stageHeight = document.body.clientHeight;
@@ -38,12 +45,7 @@ export default function Footer() {
         onHideTimer={isHideTimer}
       >
         {isHideTimer ? (
-          <RoundButton
-            text="집중 시작하기"
-            onClick={() => {
-              setBottomSheetActive(true);
-            }}
-          />
+          <RoundButton text="집중 시작하기" onClick={onClick} />
         ) : (
           <span>
             Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.

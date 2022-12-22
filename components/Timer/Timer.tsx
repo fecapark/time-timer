@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  clockDegreeAtom,
-  isClockPointerDownAtom,
-  isTimingNowAtom,
-  soundEffectAudioAtom,
+  clockDegreeAtom as CD,
+  isClockPointerDownAtom as ICPD,
+  isTimingNowAtom as ITN,
+  soundEffectAudioAtom as SEA,
 } from "../../shared/atom";
 import { Container, TimeText } from "./Timer.styled";
 import { getTimeFromDegree } from "./Timer.util";
@@ -16,11 +16,12 @@ import RoundButton from "../Button/RoundButton";
 let timerInterval: NodeJS.Timer | null = null;
 
 export default function Timer() {
-  const [isTimingNow, setIsTimingNow] = useRecoilState(isTimingNowAtom);
-  const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
-  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
-  const soundEffectAudio = useRecoilValue(soundEffectAudioAtom);
+  const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
+  const [clockDegree, setClockDegree] = useRecoilState(CD);
+  const isClockPointerDown = useRecoilValue(ICPD);
+  const soundEffectAudio = useRecoilValue(SEA);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
+
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {

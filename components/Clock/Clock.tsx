@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, PointerEvent } from "react";
 import {
   ClockBackground,
   ClockCenter,
@@ -18,10 +18,10 @@ import {
 import { Vector2 } from "../../utils/vector";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  clockDegreeAtom,
-  clockSizeAtom,
-  isClockPointerDownAtom,
-  isTimingNowAtom,
+  clockDegreeAtom as CD,
+  clockSizeAtom as CS,
+  isClockPointerDownAtom as ICPD,
+  isTimingNowAtom as ITN,
 } from "../../shared/atom";
 
 let canSetClockDegree = false;
@@ -32,11 +32,54 @@ export default function Clock() {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
   const resizeRef = useRef<HTMLDivElement>(null);
+  const [moveAreaPos, setMoveAreaPos] = useState<Vector2>(new Vector2(0, 0));
+  const [centerPos, setCenterPos] = useState<Vector2>(new Vector2(0, 0));
+  const [prevRelPos, setPrevRelPos] = useState<Vector2 | null>(null);
+  const isTimingNow = useRecoilValue(ITN);
+  const setIsClockPointerDown = useSetRecoilState(ICPD);
+  const setClockSize = useSetRecoilState(CS);
+  const [clockDegree, setClockDegree] = useRecoilState(CD);
 
-  const isTimingNow = useRecoilValue(isTimingNowAtom);
-  const setIsClockPointerDown = useSetRecoilState(isClockPointerDownAtom);
-  const [clockDegree, setClockDegree] = useRecoilState(clockDegreeAtom);
-  const setClockSize = useSetRecoilState(clockSizeAtom);
+  const onPointerDown = (e: PointerEvent) => {
+    canSetClockDegree = true;
+    isOverLimited = false;
+
+    if (isTimingNow) return;
+
+    const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
+    const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
+    const degree = getRotationDegree(relPos);
+
+    setIsClockPointerDown(true);
+    setClockDegree(degree);
+  };
+
+  const onPointerMove = (e: PointerEvent) => {
+    if (!canSetClockDegree) return;
+    if (isTimingNow) return;
+
+    const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
+    const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
+    let degree = isOverLimited ? 0 : getRotationDegree(relPos);
+
+    if (isRotatedOverOneRound(relPos, prevRelPos)) {
+      isOverLimited = true;
+      degree = 0;
+    } else if (isMovedToRightWhenStoped(relPos, isOverLimited)) {
+      isOverLimited = false;
+    }
+
+    setPrevRelPos(relPos.copy());
+    setClockDegree(degree);
+  };
+
+  const onPointerEnd = () => {
+    if (!canSetClockDegree) return;
+
+    canSetClockDegree = false;
+    isOverLimited = false;
+    setIsClockPointerDown(false);
+  };
 
   useEffect(() => {
     if (!handlerRef.current) return;
@@ -53,78 +96,22 @@ export default function Clock() {
     if (!moveAreaRef.current) return;
     if (!handlerRef.current) return;
 
-    const pointerDownHandler = (e: PointerEvent) => {
-      canSetClockDegree = true;
-      isOverLimited = false;
-
-      if (isTimingNow) return;
-
-      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
-      const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-      const degree = getRotationDegree(relPos);
-
-      setIsClockPointerDown(true);
-      setClockDegree(degree);
-    };
-
-    const pointerMoveHandler = (e: PointerEvent) => {
-      if (!canSetClockDegree) return;
-      if (isTimingNow) return;
-
-      const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
-      const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-      let degree = isOverLimited ? 0 : getRotationDegree(relPos);
-
-      if (isRotatedOverOneRound(relPos, prevRelPos)) {
-        isOverLimited = true;
-        degree = 0;
-      } else if (isMovedToRightWhenStoped(relPos, isOverLimited)) {
-        isOverLimited = false;
-      }
-
-      prevRelPos = relPos.copy();
-      setClockDegree(degree);
-    };
-
-    const pointerEndHandler = () => {
-      if (!canSetClockDegree) return;
-
-      canSetClockDegree = false;
-      isOverLimited = false;
-      setIsClockPointerDown(false);
-    };
-
     const handleResize = () => {
       const { width, height, x, y } =
         handlerRef.current!.getBoundingClientRect();
       const { x: ax, y: ay } = moveAreaRef.current!.getBoundingClientRect();
 
-      moveAreaPos = new Vector2(ax, ay);
-      centerPos = new Vector2(x + width / 2, y + height / 2);
+      setMoveAreaPos(new Vector2(ax, ay));
+      setCenterPos(new Vector2(x + width / 2, y + height / 2));
     };
 
-    let centerPos = new Vector2(0, 0);
-    let moveAreaPos = new Vector2(0, 0);
-    let prevRelPos: Vector2 | null = null;
-
-    moveAreaRef.current.addEventListener("pointerdown", pointerDownHandler);
-    moveAreaRef.current.addEventListener("pointermove", pointerMoveHandler);
-    document.addEventListener("pointerup", pointerEndHandler);
-
+    document.addEventListener("pointerup", onPointerEnd);
     window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      moveAreaRef.current?.removeEventListener(
-        "pointerdown",
-        pointerDownHandler
-      );
-      moveAreaRef.current?.removeEventListener(
-        "pointermove",
-        pointerMoveHandler
-      );
-      document.removeEventListener("pointerup", pointerEndHandler);
+      document.removeEventListener("pointerup", onPointerEnd);
     };
   }, [moveAreaRef.current, handlerRef.current, isTimingNow]);
 
@@ -159,7 +146,11 @@ export default function Clock() {
 
   return (
     <Container ref={resizeRef}>
-      <MainClock ref={moveAreaRef}>
+      <MainClock
+        ref={moveAreaRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+      >
         <ClockCenter>
           {range(60).map((i) => (
             <Graduation

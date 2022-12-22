@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div<{ active: boolean }>`
-  ${({ theme }) => theme.shareCSS.noDrag};
-
   position: fixed;
   top: 0;
   left: 0;
@@ -10,11 +8,19 @@ export const Container = styled.div<{ active: boolean }>`
   width: 100%;
   height: 100%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   opacity: ${(props) => (props.active ? "1" : "0")};
   visibility: ${(props) => (props.active ? "visible" : "hidden")};
 `;
 
 export const Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+
   width: 100%;
   height: 100%;
 
@@ -22,37 +28,28 @@ export const Background = styled.div`
 `;
 
 export const ContentContainer = styled.div<{ active: boolean }>`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-
-  width: 100%;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  width: 500px;
 
   z-index: 100;
   background-color: #212124;
 
-  transform: translate3d(0, ${(props) => (props.active ? "0" : "100%")}, 0);
-  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+  padding: 48px 32px;
+  border-radius: 24px;
+
+  opacity: ${(props) => (props.active ? "1" : "0")};
+  transform: scale(${(props) => (props.active ? "1" : "1.1")});
+  transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
 `;
 
 export const ContentHeader = styled.div`
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-
   width: 100%;
-  height: 24px;
+  text-align: start;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-bottom: 18px;
 
-  .mover {
-    width: 30px;
-    height: 4px;
-
-    border-radius: 1000px;
-    background-color: #626264;
+  span {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.15px;
   }
 `;

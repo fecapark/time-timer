@@ -1,9 +1,9 @@
 import { useRecoilValue } from "recoil";
 import {
-  clockDegreeAtom,
-  clockSizeAtom,
-  isClockPointerDownAtom,
-  isTimingNowAtom,
+  clockDegreeAtom as CD,
+  clockSizeAtom as CS,
+  isClockPointerDownAtom as ICPD,
+  isTimingNowAtom as ITN,
 } from "../../../shared/atom";
 import { Container, TimeText } from "./Header.style";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -12,15 +12,14 @@ import { useEffect, useState } from "react";
 import { getTimeFromDegree } from "../../Timer/Timer.util";
 
 export default function Header() {
-  const isClockPointerDown = useRecoilValue(isClockPointerDownAtom);
-  const isTimingNow = useRecoilValue(isTimingNowAtom);
+  const isClockPointerDown = useRecoilValue(ICPD);
+  const isTimingNow = useRecoilValue(ITN);
+  const clockDegree = useRecoilValue(CD);
+  const clockSize = useRecoilValue(CS);
+  const [timerFontSize, setTimerFontSize] = useState(55);
   const isHideTimer = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
   );
-  const clockDegree = useRecoilValue(clockDegreeAtom);
-  const clockSize = useRecoilValue(clockSizeAtom);
-
-  const [timerFontSize, setTimerFontSize] = useState(55);
 
   useEffect(() => {
     const stageHeight = document.body.clientHeight;
