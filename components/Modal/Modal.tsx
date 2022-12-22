@@ -33,7 +33,6 @@ const Background = styled.div`
 
 const ContentContainer = styled.div<{ active: boolean }>`
   width: 500px;
-  background-color: white;
 
   z-index: 100;
   background-color: #212124;

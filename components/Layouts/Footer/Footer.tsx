@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import useBottomSheet from "../../../hooks/useBottomSheet";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import {
   clockDegreeAtom,
@@ -21,6 +22,7 @@ export default function Footer() {
   const clockSize = useRecoilValue(clockSizeAtom);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const clockDegree = useRecoilValue(clockDegreeAtom);
+  const setBottomSheetActive = useBottomSheet({ content: <></> });
 
   useEffect(() => {
     const stageHeight = document.body.clientHeight;
@@ -36,7 +38,12 @@ export default function Footer() {
         onHideTimer={isHideTimer}
       >
         {isHideTimer ? (
-          <RoundButton text="집중 시작하기" />
+          <RoundButton
+            text="집중 시작하기"
+            onClick={() => {
+              setBottomSheetActive(true);
+            }}
+          />
         ) : (
           <span>
             Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.

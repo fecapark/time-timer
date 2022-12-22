@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
+import BottomSheet from "../components/BottomSheet/BottomSheet";
 import Clock from "../components/Clock/Clock";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
@@ -55,6 +56,7 @@ export default function Home() {
         {isHideTimer ? null : <Timer />}
       </Main>
       <Footer />
+      <BottomSheet />
       <Modal />
     </Container>
   );

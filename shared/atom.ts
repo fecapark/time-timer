@@ -47,3 +47,13 @@ export const clockSizeAtom = atom<number>({
   key: `clock-size/${v1()}`,
   default: 0,
 });
+
+export const isBottomSheetActiveAtom = atom<boolean>({
+  key: `is-bottom-sheet-active/${v1()}`,
+  default: true,
+});
+
+export const bottomSheetContentAtom = atom<JSX.Element | null>({
+  key: `bottom-sheet-content/${v1()}`,
+  default: null,
+});
