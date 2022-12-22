@@ -55,6 +55,18 @@ export default function BottomSheet() {
     if (!isPointerDown) return;
 
     contentRef.current!.style.transition = "";
+    setIsPointerDown(false);
+
+    if (movement < 50) {
+      requestAnimationFrame(() => {
+        contentRef.current!.style.transform = `translate3d(0, 0, 0)`;
+        contentRef.current!.ontransitionend = () => {
+          contentRef.current!.style.transform = "";
+          contentRef.current!.ontransitionend = null;
+        };
+      });
+      return;
+    }
 
     requestAnimationFrame(() => {
       contentRef.current!.style.transform = `translate3d(0, 100%, 0)`;
@@ -64,8 +76,6 @@ export default function BottomSheet() {
         setIsBottomSheetActive(false);
       };
     });
-
-    setIsPointerDown(false);
   };
 
   useEffect(() => {
