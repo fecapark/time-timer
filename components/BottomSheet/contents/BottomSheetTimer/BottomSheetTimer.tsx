@@ -1,14 +1,21 @@
 import styled from "@emotion/styled";
+import { IBottomSheetContentConstructorProp } from "../../../../shared/types";
 import Timer from "../../../Timer/Timer";
 
-const Container = styled.div`
+const ContentContainer = styled.div`
   padding: 48px 32px;
 `;
 
-export default function BottomSheetTimer() {
+export default function BottomSheetTimer({
+  hideBottomSheet,
+}: IBottomSheetContentConstructorProp) {
   return (
-    <Container>
-      <Timer />
-    </Container>
+    <ContentContainer>
+      <Timer
+        onTimingStart={() => {
+          hideBottomSheet();
+        }}
+      />
+    </ContentContainer>
   );
 }

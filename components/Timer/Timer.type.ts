@@ -1,3 +1,3 @@
 export interface IProps {
-  isHideTimer: boolean;
+  onTimingStart?: () => void;
 }

@@ -144,6 +144,13 @@ export default function Clock() {
     };
   }, [resizeRef.current]);
 
+  useEffect(() => {
+    setClockDegree(0);
+    setTimeout(() => {
+      setClockDegree(360);
+    }, 300);
+  }, []);
+
   return (
     <Container ref={resizeRef}>
       <MainClock

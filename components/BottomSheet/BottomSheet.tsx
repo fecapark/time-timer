@@ -1,7 +1,7 @@
 import { useRef, PointerEvent } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  bottomSheetContentAtom as BSC,
+  bottomSheetContentConstructorAtom as BSCC,
   isBottomSheetActiveAtom as IBSA,
 } from "../../shared/atom";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function BottomSheet() {
   const [originOffset, setOriginOffset] = useState(0);
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(IBSA);
-  const bottomSheetContent = useRecoilValue(BSC);
+  const BottomSheetContentConstructor = useRecoilValue(BSCC);
 
   const closeBottomSheet = () => {
     setIsBottomSheetActive(false);
@@ -58,21 +58,19 @@ export default function BottomSheet() {
     if (!isPointerDown) return;
 
     setIsPointerDown(false);
+    hideThisWithTransition();
+  };
 
+  const hideThisWithTransition = () => {
     contentRef.current!.style.transition = "";
     requestAnimationFrame(() => {
       setContentTransformY(isSticky ? "0" : "100%");
       contentRef.current!.ontransitionend = () => {
         if (!isSticky) setIsBottomSheetActive(false);
-        initContentTransition();
+        contentRef.current!.style.transform = "";
+        contentRef.current!.ontransitionend = null;
       };
     });
-  };
-
-  const initContentTransition = () => {
-    if (!contentRef.current) return;
-    contentRef.current!.style.transform = "";
-    contentRef.current!.ontransitionend = null;
   };
 
   return (
@@ -86,7 +84,11 @@ export default function BottomSheet() {
         <ContentHeader onPointerDown={onPointerDown}>
           <div className="mover"></div>
         </ContentHeader>
-        <div>{bottomSheetContent}</div>
+        <div>
+          <BottomSheetContentConstructor
+            hideBottomSheet={hideThisWithTransition}
+          />
+        </div>
       </ContentContainer>
     </Container>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useMediaMatch(media: string) {
+  const [setted, setSetted] = useState(false);
   const [matched, setMatched] = useState(false);
 
   useEffect(() => {
@@ -11,11 +12,12 @@ export default function useMediaMatch(media: string) {
 
     window.addEventListener("resize", onResize);
     onResize();
+    setSetted(true);
 
     return () => {
       window.removeEventListener("resize", onResize);
     };
   }, []);
 
-  return matched;
+  return [matched, setted];
 }

@@ -10,4 +10,8 @@ export interface IModalContentPayload {
   content: JSX.Element;
 }
 
+export interface IBottomSheetContentConstructorProp {
+  hideBottomSheet: () => void;
+}
+
 export type SetStateType<T> = Dispatch<SetStateAction<T>>;

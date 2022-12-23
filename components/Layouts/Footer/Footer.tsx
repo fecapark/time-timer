@@ -21,9 +21,9 @@ export default function Footer() {
   const clockDegree = useRecoilValue(CD);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const setBottomSheetActive = useBottomSheet({
-    content: <BottomSheetTimer />,
+    content: <BottomSheetTimer hideBottomSheet={() => {}} />,
   });
-  const isHideTimer = useMediaMatch(
+  const [isHideTimer, mediaSetted] = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
   );
 
@@ -44,13 +44,15 @@ export default function Footer() {
         triggerHide={isClockPointerDown || isTimingNow}
         onHideTimer={isHideTimer}
       >
-        {isHideTimer ? (
-          <RoundButton text="집중 시작하기" onClick={onClick} />
-        ) : (
-          <span>
-            Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.
-          </span>
-        )}
+        {mediaSetted ? (
+          isHideTimer ? (
+            <RoundButton text="집중 시작하기" onClick={onClick} />
+          ) : (
+            <span>
+              Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.
+            </span>
+          )
+        ) : null}
       </Container>
       {isHideTimer ? (
         <TimeText fontSize={timerFontSize} triggerHide={!isClockPointerDown}>

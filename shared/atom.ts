@@ -1,7 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { atom } from "recoil";
 import { v1 } from "uuid";
-import { IAudioData, IModalContentPayload } from "./types";
+import {
+  IAudioData,
+  IModalContentPayload,
+  IBottomSheetContentConstructorProp,
+} from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
   key: `on-clock-pointer-down/${v1()}`,
@@ -53,7 +57,9 @@ export const isBottomSheetActiveAtom = atom<boolean>({
   default: false,
 });
 
-export const bottomSheetContentAtom = atom<JSX.Element | null>({
+export const bottomSheetContentConstructorAtom = atom<
+  React.FC<IBottomSheetContentConstructorProp>
+>({
   key: `bottom-sheet-content/${v1()}`,
-  default: null,
+  default: ({ hideBottomSheet }) => null,
 });

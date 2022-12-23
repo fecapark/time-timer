@@ -14,16 +14,17 @@ import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
 import RoundButton from "../Button/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
+import { IProps } from "./Timer.type";
 
 let timerInterval: NodeJS.Timer | null = null;
 
-export default function Timer() {
+export default function Timer({ onTimingStart }: IProps) {
   const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
   const [clockDegree, setClockDegree] = useRecoilState(CD);
   const isClockPointerDown = useRecoilValue(ICPD);
   const soundEffectAudio = useRecoilValue(SEA);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
-  const isHideTimer = useMediaMatch(
+  const [isHideTimer, _] = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
   );
   const isEmptyClockDegree = clockDegree >= 360;
@@ -68,7 +69,7 @@ export default function Timer() {
   }, [clockDegree, isClockPointerDown]);
 
   return (
-    <Container isHide={isHideTimer}>
+    <Container>
       <div className="option-container">
         {isHideTimer ? null : (
           <RoundButton
@@ -85,6 +86,7 @@ export default function Timer() {
             getAudioPermission();
             setIsTimingNow(true);
             startTimer();
+            if (onTimingStart) onTimingStart();
           }}
           triggerHide={isClockPointerDown || isTimingNow}
         />
