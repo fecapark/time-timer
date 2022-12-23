@@ -63,3 +63,13 @@ export const bottomSheetContentConstructorAtom = atom<
   key: `bottom-sheet-content/${v1()}`,
   default: ({ hideBottomSheet }) => null,
 });
+
+export const isAlarmSoundOnAtom = atom<boolean>({
+  key: `is-alram-sound-on/${v1()}`,
+  default: false,
+});
+
+export const isSendPushOnAtom = atom<boolean>({
+  key: `is-send-push-on/${v1()}`,
+  default: false,
+});

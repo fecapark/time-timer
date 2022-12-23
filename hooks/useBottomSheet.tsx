@@ -1,4 +1,3 @@
-import React, { cloneElement } from "react";
 import { useSetRecoilState } from "recoil";
 import {
   bottomSheetContentConstructorAtom as BSCC,
@@ -7,22 +6,16 @@ import {
 import { IBottomSheetContentConstructorProp } from "../shared/types";
 
 interface IProps {
-  content: JSX.Element;
+  constructor: React.FC<IBottomSheetContentConstructorProp>;
 }
 
-export default function useBottomSheet({ content }: IProps) {
+export default function useBottomSheet({ constructor }: IProps) {
   const setIsBottomSheetActive = useSetRecoilState(IBSA);
   const setBottomSheetContentConstructor = useSetRecoilState(BSCC);
 
   const setThisBottomSheet = (state: boolean) => {
-    const wrapper = ({
-      hideBottomSheet,
-    }: IBottomSheetContentConstructorProp) => {
-      return cloneElement(content, { hideBottomSheet });
-    };
-
     setIsBottomSheetActive(state);
-    setBottomSheetContentConstructor(() => wrapper);
+    setBottomSheetContentConstructor(() => constructor);
   };
 
   return setThisBottomSheet;

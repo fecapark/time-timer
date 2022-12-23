@@ -21,7 +21,7 @@ export default function Footer() {
   const clockDegree = useRecoilValue(CD);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const setBottomSheetActive = useBottomSheet({
-    content: <BottomSheetTimer hideBottomSheet={() => {}} />,
+    constructor: BottomSheetTimer,
   });
   const [isHideTimer, mediaSetted] = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`

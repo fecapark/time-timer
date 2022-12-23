@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import useModal from "../../hooks/useModal";
 import usePushNotification from "../../hooks/usePushNotification";
 import {
+  isAlarmSoundOnAtom as IASO,
   isClockPointerDownAtom as ICPD,
   isNotificationPermissionGrantedAtom as INPG,
   isNotificationSupportEnvironmentAtom as INSE,
+  isSendPushOnAtom as ISPO,
 } from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import { requestNotificationPermission } from "../Timer/Timer.util";
@@ -24,8 +26,8 @@ export default function AlarmOptionContainer({
   timer: { isTimingNow, isEmptyClockDegree },
   audio: { isAudioLoaded, playAudio },
 }: IProps) {
-  const [isAlarmSoundOn, setIsAlarmSoundOn] = useState(false);
-  const [isSendPushOn, setIsSendPushOn] = useState(false);
+  const [isAlarmSoundOn, setIsAlarmSoundOn] = useRecoilState(IASO);
+  const [isSendPushOn, setIsSendPushOn] = useRecoilState(ISPO);
   const isClockPointerDown = useRecoilValue(ICPD);
   const setIsNotificationSupportEnvironment = useSetRecoilState(INSE);
   const setIsNotificationPermissionGranted = useSetRecoilState(INPG);
