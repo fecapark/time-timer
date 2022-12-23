@@ -17,7 +17,7 @@ export default function Header() {
   const clockDegree = useRecoilValue(CD);
   const clockSize = useRecoilValue(CS);
   const [timerFontSize, setTimerFontSize] = useState(55);
-  const isHideTimer = useMediaMatch(
+  const [isHideTimer, _] = useMediaMatch(
     `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
   );
 
