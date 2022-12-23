@@ -55,7 +55,10 @@ export default function Footer() {
         ) : null}
       </Container>
       {isHideTimer ? (
-        <TimeText fontSize={timerFontSize} triggerHide={!isClockPointerDown}>
+        <TimeText
+          fontSize={timerFontSize}
+          triggerHide={!isClockPointerDown && !isTimingNow}
+        >
           {getTimeFromDegree(clockDegree).sec}
         </TimeText>
       ) : null}

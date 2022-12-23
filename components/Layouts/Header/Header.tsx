@@ -37,7 +37,10 @@ export default function Header() {
         </div>
       </Container>
       {isHideTimer ? (
-        <TimeText fontSize={timerFontSize} triggerHide={!isClockPointerDown}>
+        <TimeText
+          fontSize={timerFontSize}
+          triggerHide={!isClockPointerDown && !isTimingNow}
+        >
           {getTimeFromDegree(clockDegree).min}
         </TimeText>
       ) : null}
