@@ -12,6 +12,8 @@ import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
 import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
 import RoundButton from "../Button/RoundButton";
+import useMediaMatch from "../../hooks/useMediaMatch";
+import { Theme } from "../../styles/theme";
 
 let timerInterval: NodeJS.Timer | null = null;
 
@@ -21,7 +23,9 @@ export default function Timer() {
   const isClockPointerDown = useRecoilValue(ICPD);
   const soundEffectAudio = useRecoilValue(SEA);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
-
+  const isHideTimer = useMediaMatch(
+    `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
+  );
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
@@ -64,28 +68,35 @@ export default function Timer() {
   }, [clockDegree, isClockPointerDown]);
 
   return (
-    <Container>
-      <RoundButton
-        text="일시정지"
-        disabled={!isTimingNow}
-        onClick={pauseTimer}
-        triggerHide={!isTimingNow}
-      />
-      <RoundButton
-        text={isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
-        disabled={isEmptyClockDegree}
-        onClick={() => {
-          getAudioPermission();
-          setIsTimingNow(true);
-          startTimer();
-        }}
-        triggerHide={isClockPointerDown || isTimingNow}
-      />
-      <AlarmOptionContainer
-        timer={{ isEmptyClockDegree, isTimingNow }}
-        audio={{ isAudioLoaded: soundEffectAudio !== null, playAudio }}
-      />
-      <TimeText triggerZoom={isClockPointerDown || isTimingNow}>
+    <Container isHide={isHideTimer}>
+      <div className="option-container">
+        {isHideTimer ? null : (
+          <RoundButton
+            text="일시정지"
+            disabled={!isTimingNow}
+            onClick={pauseTimer}
+            triggerHide={!isTimingNow}
+          />
+        )}
+        <RoundButton
+          text={isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
+          disabled={isEmptyClockDegree}
+          onClick={() => {
+            getAudioPermission();
+            setIsTimingNow(true);
+            startTimer();
+          }}
+          triggerHide={isClockPointerDown || isTimingNow}
+        />
+        <AlarmOptionContainer
+          timer={{ isEmptyClockDegree, isTimingNow }}
+          audio={{ isAudioLoaded: soundEffectAudio !== null, playAudio }}
+        />
+      </div>
+      <TimeText
+        triggerZoom={isClockPointerDown || isTimingNow}
+        isHide={isHideTimer}
+      >
         <div className="row">
           <span className="min">{getTimeFromDegree(clockDegree).min}</span>
         </div>

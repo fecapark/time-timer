@@ -99,5 +99,9 @@ export const Graduation = styled.div<IGraduationStyleProps>`
 
     transition: color 0.2s cubic-bezier(0.2, 0, 0, 1),
       transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+    @media screen and (max-width: 600px) {
+      font-size: 26px;
+    }
   }
 `;

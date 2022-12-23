@@ -1,22 +1,36 @@
 import styled from "@emotion/styled";
 
-export const Container = styled.div`
-  position: absolute;
-
+export const Container = styled.div<{ isHide: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 30px;
 
-  right: 60px;
-  bottom: 0px;
+  ${(props) =>
+    props.isHide
+      ? `
+    justify-content: center;
+    flex-direction: row-reverse;
+    `
+      : `
+    position: absolute;
+    right: 60px;
+    bottom: 0px;
+  `};
+
+  .option-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 30px;
+  }
 `;
 
-export const TimeText = styled.div<{ triggerZoom: boolean }>`
+export const TimeText = styled.div<{ triggerZoom: boolean; isHide: boolean }>`
   ${({ theme }) => theme.shareCSS.noDrag};
 
-  font-size: 60px;
-  line-height: 60px;
+  font-size: ${(props) => (props.isHide ? "72" : "60")}px;
+  line-height: 1em;
   font-weight: 100;
 
   display: flex;
@@ -35,7 +49,7 @@ export const TimeText = styled.div<{ triggerZoom: boolean }>`
   .row {
     width: 100px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: ${(props) => (props.isHide ? "flex-start" : "flex-end")};
 
     .min,
     .sec {
