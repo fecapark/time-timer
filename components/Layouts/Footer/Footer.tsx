@@ -24,7 +24,7 @@ export default function Footer() {
     constructor: BottomSheetTimer,
   });
   const [isHideTimer, mediaSetted] = useMediaMatch(
-    `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
+    Theme.mediaQueries.hideTimerMaxWidth
   );
 
   const onClick = () => {

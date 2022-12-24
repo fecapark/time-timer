@@ -24,9 +24,7 @@ export default function Timer({ onTimingStart }: IProps) {
   const isClockPointerDown = useRecoilValue(ICPD);
   const soundEffectAudio = useRecoilValue(SEA);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
-  const [isHideTimer, _] = useMediaMatch(
-    `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
-  );
+  const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {

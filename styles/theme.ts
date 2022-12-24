@@ -32,9 +32,14 @@ const responsiveSizes = {
   resizeClockWidth: 600,
 };
 
+const mediaQueries = {
+  hideTimerMaxWidth: `screen and (max-width: ${responsiveSizes.hideTimer}px)`,
+};
+
 export const Theme = {
   shareCSS,
   background,
   font,
   responsiveSizes,
+  mediaQueries,
 };

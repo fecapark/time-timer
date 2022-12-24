@@ -5,6 +5,7 @@ import useModal from "../../hooks/useModal";
 import usePushNotification from "../../hooks/usePushNotification";
 import {
   isAlarmSoundOnAtom as IASO,
+  isAlarmSoundOnAtom,
   isClockPointerDownAtom as ICPD,
   isNotificationPermissionGrantedAtom as INPG,
   isNotificationSupportEnvironmentAtom as INSE,
@@ -87,7 +88,7 @@ export default function AlarmOptionContainer({
         <span>종료시 알람 소리 켜기</span>
         {isAudioLoaded ? (
           <Switch
-            defaultState="off"
+            defaultState={isAlarmSoundOn ? "on" : "off"}
             onOn={onSoundAlarmOn}
             onOff={onSoundAlarmOff}
           />
@@ -99,7 +100,11 @@ export default function AlarmOptionContainer({
       </OptionSwitchRow>
       <OptionSwitchRow isOn={isSendPushOn}>
         <span>종료시 푸쉬 알림 켜기</span>
-        <Switch defaultState="off" onOn={onSendPushOn} onOff={onSendPushOff} />
+        <Switch
+          defaultState={isSendPushOn ? "on" : "off"}
+          onOn={onSendPushOn}
+          onOff={onSendPushOff}
+        />
       </OptionSwitchRow>
     </Container>
   );

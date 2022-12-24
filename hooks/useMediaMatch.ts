@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-export default function useMediaMatch(media: string) {
+type Matched = boolean;
+type SettedOnce = boolean;
+
+export default function useMediaMatch(media: string): [Matched, SettedOnce] {
   const [setted, setSetted] = useState(false);
   const [matched, setMatched] = useState(false);
 

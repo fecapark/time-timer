@@ -1,4 +1,4 @@
-import { useRef, PointerEvent } from "react";
+import { useRef, PointerEvent, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   bottomSheetContentConstructorAtom as BSCC,
@@ -11,6 +11,8 @@ import {
   ContentContainer,
   ContentHeader,
 } from "./BottomSheet.styled";
+import useMediaMatch from "../../hooks/useMediaMatch";
+import { Theme } from "../../styles/theme";
 
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -19,6 +21,7 @@ export default function BottomSheet() {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(IBSA);
   const BottomSheetContentConstructor = useRecoilValue(BSCC);
+  const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
 
   const closeBottomSheet = () => {
     setIsBottomSheetActive(false);
@@ -66,12 +69,18 @@ export default function BottomSheet() {
     requestAnimationFrame(() => {
       setContentTransformY(isSticky ? "0" : "100%");
       contentRef.current!.ontransitionend = () => {
-        if (!isSticky) setIsBottomSheetActive(false);
+        if (!isSticky) closeBottomSheet();
         contentRef.current!.style.transform = "";
         contentRef.current!.ontransitionend = null;
       };
     });
   };
+
+  useEffect(() => {
+    if (!isHideTimer) {
+      closeBottomSheet();
+    }
+  }, [isHideTimer]);
 
   return (
     <Container

@@ -17,9 +17,7 @@ export default function Header() {
   const clockDegree = useRecoilValue(CD);
   const clockSize = useRecoilValue(CS);
   const [timerFontSize, setTimerFontSize] = useState(55);
-  const [isHideTimer, _] = useMediaMatch(
-    `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
-  );
+  const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
 
   useEffect(() => {
     const stageHeight = document.body.clientHeight;
