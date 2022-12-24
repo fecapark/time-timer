@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.button<{ triggerHide: boolean }>`
-  all: unset;
-  color: white;
-
   ${({ theme }) => theme.shareCSS.noDrag};
 
+  color: white;
   border: 2px solid white;
   padding: 0.8em 1.6em;
   border-radius: 1000px;

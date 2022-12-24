@@ -11,6 +11,11 @@ const GlobalStyle = css`
     box-sizing: border-box;
   }
 
+  button {
+    all: unset;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   html,
   body,
   #__next {

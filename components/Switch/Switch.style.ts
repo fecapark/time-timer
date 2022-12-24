@@ -2,17 +2,15 @@ import styled from "@emotion/styled";
 import { IStyleProps } from "./Switch.type";
 
 export const Container = styled.div<IStyleProps>`
+  ${({ theme }) => theme.shareCSS.noDrag}
+  -webkit-tap-highlight-color: transparent;
+
   width: 50px;
   border-radius: 1000px;
   padding: 4px;
 
   transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
   border: 2px solid ${(props) => (props.state === "on" ? "white" : "grey")};
-
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
 
   cursor: pointer;
 
