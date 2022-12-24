@@ -17,6 +17,7 @@ import { Theme } from "../../styles/theme";
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [pointerDownOffset, setPointerDownOffset] = useState(0);
   const [originOffset, setOriginOffset] = useState(0);
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isBottomSheetActive, setIsBottomSheetActive] = useRecoilState(IBSA);
@@ -39,21 +40,24 @@ export default function BottomSheet() {
     if (!isPointerDown) return;
 
     const { clientY } = e.nativeEvent;
-    const movement = Math.max(clientY - originOffset, 0);
+    const movement = Math.max(clientY - originOffset - pointerDownOffset, 0);
 
     setIsSticky(movement < 50);
     setContentTransformY(`${movement}px`);
   };
 
-  const onPointerDown = () => {
+  const onPointerDown = (e: PointerEvent) => {
     if (!contentRef.current) return;
     contentRef.current!.style.transition = "none";
 
-    const stageHeight = document.body.clientHeight;
+    const { clientY } = e.nativeEvent;
     const { height } = contentRef.current.getBoundingClientRect();
+    const stageHeight = document.body.clientHeight;
+    const originOffset = stageHeight - height;
 
     setIsPointerDown(true);
-    setOriginOffset(stageHeight - height);
+    setOriginOffset(originOffset);
+    setPointerDownOffset(clientY - originOffset);
   };
 
   const onPointerEnd = () => {
