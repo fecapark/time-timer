@@ -47,6 +47,11 @@ export default function Timer({ onTimingStart }: IProps) {
       prevTime = curTime;
     };
 
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
     let prevTime = new Date().getTime();
     timerInterval = setInterval(onInterval, 1000);
   };

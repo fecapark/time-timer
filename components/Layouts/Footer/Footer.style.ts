@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 export const PauseButton = styled.button<{ triggerHide: boolean }>`
   all: unset;
 
-  font-size: 18px;
+  font-size: 20px;
 
   position: fixed;
   right: 5vw;
@@ -14,7 +14,7 @@ export const PauseButton = styled.button<{ triggerHide: boolean }>`
   align-items: center;
 
   background-color: ${({ theme }) => theme.background.secondary};
-  padding: 1.3em 1em;
+  padding: 1.2em 1em;
 
   border-top-left-radius: 1000px;
   border-top-right-radius: 1000px;
