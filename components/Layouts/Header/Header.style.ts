@@ -24,7 +24,7 @@ export const TimeText = styled.div<{
     ${(props) =>
       props.triggerHide
         ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.35s"
-        : "0.3s cubic-bezier(0, 0, 0, 1) 0.2s"};
+        : "0.3s cubic-bezier(0, 0, 0, 1) 0.6s"};
 `;
 
 export const Container = styled.header<{ triggerHide: boolean }>`

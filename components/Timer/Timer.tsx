@@ -52,12 +52,16 @@ export default function Timer({ onTimingStart }: IProps) {
   };
 
   const pauseTimer = () => {
+    setIsTimingNow(false);
+  };
+
+  useEffect(() => {
+    if (isTimingNow) return;
     if (!timerInterval) return;
 
     clearInterval(timerInterval);
     timerInterval = null;
-    setIsTimingNow(false);
-  };
+  }, [isTimingNow]);
 
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;

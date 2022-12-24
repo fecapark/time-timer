@@ -1,5 +1,50 @@
 import styled from "@emotion/styled";
 
+export const PauseButton = styled.button<{ triggerHide: boolean }>`
+  all: unset;
+
+  font-size: 18px;
+
+  position: fixed;
+  right: 5vw;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: ${({ theme }) => theme.background.secondary};
+  padding: 1.3em 1em;
+
+  border-top-left-radius: 1000px;
+  border-top-right-radius: 1000px;
+
+  transform: translate3d(
+    0,
+    ${(props) => (props.triggerHide ? "100%" : "0")},
+    0
+  );
+  transition: transform
+      ${(props) =>
+        props.triggerHide
+          ? "0.2s cubic-bezier(0, 0, 0, 1)"
+          : "0.3s cubic-bezier(0.2, 0, 0, 1) 1s"},
+    background
+      ${(props) =>
+        props.triggerHide
+          ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
+          : "0.2s cubic-bezier(0, 0, 0, 1)"};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.background.hoverAccent};
+  }
+
+  svg {
+    font-size: 1em;
+    color: #e0e0e0;
+  }
+`;
+
 export const TimeText = styled.div<{
   triggerHide: boolean;
   fontSize: number;
@@ -24,7 +69,7 @@ export const TimeText = styled.div<{
     ${(props) =>
       props.triggerHide
         ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.35s"
-        : "0.3s cubic-bezier(0, 0, 0, 1) 0.2s"};
+        : "0.3s cubic-bezier(0, 0, 0, 1) 0.6s"};
 `;
 
 export const Container = styled.footer<{

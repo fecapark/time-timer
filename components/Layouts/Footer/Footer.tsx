@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import useBottomSheet from "../../../hooks/useBottomSheet";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import {
@@ -12,11 +12,12 @@ import { Theme } from "../../../styles/theme";
 import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
 import RoundButton from "../../Button/RoundButton";
 import { getTimeFromDegree } from "../../Timer/Timer.util";
-import { Container, TimeText } from "./Footer.style";
+import { Container, PauseButton, TimeText } from "./Footer.style";
+import { IoMdPause } from "react-icons/io";
 
 export default function Footer() {
   const isClockPointerDown = useRecoilValue(ICPD);
-  const isTimingNow = useRecoilValue(ITN);
+  const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
   const clockSize = useRecoilValue(CS);
   const clockDegree = useRecoilValue(CD);
   const [timerFontSize, setTimerFontSize] = useState(55);
@@ -27,8 +28,12 @@ export default function Footer() {
     Theme.mediaQueries.hideTimerMaxWidth
   );
 
-  const onClick = () => {
+  const onTimerStartClick = () => {
     setBottomSheetActive(true);
+  };
+
+  const onTimerPauseClick = () => {
+    setIsTimingNow(false);
   };
 
   useEffect(() => {
@@ -46,7 +51,7 @@ export default function Footer() {
       >
         {mediaSetted ? (
           isHideTimer ? (
-            <RoundButton text="집중 시작하기" onClick={onClick} />
+            <RoundButton text="집중 시작하기" onClick={onTimerStartClick} />
           ) : (
             <span>
               Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.
@@ -61,6 +66,11 @@ export default function Footer() {
         >
           {getTimeFromDegree(clockDegree).sec}
         </TimeText>
+      ) : null}
+      {isHideTimer ? (
+        <PauseButton triggerHide={!isTimingNow} onClick={onTimerPauseClick}>
+          <IoMdPause />
+        </PauseButton>
       ) : null}
     </>
   );
