@@ -123,7 +123,7 @@ export default function Clock() {
       const stageHeight = document.body.clientHeight;
 
       const resizedWidth = Math.min(600, stageWidth);
-      const resizedHeight = Math.min(600 + 180, stageHeight - 180);
+      const resizedHeight = Math.min(600 + 190, stageHeight - 190);
       const resultSize = Math.min(resizedWidth, resizedHeight);
       const resultScaleRatio = Math.min(1, resultSize / 600);
 
@@ -132,7 +132,6 @@ export default function Clock() {
       `;
       moveAreaRef.current!.style.width = `${resultSize}px`;
       moveAreaRef.current!.style.height = `${resultSize}px`;
-
       setClockSize(resultSize);
     };
 

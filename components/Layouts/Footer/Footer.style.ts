@@ -34,6 +34,7 @@ export const Container = styled.footer<{
   font-size: 12px;
   color: #a0a0a0;
   width: 100%;
+  height: 60px;
 
   transform: translate3d(
     0,
@@ -53,7 +54,7 @@ export const Container = styled.footer<{
   display: flex;
   flex-direction: column;
   gap: 0.3em;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 
   u {

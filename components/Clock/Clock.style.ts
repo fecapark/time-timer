@@ -11,6 +11,8 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  transform-origin: center center;
 `;
 
 export const MainClock = styled.div`
