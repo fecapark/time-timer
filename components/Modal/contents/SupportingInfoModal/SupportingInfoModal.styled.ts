@@ -35,6 +35,7 @@ export const SupportItemContainer = styled.div<{ support?: boolean }>`
 
     span {
       font-size: 12px;
+      text-align: center;
     }
   }
 
