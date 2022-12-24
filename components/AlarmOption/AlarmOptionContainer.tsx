@@ -5,7 +5,6 @@ import useModal from "../../hooks/useModal";
 import usePushNotification from "../../hooks/usePushNotification";
 import {
   isAlarmSoundOnAtom as IASO,
-  isAlarmSoundOnAtom,
   isClockPointerDownAtom as ICPD,
   isNotificationPermissionGrantedAtom as INPG,
   isNotificationSupportEnvironmentAtom as INSE,

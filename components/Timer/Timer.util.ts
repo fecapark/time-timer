@@ -1,3 +1,6 @@
+import firebase from "firebase/app";
+import "firebase/messaging";
+
 type RequestNotificationPermissionResult = "granted" | "denied" | "not-support";
 
 export const getTimeFromDegree = (degree: number) => {
@@ -14,7 +17,10 @@ export const getTimeFromDegree = (degree: number) => {
 export const requestNotificationPermission =
   (): Promise<RequestNotificationPermissionResult> => {
     const isClientSupportNotification = () => {
+      const messagingSupport = firebase.messaging.isSupported();
+
       return (
+        messagingSupport &&
         "Notification" in window &&
         "serviceWorker" in navigator &&
         "PushManager" in window
