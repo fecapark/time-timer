@@ -28,7 +28,7 @@ export const PauseButton = styled.button<{ triggerHide: boolean }>`
       ${(props) =>
         props.triggerHide
           ? "0.2s cubic-bezier(0, 0, 0, 1)"
-          : "0.3s cubic-bezier(0.2, 0, 0, 1) 1s"},
+          : "0.3s cubic-bezier(0.2, 0, 0, 1) 0.7s"},
     background
       ${(props) =>
         props.triggerHide
@@ -69,7 +69,7 @@ export const TimeText = styled.div<{
     ${(props) =>
       props.triggerHide
         ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.35s"
-        : "0.3s cubic-bezier(0, 0, 0, 1) 0.6s"};
+        : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
 `;
 
 export const Container = styled.footer<{
