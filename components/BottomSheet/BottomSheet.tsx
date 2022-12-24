@@ -48,7 +48,7 @@ export default function BottomSheet() {
 
   const onPointerDown = (e: PointerEvent) => {
     if (!contentRef.current) return;
-    contentRef.current!.style.transition = "none";
+    contentRef.current.style.transition = "none";
 
     const { clientY } = e.nativeEvent;
     const { height } = contentRef.current.getBoundingClientRect();
@@ -61,7 +61,6 @@ export default function BottomSheet() {
   };
 
   const onPointerEnd = () => {
-    if (!contentRef.current) return;
     if (!isPointerDown) return;
 
     setIsPointerDown(false);
@@ -69,6 +68,8 @@ export default function BottomSheet() {
   };
 
   const hideThisWithTransition = () => {
+    if (!contentRef.current) return;
+
     contentRef.current!.style.transition = "";
     requestAnimationFrame(() => {
       setContentTransformY(isSticky ? "0" : "100%");

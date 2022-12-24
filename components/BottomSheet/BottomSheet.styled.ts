@@ -42,11 +42,13 @@ export const ContentHeader = styled.div`
   border-top-right-radius: 24px;
 
   width: 100%;
-  height: 24px;
+  height: 40px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  touch-action: none;
 
   .mover {
     width: 30px;
