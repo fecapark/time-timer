@@ -75,6 +75,7 @@ export default function BottomSheet() {
       setContentTransformY(isSticky ? "0" : "100%");
       contentRef.current!.ontransitionend = () => {
         if (!isSticky) closeBottomSheet();
+        else setIsSticky(false);
         contentRef.current!.style.transform = "";
         contentRef.current!.ontransitionend = null;
       };
