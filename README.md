@@ -1,6 +1,6 @@
 # Time Timer
 
-[Project Link](timer.fecapark.com)
+[Project Link](https://timer.fecapark.com)
 
 ## Todos
 
