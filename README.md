@@ -1,4 +1,4 @@
-<center>
+<div align="center">
 
 # Time Timer
 
@@ -17,7 +17,7 @@
 [About Time Timer](https://www.timetimer.com)
 
 <br />
-</center>
+</div>
 
 ## Plan
 
