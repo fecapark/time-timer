@@ -17,7 +17,7 @@ function MetaIconSet() {
         href="/apple-touch-icon.png"
       />
       <link rel="icon" type="image/png" href="/favicon-32x32.png" />
-      <link rel="mask-icon" href="/favicon-32x32.png" color="#000000" />
+      <link rel="mask-icon" href="/favicon.svg" color="#000000" />
     </>
   );
 }

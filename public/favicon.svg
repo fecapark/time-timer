@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<clipPath id="ArtboardFrame">
+<rect height="1024" width="1024" x="0" y="0"/>
+</clipPath>
+<g clip-path="url(#ArtboardFrame)" id="레이어-1">
+<path d="M272.245 691.952L1729.9-649.816L2382.14 1226.55L272.245 691.952Z" fill="#ff1919" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+<g id="레이어-2">
+<path d="M177.818 583.04C177.818 444.72 289.787 332.589 427.907 332.589C566.028 332.589 677.996 444.72 677.996 583.04C677.996 721.361 566.028 833.491 427.907 833.491C289.787 833.491 177.818 721.361 177.818 583.04Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
+<path d="M476.838 491.454L700.877 271.129C710.195 261.965 723.426 260.356 730.43 267.534L741.173 278.544C748.177 285.722 746.301 298.969 736.983 308.132L512.944 528.458C503.626 537.621 490.395 539.23 483.391 532.052L472.649 521.042C465.645 513.864 467.52 500.617 476.838 491.454Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</svg>
