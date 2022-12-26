@@ -10,9 +10,14 @@ import { Theme } from "../styles/theme";
 function MetaIconSet() {
   return (
     <>
-      <link rel="apple-touch-icon" href="/favicon.svg" />
-      <link rel="icon" href="/favicon.svg" />
-      <link rel="mask-icon" href="/favicon.svg" color="#000000" />
+      <link rel="apple-touch-icon" href="/favicon.svg" type="image/svg+xml" />
+      <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      <link
+        rel="mask-icon"
+        href="/favicon.svg"
+        color="#000000"
+        type="image/svg+xml"
+      />
     </>
   );
 }
