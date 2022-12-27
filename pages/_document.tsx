@@ -7,6 +7,35 @@ import Document, {
 } from "next/document";
 import { Theme } from "../styles/theme";
 
+function TwitterCardMetaSet() {
+  return (
+    <>
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content="Time Timer | 타임 타이머" />
+      <meta
+        name="twitter:description"
+        content="최고의 집중을 위해 제작된 1시간 타이머를 웹에서 무료로 이용해보세요."
+      />
+      <meta name="twitter:image" content="/share-thumbnail.png" />
+    </>
+  );
+}
+
+function OpenGraphMetaSet() {
+  return (
+    <>
+      <meta property="og:url" content="https://timer.fecapark.com" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="/share-thumbnail.png" />
+      <meta
+        property="og:description"
+        content="최고의 집중을 위해 제작된 1시간 타이머를 웹에서 무료로 이용해보세요."
+      />
+      <meta property="og:title" content="Time Timer | 타임 타이머"></meta>
+    </>
+  );
+}
+
 function MetaIconSet() {
   return (
     <>
@@ -79,6 +108,8 @@ class MyDocument extends Document {
           <meta name="author" content="Sanghyeok Park, fecapark" />
           <meta name="apple-mobile-web-app-title" content="Time Timer" />
           <MetaIconSet />
+          <TwitterCardMetaSet />
+          <OpenGraphMetaSet />
           <FontSet />
         </Head>
         <body>
