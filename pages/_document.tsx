@@ -28,8 +28,8 @@ function MetaIconSet() {
         href="/favicon-16x16.png"
       />
       <link rel="manifest" href="/site.webmanifest" />
-      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-      <meta name="msapplication-TileColor" content="#da532c" />
+      <link rel="mask-icon" href="/final-logo.svg" color="#000000" />
+      <meta name="msapplication-TileColor" content="#1f1f1f" />
       <meta name="theme-color" content={Theme.background.primary} />
     </>
   );

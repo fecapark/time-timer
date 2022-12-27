@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="레이어-1">
+<path d="M86.9141 511.963C86.9141 277.242 277.193 86.9632 511.914 86.9632C746.635 86.9632 936.914 277.242 936.914 511.963C936.914 746.684 746.635 936.963 511.914 936.963C277.193 936.963 86.9141 746.684 86.9141 511.963Z" fill="#1f1f1f" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+<g id="레이어-4">
+<path d="M913.481 651.774C855.675 817.831 697.754 937 512 937C277.279 937 87 746.721 87 512C87 277.279 277.279 87 512 87" fill="#ff1919" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+<g id="레이어-5">
+<path d="M515.852 523.173L512.181 87.0301L913.899 650.977" fill="#1f1f1f" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+<g id="레이어-3">
+<path d="M424.084 521.41C424.084 471.705 464.379 431.41 514.084 431.41C563.79 431.41 604.084 471.705 604.084 521.41C604.084 571.116 563.79 611.41 514.084 611.41C464.379 611.41 424.084 571.116 424.084 521.41Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
+<path d="M546.539 521.021L643.727 550.362C648.762 551.882 651.611 557.195 650.091 562.23L649.83 563.097C648.31 568.132 642.996 570.981 637.961 569.461L540.773 540.12C535.739 538.6 532.889 533.287 534.409 528.252L534.671 527.385C536.191 522.35 541.504 519.501 546.539 521.021Z" fill="#ffffff" fill-rule="nonzero" opacity="1" stroke="none"/>
+</g>
+</svg>
