@@ -44,8 +44,7 @@ const PreviewIconWrapper = styled.div<{ loading: boolean }>`
   padding: 0.8em;
 
   &:hover {
-    border-color: ${(props) =>
-      props.loading ? "grey" : props.theme.background.hoverAccent};
+    border-color: ${({ theme }) => theme.background.hoverAccent};
     background-color: ${({ theme }) => theme.background.hoverAccent};
 
     transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
