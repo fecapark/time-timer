@@ -27,7 +27,8 @@ export const OptionSwitchRow = styled.div<{ isOn: boolean }>`
   span {
     margin-right: 12px;
     font-family: ${({ theme }) => theme.font.family.openSans};
-    font-size: 14px;
+    font-size: 13px;
+    text-align: end;
     color: ${(props) => (props.isOn ? "white" : "grey")};
   }
 `;
