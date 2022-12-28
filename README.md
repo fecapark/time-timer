@@ -9,7 +9,7 @@
 
 <br />
 
-![1DFCA6ED-F4F5-48A0-8CB3-4ABA20C51256](https://user-images.githubusercontent.com/101973955/209490143-2a1b1496-22ec-4f3d-a366-3e0faf2ac6e2.jpeg)
+![2AEB6EE5-8317-45CC-9371-12B4FF9722DC](https://user-images.githubusercontent.com/101973955/209777714-9f05367f-2d62-42d5-ae7f-7a64ecff9d1f.jpeg)
 
 <br />
 
