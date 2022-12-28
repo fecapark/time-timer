@@ -5,9 +5,18 @@ const background = {
   hoverAccent: "#004a77",
 };
 
+const clock = {
+  color: {
+    red: background.accent,
+    blue: "#1f75fe",
+    yellow: "#ffcc00",
+  },
+};
+
 const font = {
   family: {
     primary: "'Roboto', 'Noto Sans KR', sans-serif",
+    openSans: "'Open Sans', 'Noto Sans KR', sans-serif",
     poppins: "'Poppins', sans-serif",
   },
   color: {
@@ -42,4 +51,5 @@ export const Theme = {
   font,
   responsiveSizes,
   mediaQueries,
+  clock,
 };

@@ -5,6 +5,7 @@ import {
   isClockPointerDownAtom as ICPD,
   isTimingNowAtom as ITN,
   soundEffectAudioAtom as SEA,
+  languageOptionValueAtom as LOV,
 } from "../../shared/atom";
 import { Container, TimeText } from "./Timer.styled";
 import { getTimeFromDegree } from "./Timer.util";
@@ -23,6 +24,7 @@ export default function Timer({ onTimingStart }: IProps) {
   const [clockDegree, setClockDegree] = useRecoilState(CD);
   const isClockPointerDown = useRecoilValue(ICPD);
   const soundEffectAudio = useRecoilValue(SEA);
+  const language = useRecoilValue(LOV);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
@@ -80,14 +82,22 @@ export default function Timer({ onTimingStart }: IProps) {
       <div className="option-container">
         {isHideTimer ? null : (
           <RoundButton
-            text="일시정지"
+            text={language === "kor" ? "일시정지" : "Pause"}
             disabled={!isTimingNow}
             onClick={pauseTimer}
             triggerHide={!isTimingNow}
           />
         )}
         <RoundButton
-          text={isEmptyClockDegree ? "시간을 설정해주세요" : "집중 시작하기"}
+          text={
+            isEmptyClockDegree
+              ? language === "kor"
+                ? "시간을 설정해주세요"
+                : "Please Set Time"
+              : language === "kor"
+              ? "집중 시작하기"
+              : "Start Focus"
+          }
           disabled={isEmptyClockDegree}
           onClick={() => {
             getAudioPermission();

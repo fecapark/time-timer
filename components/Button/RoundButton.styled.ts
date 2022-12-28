@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 export const Container = styled.button<{ triggerHide: boolean }>`
   ${({ theme }) => theme.shareCSS.noDrag};
 
+  font-family: ${({ theme }) => theme.font.family.openSans};
   color: white;
   border: 2px solid white;
   padding: 0.8em 1.6em;

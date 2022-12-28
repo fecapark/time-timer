@@ -1,5 +1,25 @@
 import styled from "@emotion/styled";
 
+export const IconContainer = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 8px;
+  border-radius: 50%;
+
+  transform: translate3d(-8px, -8px, 0);
+
+  &:hover {
+    background-color: #323236;
+  }
+
+  svg {
+    color: white;
+    font-size: 26px;
+  }
+`;
+
 export const TimeText = styled.div<{
   triggerHide: boolean;
   fontSize: number;
@@ -33,8 +53,10 @@ export const Container = styled.header<{ triggerHide: boolean }>`
   width: 100%;
   height: 60px;
 
+  padding: 0 2em;
+
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
 
   transform: translate3d(
@@ -70,6 +92,11 @@ export const Container = styled.header<{ triggerHide: boolean }>`
         color: #212121;
       }
     }
+  }
+
+  .dummy {
+    opacity: 0;
+    visibility: hidden;
   }
 
   @media screen and (max-width: ${({ theme }) =>

@@ -97,10 +97,9 @@ export const Container = styled.footer<{
         : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
 
   display: flex;
-  flex-direction: column;
   gap: 0.3em;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-end;
 
   u {
     cursor: pointer;

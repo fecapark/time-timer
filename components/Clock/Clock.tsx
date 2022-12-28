@@ -18,6 +18,7 @@ import {
 import { Vector2 } from "../../utils/vector";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  clockColorValueAtom as CCV,
   clockDegreeAtom as CD,
   clockSizeAtom as CS,
   isClockPointerDownAtom as ICPD,
@@ -39,6 +40,7 @@ export default function Clock() {
   const setIsClockPointerDown = useSetRecoilState(ICPD);
   const setClockSize = useSetRecoilState(CS);
   const [clockDegree, setClockDegree] = useRecoilState(CD);
+  const clockColor = useRecoilValue(CCV);
 
   const onPointerDown = (e: PointerEvent) => {
     canSetClockDegree = true;
@@ -87,10 +89,11 @@ export default function Clock() {
 
     updateClockShapeByDegree(
       clockDegree,
+      clockColor,
       handlerRef.current!,
       backgroundRef.current!
     );
-  }, [clockDegree, handlerRef.current, backgroundRef.current]);
+  }, [clockDegree, clockColor, handlerRef.current, backgroundRef.current]);
 
   useEffect(() => {
     if (!moveAreaRef.current) return;

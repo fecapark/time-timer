@@ -1,4 +1,5 @@
 import { Theme } from "../../styles/theme";
+import { ClockColorType } from "../../shared/types";
 import { Vector2 } from "../../utils/vector";
 
 export function getRotatedPosition(radius: number, degree: number) {
@@ -53,6 +54,7 @@ export const isMovedToRightWhenStoped = (pos: Vector2, isStopped: boolean) => {
 
 export const updateClockShapeByDegree = (
   degree: number,
+  clockColor: ClockColorType,
   handler: HTMLElement,
   background: HTMLElement
 ) => {
@@ -62,7 +64,7 @@ export const updateClockShapeByDegree = (
       rotate3d(0, 0, 1, ${degree}deg)
     `;
     background.style.background = `
-      conic-gradient(#0000001e ${degree}deg, ${Theme.background.accent}dd ${degree}deg)
+      conic-gradient(#0000001e ${degree}deg, ${Theme.clock.color[clockColor]}dd ${degree}deg)
     `;
   });
 };

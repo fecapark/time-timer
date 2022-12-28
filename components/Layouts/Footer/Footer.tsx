@@ -7,6 +7,7 @@ import {
   clockSizeAtom as CS,
   isClockPointerDownAtom as ICPD,
   isTimingNowAtom as ITN,
+  languageOptionValueAtom as LOV,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
@@ -20,6 +21,7 @@ export default function Footer() {
   const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
   const clockSize = useRecoilValue(CS);
   const clockDegree = useRecoilValue(CD);
+  const language = useRecoilValue(LOV);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const setBottomSheetActive = useBottomSheet({
     constructor: BottomSheetTimer,
@@ -51,7 +53,10 @@ export default function Footer() {
       >
         {mediaSetted ? (
           isHideTimer ? (
-            <RoundButton text="집중 시작하기" onClick={onTimerStartClick} />
+            <RoundButton
+              text={language === "kor" ? "집중 시작하기" : "Start Focus"}
+              onClick={onTimerStartClick}
+            />
           ) : (
             <span>
               Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.

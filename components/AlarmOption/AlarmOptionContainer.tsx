@@ -9,6 +9,7 @@ import {
   isNotificationPermissionGrantedAtom as INPG,
   isNotificationSupportEnvironmentAtom as INSE,
   isSendPushOnAtom as ISPO,
+  languageOptionValueAtom as LOV,
 } from "../../shared/atom";
 import Switch from "../Switch/Switch";
 import { requestNotificationPermission } from "../Timer/Timer.util";
@@ -29,14 +30,18 @@ export default function AlarmOptionContainer({
   const [isAlarmSoundOn, setIsAlarmSoundOn] = useRecoilState(IASO);
   const [isSendPushOn, setIsSendPushOn] = useRecoilState(ISPO);
   const isClockPointerDown = useRecoilValue(ICPD);
+  const language = useRecoilValue(LOV);
   const setIsNotificationSupportEnvironment = useSetRecoilState(INSE);
   const setIsNotificationPermissionGranted = useSetRecoilState(INPG);
   const [requestPushToken, sendPushMessage] = usePushNotification({
-    title: "설정한 시간이 종료되었어요.",
-    body: "다시 집중해볼까요?",
+    title: language === "kor" ? "설정한 시간이 종료되었어요." : "Time's up!",
+    body: language === "kor" ? "다시 집중해볼까요?" : "Let's countdown again.",
   });
   const setModalActive = useModal({
-    title: "푸쉬 알림을 지원하지 않는 브라우저입니다",
+    title:
+      language === "kor"
+        ? "푸쉬 알림을 지원하지 않는 브라우저입니다"
+        : "Browser does not support push notification.",
     content: <SupportingInfoModal />,
   });
 
@@ -84,7 +89,11 @@ export default function AlarmOptionContainer({
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
       <OptionSwitchRow isOn={isAlarmSoundOn}>
-        <span>종료시 알람 소리 켜기</span>
+        <span>
+          {language === "kor"
+            ? "종료시 알람 소리 켜기"
+            : "Activate alarm sound"}
+        </span>
         {isAudioLoaded ? (
           <Switch
             defaultState={isAlarmSoundOn ? "on" : "off"}
@@ -98,7 +107,11 @@ export default function AlarmOptionContainer({
         )}
       </OptionSwitchRow>
       <OptionSwitchRow isOn={isSendPushOn}>
-        <span>종료시 푸쉬 알림 켜기</span>
+        <span>
+          {language === "kor"
+            ? "종료시 푸쉬 알림 켜기"
+            : "Activate push notification"}
+        </span>
         <Switch
           defaultState={isSendPushOn ? "on" : "off"}
           onOn={onSendPushOn}

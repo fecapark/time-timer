@@ -5,6 +5,8 @@ import {
   IAudioData,
   IModalContentPayload,
   IBottomSheetContentConstructorProp,
+  ClockColorType,
+  LanguageOptionType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -72,4 +74,19 @@ export const isAlarmSoundOnAtom = atom<boolean>({
 export const isSendPushOnAtom = atom<boolean>({
   key: `is-send-push-on/${v1()}`,
   default: false,
+});
+
+export const isActiveMenuAtom = atom<boolean>({
+  key: `is-active-menu/${v1()}`,
+  default: false,
+});
+
+export const clockColorValueAtom = atom<ClockColorType>({
+  key: `clock-color-value/${v1()}`,
+  default: "red",
+});
+
+export const languageOptionValueAtom = atom<LanguageOptionType>({
+  key: `language-option-value/${v1()}`,
+  default: "kor",
 });
