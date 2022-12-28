@@ -7,6 +7,7 @@ import {
   IBottomSheetContentConstructorProp,
   ClockColorType,
   LanguageOptionType,
+  MenuSectionType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -89,4 +90,14 @@ export const clockColorValueAtom = atom<ClockColorType>({
 export const languageOptionValueAtom = atom<LanguageOptionType>({
   key: `language-option-value/${v1()}`,
   default: "kor",
+});
+
+export const isSliderActiveAtom = atom<boolean>({
+  key: `is-slider-active/${v1()}`,
+  default: false,
+});
+
+export const activedMenuSectionAtom = atom<MenuSectionType | null>({
+  key: `actived-menu-section/${v1()}`,
+  default: null,
 });

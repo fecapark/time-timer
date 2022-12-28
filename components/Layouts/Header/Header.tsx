@@ -11,7 +11,6 @@ import useMediaMatch from "../../../hooks/useMediaMatch";
 import { Theme } from "../../../styles/theme";
 import { useEffect, useState } from "react";
 import { getTimeFromDegree } from "../../Timer/Timer.util";
-import Menu from "../../Menu/Menu";
 import { IoMdMenu } from "react-icons/io";
 
 export default function Header() {
@@ -33,22 +32,22 @@ export default function Header() {
   return (
     <>
       <Container triggerHide={isClockPointerDown || isTimingNow}>
-        <IconContainer
+        {/* <IconContainer
           onClick={() => {
             setIsActiveMenu(true);
           }}
         >
           <IoMdMenu />
-        </IconContainer>
+        </IconContainer> */}
         <div className="logo">
           <div className="left word">Time</div>
           <div className="right word">Timer</div>
         </div>
-        <div className="dummy">
+        {/* <div className="dummy">
           <IconContainer>
             <IoMdMenu />
           </IconContainer>
-        </div>
+        </div> */}
       </Container>
       {isHideTimer ? (
         <TimeText

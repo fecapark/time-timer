@@ -8,6 +8,7 @@ import Clock from "../components/Clock/Clock";
 import Intro from "../components/Intro/Intro";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
+import FixedMenu from "../components/Menu/FixedMenu/FixedMenu";
 import MobileMenu from "../components/Menu/MobileMenu/MobileMenu";
 import Modal from "../components/Modal/Modal";
 import Seo from "../components/SEO/Seo";
@@ -68,9 +69,10 @@ export default function Home() {
           {mediaSetted && !isHideTimer ? <Timer /> : null}
         </Main>
         <Footer />
+        <FixedMenu />
+        {/* <MobileMenu /> */}
         <BottomSheet />
         <Modal />
-        <MobileMenu />
         {!mediaSetted || showIntro ? (
           <Intro setShowIntro={setShowIntro} />
         ) : null}

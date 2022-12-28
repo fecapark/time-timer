@@ -56,7 +56,7 @@ export const Container = styled.header<{ triggerHide: boolean }>`
   padding: 0 2em;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
 
   transform: translate3d(

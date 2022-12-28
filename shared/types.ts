@@ -20,3 +20,5 @@ export type SetStateType<T> = Dispatch<SetStateAction<T>>;
 export type LanguageOptionType = "kor" | "en";
 
 export type ClockColorType = keyof typeof Theme.clock.color;
+
+export type MenuSectionType = "language" | "color" | "notification";
