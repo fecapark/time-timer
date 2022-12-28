@@ -9,7 +9,7 @@ const dummyAudioSrc =
 
 export default function useAudio(
   src: string | undefined | null
-): [(option: IPermissionOption) => void, () => void] {
+): [(option?: IPermissionOption) => void, () => void, boolean] {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [isPlayable, setIsPlayable] = useState(false);
 
@@ -18,7 +18,7 @@ export default function useAudio(
   }, []);
 
   const getPermission = useCallback(
-    ({ autoplayWhenAccepted = false }: IPermissionOption) => {
+    ({ autoplayWhenAccepted = false }: IPermissionOption = {}) => {
       if (!audio) return;
       if (isPlayable) return;
       if (!src || src === "") return;
@@ -49,5 +49,5 @@ export default function useAudio(
     audio.play();
   }, [audio, isPlayable]);
 
-  return [getPermission, play];
+  return [getPermission, play, isPlayable];
 }

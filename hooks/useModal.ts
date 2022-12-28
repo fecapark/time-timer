@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { isModalActiveAtom, modalContentAtom } from "../shared/atom";
 import { IModalContentPayload } from "../shared/types";
@@ -11,10 +10,6 @@ export default function useModal(payload: IModalContentPayload) {
     setIsModalActive(state);
     setModalContent(payload);
   };
-
-  useEffect(() => {
-    setModalContent(payload);
-  }, [payload]);
 
   return setThisModal;
 }
