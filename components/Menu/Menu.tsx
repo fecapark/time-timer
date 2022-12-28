@@ -7,12 +7,14 @@ import {
   MdOutlineArrowDropUp,
 } from "react-icons/md";
 import { useRecoilState, useRecoilValue } from "recoil";
+import useModal from "../../hooks/useModal";
 import {
   isActiveMenuAtom as IAM,
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
 } from "../../shared/atom";
 import { Theme } from "../../styles/theme";
+import SupportingInfoModal from "../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 
 const MenuContainer = styled.div<{ isActive: boolean }>`
   position: fixed;
@@ -247,6 +249,14 @@ export default function Menu() {
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
 
+  const setSupportModalActive = useModal({
+    title:
+      language === "kor"
+        ? "백그라운드 푸쉬 알림 지원을 확인하세요"
+        : "Check background push notification supports",
+    content: <SupportingInfoModal notSupport={false} />,
+  });
+
   const closeMenu = () => {
     setIsActive(false);
   };
@@ -314,6 +324,10 @@ export default function Menu() {
                   ? "백그라운드 푸쉬 알림 지원"
                   : "About push notification"
               }
+              onClick={() => {
+                closeMenu();
+                setSupportModalActive(true);
+              }}
             />
           </ItemDrawer>
           <div style={{ margin: "24px 0" }} />

@@ -13,7 +13,10 @@ import {
   SupportTitle,
   SupportContainer,
 } from "./SupportingInfoModal.styled";
-import { ISupportItemProp } from "./SupportingInfoModal.type";
+import {
+  ISupportItemProp,
+  ISupportModalProps,
+} from "./SupportingInfoModal.type";
 import { useRecoilValue } from "recoil";
 import { languageOptionValueAtom as LOV } from "../../../../shared/atom";
 
@@ -29,23 +32,28 @@ function SupportItem({ name, icon, support = true }: ISupportItemProp) {
   );
 }
 
-export default function SupportingInfoModal() {
+export default function SupportingInfoModal({
+  notSupport = true,
+}: ISupportModalProps) {
   const language = useRecoilValue(LOV);
 
   return (
     <Container>
       <div>
-        <span>
-          {language === "kor"
-            ? "현재 사용중이신 브라우저는 백그라운드 푸쉬 알림을 지원하지 않습니다."
-            : "Your browser does not support background push notification."}
-        </span>
-        <br />
-        <span>
+        <p>
+          {notSupport
+            ? language === "kor"
+              ? "현재 사용중이신 브라우저는 백그라운드 푸쉬 알림을 지원하지 않습니다."
+              : "Your browser does not support background push notification."
+            : language === "kor"
+            ? "일부 브라우저 및 환경에서는 백그라운드 푸쉬 알림을 지원하지 않습니다."
+            : "Background push notifications are not supported in some browsers and environments."}
+        </p>
+        <p>
           {language === "kor"
             ? "하단의 지원 항목을 참고해주세요."
-            : "Please refer to the browser support items below."}
-        </span>
+            : "Please refer to the support items below."}
+        </p>
       </div>
       <div>
         <SupportTitle>

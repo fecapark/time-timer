@@ -3,6 +3,10 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
   font-size: 13px;
   color: #e0e0e0;
+
+  p {
+    margin-bottom: 0.5em;
+  }
 `;
 
 export const SupportContainer = styled.div`
