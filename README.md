@@ -9,7 +9,7 @@
 
 <br />
 
-![2AEB6EE5-8317-45CC-9371-12B4FF9722DC](https://user-images.githubusercontent.com/101973955/209777714-9f05367f-2d62-42d5-ae7f-7a64ecff9d1f.jpeg)
+![C244D12E-A554-4F80-B704-45038C53D0F5](https://user-images.githubusercontent.com/101973955/209845740-ab1ed887-e9e0-43c0-be3a-434d4fffe625.jpeg)
 
 <br />
 
@@ -23,7 +23,7 @@
 
 - [x] 메뉴 바 제작
 - [x] 영어 지원하기
-- [ ] 푸쉬 알림 브라우저 미지원 기능 개선하기
 - [x] favicon 제작하기 (현재는 임시 이미지 사용 중)
+- [ ] 푸쉬 알림 브라우저 미지원 기능 개선하기
 - [ ] `meta content='os:...'` 적용하기
 - [ ] 푸쉬 알림에 이미지 적용
