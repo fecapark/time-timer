@@ -31,23 +31,30 @@ export default function Header() {
 
   return (
     <>
-      <Container triggerHide={isClockPointerDown || isTimingNow}>
-        {/* <IconContainer
-          onClick={() => {
-            setIsActiveMenu(true);
-          }}
-        >
-          <IoMdMenu />
-        </IconContainer> */}
+      <Container
+        hasMenuIcon={isHideTimer}
+        triggerHide={isClockPointerDown || isTimingNow}
+      >
+        {isHideTimer ? (
+          <IconContainer
+            onClick={() => {
+              setIsActiveMenu(true);
+            }}
+          >
+            <IoMdMenu />
+          </IconContainer>
+        ) : null}
         <div className="logo">
           <div className="left word">Time</div>
           <div className="right word">Timer</div>
         </div>
-        {/* <div className="dummy">
-          <IconContainer>
-            <IoMdMenu />
-          </IconContainer>
-        </div> */}
+        {isHideTimer ? (
+          <div className="dummy">
+            <IconContainer>
+              <IoMdMenu />
+            </IconContainer>
+          </div>
+        ) : null}
       </Container>
       {isHideTimer ? (
         <TimeText

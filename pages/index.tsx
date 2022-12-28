@@ -45,7 +45,7 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
   const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);
   const [isHideTimer, mediaSetted] = useMediaMatch(
-    `screen and (max-width: ${Theme.responsiveSizes.hideTimer}px)`
+    Theme.mediaQueries.hideTimerMaxWidth
   );
 
   useEffect(() => {
@@ -69,8 +69,7 @@ export default function Home() {
           {mediaSetted && !isHideTimer ? <Timer /> : null}
         </Main>
         <Footer />
-        <FixedMenu />
-        {/* <MobileMenu /> */}
+        {mediaSetted ? !isHideTimer ? <FixedMenu /> : <MobileMenu /> : null}
         <BottomSheet />
         <Modal />
         {!mediaSetted || showIntro ? (

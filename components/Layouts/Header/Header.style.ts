@@ -47,7 +47,10 @@ export const TimeText = styled.div<{
         : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
 `;
 
-export const Container = styled.header<{ triggerHide: boolean }>`
+export const Container = styled.header<{
+  hasMenuIcon: boolean;
+  triggerHide: boolean;
+}>`
   font-size: 18px;
 
   width: 100%;
@@ -56,7 +59,8 @@ export const Container = styled.header<{ triggerHide: boolean }>`
   padding: 0 2em;
 
   display: flex;
-  justify-content: center;
+  justify-content: ${(props) =>
+    props.hasMenuIcon ? "space-between" : "center"};
   align-items: flex-start;
 
   transform: translate3d(

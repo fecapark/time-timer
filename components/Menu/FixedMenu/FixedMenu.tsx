@@ -7,7 +7,7 @@ import {
   MdTranslate,
 } from "react-icons/md";
 import { BsGithub } from "react-icons/bs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isSliderActiveAtom as ISA,
@@ -19,6 +19,7 @@ import { Theme } from "../../../styles/theme";
 import useModal from "../../../hooks/useModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
+import useMediaMatch from "../../../hooks/useMediaMatch";
 
 const Container = styled.div`
   position: fixed;
@@ -219,11 +220,16 @@ function SliderItem({
 function Slider({ selector }: { selector: () => React.ReactNode }) {
   const setSection = useSetRecoilState(AMS);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
+  const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
 
   const closeSlider = () => {
     setSection(null);
     setIsSliderActive(false);
   };
+
+  useEffect(() => {
+    closeSlider();
+  }, [isHideTimer]);
 
   return (
     <SliderContainer active={isSliderActive}>
@@ -363,16 +369,16 @@ export default function FixedMenu() {
     </>
   );
 
+  const sliderContentSelector = () => {
+    if (section === "language") return LangSection;
+    if (section === "color") return ColorSection;
+    if (section === "notification") return NotificationSection;
+    return null;
+  };
+
   return (
     <Container>
-      <Slider
-        selector={() => {
-          if (section === "language") return LangSection;
-          if (section === "color") return ColorSection;
-          if (section === "notification") return NotificationSection;
-          return null;
-        }}
-      />
+      <Slider selector={sliderContentSelector} />
       <MainMenuBar>
         <div className="section">
           <Item

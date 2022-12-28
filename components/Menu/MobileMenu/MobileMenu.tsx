@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MdMenuOpen,
   MdOpenInNew,
@@ -6,6 +6,7 @@ import {
   MdOutlineArrowDropUp,
 } from "react-icons/md";
 import { useRecoilState, useRecoilValue } from "recoil";
+import useMediaMatch from "../../../hooks/useMediaMatch";
 import useModal from "../../../hooks/useModal";
 import {
   isActiveMenuAtom as IAM,
@@ -91,6 +92,7 @@ export default function MobileMenu() {
   const [isActive, setIsActive] = useRecoilState(IAM);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
+  const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
 
   const setSupportModalActive = useModal({
     title:
@@ -110,6 +112,10 @@ export default function MobileMenu() {
   const closeMenu = () => {
     setIsActive(false);
   };
+
+  useEffect(() => {
+    closeMenu();
+  }, [isHideTimer]);
 
   return (
     <MenuContainer isActive={isActive}>
