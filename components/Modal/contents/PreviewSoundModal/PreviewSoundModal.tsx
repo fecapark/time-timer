@@ -6,6 +6,8 @@ import {
   languageOptionValueAtom as LOV,
   soundEffectAudioAtom as SEA,
 } from "../../../../shared/atom";
+import { useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 
 const Container = styled.div`
   font-size: 13px;
@@ -30,19 +32,20 @@ const PreviewContentContainer = styled.div`
   align-items: center;
 `;
 
-const PreviewIconWrapper = styled.div`
+const PreviewIconWrapper = styled.div<{ loading: boolean }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
 
-  border: 2px solid white;
+  border: 2px solid ${(props) => (props.loading ? "grey" : "white")};
   border-radius: 50%;
 
   font-size: 28px;
   padding: 0.8em;
 
   &:hover {
-    border-color: ${({ theme }) => theme.background.hoverAccent};
+    border-color: ${(props) =>
+      props.loading ? "grey" : props.theme.background.hoverAccent};
     background-color: ${({ theme }) => theme.background.hoverAccent};
 
     transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
@@ -52,18 +55,21 @@ const PreviewIconWrapper = styled.div`
 `;
 
 export default function PreviewSoundModal() {
+  const [requestOnce, setRequestOnce] = useState(false);
   const language = useRecoilValue(LOV);
   const soundEffectAudio = useRecoilValue(SEA);
   const [getAudioPermission, playAudio, isAudioPlayable] = useAudio(
     soundEffectAudio?.src
   );
+  const loading = requestOnce && !isAudioPlayable;
 
   const playSoundEffect = () => {
+    setRequestOnce(true);
     if (!isAudioPlayable) {
       getAudioPermission({ autoplayWhenAccepted: true });
       return;
     }
-    playAudio();
+    playAudio({ replay: true });
   };
 
   return (
@@ -82,8 +88,12 @@ export default function PreviewSoundModal() {
         )}
       </p>
       <PreviewContentContainer>
-        <PreviewIconWrapper onClick={playSoundEffect}>
-          <MdHeadset />
+        <PreviewIconWrapper loading={loading} onClick={playSoundEffect}>
+          {loading ? (
+            <RotatingLines strokeColor="grey" width="28" />
+          ) : (
+            <MdHeadset />
+          )}
         </PreviewIconWrapper>
       </PreviewContentContainer>
     </Container>

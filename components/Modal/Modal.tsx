@@ -17,7 +17,7 @@ export default function Modal() {
 
   return (
     <Container active={isModalActive}>
-      <Background onClick={closeModal} />
+      <Background active={isModalActive} onClick={closeModal} />
       <ContentContainer active={isModalActive}>
         <ContentHeader>
           <span>{modalContent?.title}</span>
