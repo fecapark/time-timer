@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { isPropertyAccessExpression } from "typescript";
 
 export const Container = styled.div<{ active: boolean }>`
   ${({ theme }) => theme.shareCSS.noDrag};
@@ -12,12 +13,22 @@ export const Container = styled.div<{ active: boolean }>`
 
   opacity: ${(props) => (props.active ? "1" : "0")};
   visibility: ${(props) => (props.active ? "visible" : "hidden")};
+
+  transition: ${(props) =>
+    props.active
+      ? "none"
+      : `
+    opacity 0s linear 0.3s,
+    visibility 0s linear 0.3s
+  `};
 `;
 
-export const Background = styled.div`
+export const Background = styled.div<{ active: boolean }>`
   width: 100%;
   height: 100%;
 
+  opacity: ${(props) => (props.active ? "1" : "0")};
+  transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1);
   background-color: #00000077;
 `;
 
@@ -57,4 +68,9 @@ export const ContentHeader = styled.div`
     border-radius: 1000px;
     background-color: #626264;
   }
+`;
+
+export const ContentWrapper = styled.div<{ active: boolean }>`
+  opacity: ${(props) => (props.active ? "1" : "0")};
+  visibility: ${(props) => (props.active ? "visible" : "hidden")};
 `;

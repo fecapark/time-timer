@@ -10,12 +10,14 @@ import {
   Container,
   ContentContainer,
   ContentHeader,
+  ContentWrapper,
 } from "./BottomSheet.styled";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [hideContent, setHideContent] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [pointerDownOffset, setPointerDownOffset] = useState(0);
   const [originOffset, setOriginOffset] = useState(0);
@@ -71,22 +73,20 @@ export default function BottomSheet() {
     if (!contentRef.current) return;
 
     contentRef.current!.style.transition = "";
+
     requestAnimationFrame(() => {
-      setContentTransformY(isSticky ? "0" : "100%");
-      contentRef.current!.ontransitionend = () => {
-        if (!isSticky) closeBottomSheet();
-        else setIsSticky(false);
-        contentRef.current!.style.transform = "";
-        contentRef.current!.ontransitionend = null;
-      };
+      contentRef.current!.style.transform = "";
+      if (isSticky) setIsSticky(false);
+      else closeBottomSheet();
     });
   };
 
   useEffect(() => {
-    if (!isHideTimer) {
-      closeBottomSheet();
-    }
-  }, [isHideTimer]);
+    if (!contentRef.current) return;
+    if (isHideTimer) return;
+
+    closeBottomSheet();
+  }, [isHideTimer, contentRef.current]);
 
   return (
     <Container
@@ -94,16 +94,16 @@ export default function BottomSheet() {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerEnd}
     >
-      <Background onClick={closeBottomSheet} />
+      <Background active={isBottomSheetActive} onClick={closeBottomSheet} />
       <ContentContainer ref={contentRef} active={isBottomSheetActive}>
         <ContentHeader onPointerDown={onPointerDown}>
           <div className="mover"></div>
         </ContentHeader>
-        <div>
+        <ContentWrapper active={isBottomSheetActive}>
           <BottomSheetContentConstructor
             hideBottomSheet={hideThisWithTransition}
           />
-        </div>
+        </ContentWrapper>
       </ContentContainer>
     </Container>
   );
