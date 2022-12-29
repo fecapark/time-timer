@@ -160,10 +160,6 @@ export default function FixedMenu() {
   const [section, setSection] = useState<MenuSectionType | null>(null);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
-
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
-
   const setSupportModalActive = useModal({
     title:
       language === "kor"
@@ -178,72 +174,73 @@ export default function FixedMenu() {
         : "Preview alarm sound before start",
     content: <PreviewSoundModal />,
   });
+  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
+    useOptionStorage();
 
-  const LangSection = (
-    <>
-      <SliderItem
-        content="한국어"
-        selected={language === "kor"}
-        onClick={() => {
-          setOptionStorageValue({ language: "kor" });
-        }}
-      />
-      <SliderItem
-        content="English"
-        selected={language === "en"}
-        onClick={() => {
-          setOptionStorageValue({ language: "en" });
-        }}
-      />
-    </>
-  );
-
-  const ColorSection = (
-    <>
-      {Object.entries(Theme.clock.color).map(([colorName, value]) => {
-        return (
-          <SliderItem
-            key={value}
-            content={<ColorThumbnail color={value} />}
-            selected={clockColor === colorName}
-            onClick={() => {
-              setOptionStorageValue({
-                clockColor: colorName as ClockColorType,
-              });
-            }}
-          />
-        );
-      })}
-    </>
-  );
-
-  const NotificationSection = (
-    <>
-      <SliderItem
-        content={
-          language === "kor" ? "알람 소리 미리 듣기" : "Preview alarm sound"
-        }
-        onClick={() => {
-          setPreviewSoundModalActive(true);
-        }}
-      />
-      <SliderItem
-        content={
-          language === "kor"
-            ? "백그라운드 푸쉬 알림 지원"
-            : "About push notification"
-        }
-        onClick={() => {
-          setSupportModalActive(true);
-        }}
-      />
-    </>
-  );
+  const sectionContents: Record<MenuSectionType, React.ReactNode> = {
+    language: (
+      <>
+        <SliderItem
+          content="한국어"
+          selected={language === "kor"}
+          onClick={() => {
+            setOptionStorageValue({ language: "kor" });
+          }}
+        />
+        <SliderItem
+          content="English"
+          selected={language === "en"}
+          onClick={() => {
+            setOptionStorageValue({ language: "en" });
+          }}
+        />
+      </>
+    ),
+    color: (
+      <>
+        {Object.entries(Theme.clock.color).map(([colorName, value]) => {
+          return (
+            <SliderItem
+              key={value}
+              content={<ColorThumbnail color={value} />}
+              selected={clockColor === colorName}
+              onClick={() => {
+                setOptionStorageValue({
+                  clockColor: colorName as ClockColorType,
+                });
+              }}
+            />
+          );
+        })}
+      </>
+    ),
+    notification: (
+      <>
+        <SliderItem
+          content={
+            language === "kor" ? "알람 소리 미리 듣기" : "Preview alarm sound"
+          }
+          onClick={() => {
+            setPreviewSoundModalActive(true);
+          }}
+        />
+        <SliderItem
+          content={
+            language === "kor"
+              ? "백그라운드 푸쉬 알림 지원"
+              : "About push notification"
+          }
+          onClick={() => {
+            setSupportModalActive(true);
+          }}
+        />
+      </>
+    ),
+  };
 
   const sliderContentSelector = () => {
-    if (section === "language") return LangSection;
-    if (section === "color") return ColorSection;
-    if (section === "notification") return NotificationSection;
+    if (!section) return null;
+    if (section in sectionContents) return sectionContents[section];
     return null;
   };
 
