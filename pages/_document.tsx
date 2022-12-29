@@ -10,7 +10,7 @@ import { Theme } from "../styles/theme";
 function TwitterCardMetaSet() {
   return (
     <>
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Time Timer | 타임 타이머" />
       <meta
         name="twitter:description"
