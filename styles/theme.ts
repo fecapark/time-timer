@@ -8,8 +8,11 @@ const background = {
 const clock = {
   color: {
     red: background.accent,
-    blue: "#1f75fe",
+    pink: "#e0125a",
     yellow: "#ffcc00",
+    green: "#34a853",
+    blue: "#1f75fe",
+    purple: "#6b2cf5",
   },
 };
 

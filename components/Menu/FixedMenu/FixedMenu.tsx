@@ -38,6 +38,7 @@ import {
   ISliderProps,
   MenuSectionType,
 } from "./FixedMenu.type";
+import { ClockColorType } from "../../../shared/types";
 
 function SliderItem({
   content,
@@ -195,27 +196,17 @@ export default function FixedMenu() {
 
   const ColorSection = (
     <>
-      <SliderItem
-        content={<ColorThumbnail color={Theme.clock.color.red} />}
-        selected={clockColor === "red"}
-        onClick={() => {
-          setClockColor("red");
-        }}
-      />
-      <SliderItem
-        content={<ColorThumbnail color={Theme.clock.color.blue} />}
-        selected={clockColor === "blue"}
-        onClick={() => {
-          setClockColor("blue");
-        }}
-      />
-      <SliderItem
-        content={<ColorThumbnail color={Theme.clock.color.yellow} />}
-        selected={clockColor === "yellow"}
-        onClick={() => {
-          setClockColor("yellow");
-        }}
-      />
+      {Object.entries(Theme.clock.color).map(([colorName, value]) => {
+        return (
+          <SliderItem
+            content={<ColorThumbnail color={value} />}
+            selected={clockColor === colorName}
+            onClick={() => {
+              setClockColor(colorName as ClockColorType);
+            }}
+          />
+        );
+      })}
     </>
   );
 

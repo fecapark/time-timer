@@ -13,6 +13,7 @@ import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
 } from "../../../shared/atom";
+import { ClockColorType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
@@ -144,27 +145,17 @@ export default function MobileMenu() {
             />
           </ItemDrawer>
           <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
-            <Item
-              content={<ColorThumbnail color={Theme.clock.color.red} />}
-              selected={clockColor === "red"}
-              onClick={() => {
-                setClockColor("red");
-              }}
-            />
-            <Item
-              content={<ColorThumbnail color={Theme.clock.color.blue} />}
-              selected={clockColor === "blue"}
-              onClick={() => {
-                setClockColor("blue");
-              }}
-            />
-            <Item
-              content={<ColorThumbnail color={Theme.clock.color.yellow} />}
-              selected={clockColor === "yellow"}
-              onClick={() => {
-                setClockColor("yellow");
-              }}
-            />
+            {Object.entries(Theme.clock.color).map(([colorName, value]) => {
+              return (
+                <Item
+                  content={<ColorThumbnail color={value} />}
+                  selected={clockColor === colorName}
+                  onClick={() => {
+                    setClockColor(colorName as ClockColorType);
+                  }}
+                />
+              );
+            })}
           </ItemDrawer>
           <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
             <Item
