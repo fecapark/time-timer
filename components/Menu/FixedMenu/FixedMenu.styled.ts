@@ -25,6 +25,7 @@ export const MainMenuBar = styled.div`
   background-color: #29292b;
 
   padding-top: 28px;
+  padding-bottom: calc(13px * 0.3);
   height: 100%;
 
   display: flex;
