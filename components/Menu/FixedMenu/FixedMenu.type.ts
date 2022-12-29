@@ -1,5 +1,8 @@
+import React from "react";
+
 export interface IItemProps {
-  icon: React.ReactNode;
+  defaultIcon: React.ReactNode;
+  selectedIcon?: React.ReactNode;
   text: string;
   selected?: boolean;
   onClick?: () => void;
@@ -20,6 +23,11 @@ export interface ISliderItemProps {
 export interface ISliderContainerStyleProps {
   active: boolean;
   triggerInteractionHide: boolean;
+}
+
+export interface ISliderProps {
+  selector: () => React.ReactNode;
+  onClose: () => void;
 }
 
 export type MenuSectionType = "language" | "color" | "notification";

@@ -1,12 +1,14 @@
 import {
   MdKeyboardArrowLeft,
+  MdNotifications,
   MdOpenInNew,
   MdOutlineNotifications,
   MdOutlinePalette,
+  MdPalette,
   MdTranslate,
 } from "react-icons/md";
 import { BsGithub } from "react-icons/bs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isSliderActiveAtom as ISA,
@@ -33,6 +35,7 @@ import {
   IItemProps,
   IOpenLinkItemProps,
   ISliderItemProps,
+  ISliderProps,
   MenuSectionType,
 } from "./FixedMenu.type";
 
@@ -55,7 +58,8 @@ function SliderItem({
   );
 }
 
-function Slider({ selector }: { selector: () => React.ReactNode }) {
+function Slider({ selector, onClose }: ISliderProps) {
+  const sliderRef = useRef<HTMLDivElement>(null);
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
@@ -64,6 +68,23 @@ function Slider({ selector }: { selector: () => React.ReactNode }) {
   const closeSlider = () => {
     setIsSliderActive(false);
   };
+
+  const handleSliderToggleTransition = () => {
+    if (!sliderRef.current) return;
+
+    if (isSliderActive) {
+      sliderRef.current.ontransitionend = null;
+    } else {
+      sliderRef.current.ontransitionend = () => {
+        onClose();
+        sliderRef.current!.ontransitionend = null;
+      };
+    }
+  };
+
+  useEffect(() => {
+    handleSliderToggleTransition();
+  }, [isSliderActive]);
 
   useEffect(() => {
     closeSlider();
@@ -76,6 +97,7 @@ function Slider({ selector }: { selector: () => React.ReactNode }) {
 
   return (
     <SliderContainer
+      ref={sliderRef}
       active={isSliderActive}
       triggerInteractionHide={isClockPointerDown || isTimingNow}
     >
@@ -91,7 +113,8 @@ function Slider({ selector }: { selector: () => React.ReactNode }) {
 }
 
 function Item({
-  icon,
+  defaultIcon,
+  selectedIcon,
   text,
   selected = false,
   onClick = () => {},
@@ -110,7 +133,9 @@ function Item({
         openSlider();
       }}
     >
-      <div className="icon-wrapper">{icon}</div>
+      <div className="icon-wrapper">
+        {selected && selectedIcon ? selectedIcon : defaultIcon}
+      </div>
       <span className="item-text">{text}</span>
     </ItemContainer>
   );
@@ -226,23 +251,30 @@ export default function FixedMenu() {
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
-      <Slider selector={sliderContentSelector} />
+      <Slider
+        selector={sliderContentSelector}
+        onClose={() => {
+          setSection(null);
+        }}
+      />
       <MainMenuBar>
         <div className="section">
           <Item
-            icon={<MdTranslate />}
+            defaultIcon={<MdTranslate />}
             text={language === "kor" ? "언어" : "Language"}
             selected={section === "language"}
             onClick={() => setSection("language")}
           />
           <Item
-            icon={<MdOutlinePalette />}
+            defaultIcon={<MdOutlinePalette />}
+            selectedIcon={<MdPalette />}
             text={language === "kor" ? "색상" : "Color"}
             selected={section === "color"}
             onClick={() => setSection("color")}
           ></Item>
           <Item
-            icon={<MdOutlineNotifications />}
+            defaultIcon={<MdOutlineNotifications />}
+            selectedIcon={<MdNotifications />}
             text={language === "kor" ? "알림" : "Notification"}
             selected={section === "notification"}
             onClick={() => setSection("notification")}
