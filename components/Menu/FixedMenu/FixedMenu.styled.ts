@@ -102,6 +102,8 @@ export const ItemContainer = styled.div<{ active: boolean }>`
   font-family: ${({ theme }) => theme.font.family.openSans};
   color: #e0e0e0;
 
+  -webkit-tap-highlight-color: transparent;
+
   .icon-wrapper {
     display: inline-flex;
     justify-content: center;
@@ -159,6 +161,7 @@ export const SliderItemContainer = styled.div`
   align-items: center;
 
   color: #e0e0e0;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background-color: ${({ theme }) => theme.background.hoverAccent};

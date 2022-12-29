@@ -5,6 +5,7 @@ import {
 } from "../shared/atom";
 import { optionKey } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
+import useIsomorphicEffect from "./useIsomorphicEffect";
 
 export default function useOptionStorage(): [
   IOptionDataType,
@@ -69,7 +70,7 @@ export default function useOptionStorage(): [
     setCanAccess(true);
   }, []);
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (!canAccess) return;
     const data = get();
     set(data);

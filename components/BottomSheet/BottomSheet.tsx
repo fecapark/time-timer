@@ -17,7 +17,6 @@ import { Theme } from "../../styles/theme";
 
 export default function BottomSheet() {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [hideContent, setHideContent] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [pointerDownOffset, setPointerDownOffset] = useState(0);
   const [originOffset, setOriginOffset] = useState(0);

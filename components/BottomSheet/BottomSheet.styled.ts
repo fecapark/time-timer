@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { isPropertyAccessExpression } from "typescript";
 
 export const Container = styled.div<{ active: boolean }>`
   ${({ theme }) => theme.shareCSS.noDrag};

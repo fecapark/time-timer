@@ -40,6 +40,7 @@ import {
 } from "./FixedMenu.type";
 import { ClockColorType } from "../../../shared/types";
 import useOptionStorage from "../../../hooks/useOptionStorage";
+import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 
 function SliderItem({
   content,
@@ -244,9 +245,8 @@ export default function FixedMenu() {
     return null;
   };
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (!canAccessToOptionStorage) return;
-
     setLanguage(optionValue.language);
     setClockColor(optionValue.clockColor);
   }, [optionValue, canAccessToOptionStorage]);

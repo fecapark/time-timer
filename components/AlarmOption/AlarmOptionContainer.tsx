@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import useModal from "../../hooks/useModal";

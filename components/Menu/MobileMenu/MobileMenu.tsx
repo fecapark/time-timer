@@ -6,6 +6,7 @@ import {
   MdOutlineArrowDropUp,
 } from "react-icons/md";
 import { useRecoilState, useRecoilValue } from "recoil";
+import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import useModal from "../../../hooks/useModal";
 import useOptionStorage from "../../../hooks/useOptionStorage";
@@ -120,9 +121,8 @@ export default function MobileMenu() {
     closeMenu();
   }, [isHideTimer]);
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (!canAccessToOptionStorage) return;
-
     setLanguage(optionValue.language);
     setClockColor(optionValue.clockColor);
   }, [optionValue, canAccessToOptionStorage]);

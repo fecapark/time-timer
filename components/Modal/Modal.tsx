@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { isModalActiveAtom, modalContentAtom } from "../../shared/atom";
 import {
   Background,
