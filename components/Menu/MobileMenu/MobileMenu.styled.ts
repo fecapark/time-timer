@@ -89,6 +89,7 @@ export const MenuContentContainer = styled.div<{ isActive: boolean }>`
   .footer {
     padding: 16px;
 
+    font-family: ${({ theme }) => theme.font.family.primary};
     font-size: 12px;
     color: #a0a0a0;
 

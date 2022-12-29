@@ -101,14 +101,6 @@ export const Container = styled.footer<{
   justify-content: center;
   align-items: flex-end;
 
-  u {
-    cursor: pointer;
-
-    &:hover {
-      color: white;
-    }
-  }
-
   @media screen and (max-width: ${({ theme }) =>
       theme.responsiveSizes.hideTimer}px) {
     font-size: 15px;

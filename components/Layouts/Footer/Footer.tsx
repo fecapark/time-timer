@@ -59,7 +59,7 @@ export default function Footer() {
             />
           ) : (
             <span>
-              Copyright &copy; 2022 <u>Sanghyeok Park</u>. All rights reserved.
+              Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
             </span>
           )
         ) : null}
