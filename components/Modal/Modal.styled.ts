@@ -40,16 +40,20 @@ export const Background = styled.div<{ active: boolean }>`
 
 export const ContentContainer = styled.div<{ active: boolean }>`
   width: 500px;
+  max-height: calc(100% - 32px * 2);
 
   z-index: 100;
   background-color: #212124;
 
+  margin: 0 24px;
   padding: 48px 32px;
   border-radius: 24px;
 
   opacity: ${(props) => (props.active ? "1" : "0")};
   transform: scale(${(props) => (props.active ? "1" : "1.1")});
   transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
+
+  overflow-y: auto;
 `;
 
 export const ContentHeader = styled.div`
