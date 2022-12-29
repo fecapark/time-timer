@@ -148,6 +148,7 @@ export default function MobileMenu() {
             {Object.entries(Theme.clock.color).map(([colorName, value]) => {
               return (
                 <Item
+                  key={value}
                   content={<ColorThumbnail color={value} />}
                   selected={clockColor === colorName}
                   onClick={() => {

@@ -205,6 +205,7 @@ export default function FixedMenu() {
       {Object.entries(Theme.clock.color).map(([colorName, value]) => {
         return (
           <SliderItem
+            key={value}
             content={<ColorThumbnail color={value} />}
             selected={clockColor === colorName}
             onClick={() => {
