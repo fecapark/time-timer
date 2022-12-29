@@ -105,10 +105,6 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
           <meta name="author" content="Sanghyeok Park, fecapark" />
           <meta name="apple-mobile-web-app-title" content="Time Timer" />
           <MetaIconSet />

@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import {
   MdKeyboardArrowLeft,
   MdOpenInNew,
@@ -13,190 +12,29 @@ import {
   isSliderActiveAtom as ISA,
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
-  activedMenuSectionAtom as AMS,
+  isTimingNowAtom as ITN,
+  isClockPointerDownAtom as ICPD,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useModal from "../../../hooks/useModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import useMediaMatch from "../../../hooks/useMediaMatch";
-
-const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  height: 100%;
-`;
-
-const MainMenuBar = styled.div`
-  position: relative;
-  background-color: #29292b;
-
-  padding: 28px 0;
-  height: 100%;
-
-  .section {
-    margin-bottom: 56px;
-  }
-`;
-
-const SliderContainer = styled.div<{ active: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 88px;
-  background-color: #29292b;
-
-  height: 100%;
-  padding: 8px;
-
-  border-top-right-radius: 24px;
-  border-bottom-right-radius: 24px;
-
-  transform: translate3d(${(props) => (props.active ? "0" : "-100%")}, 0, 0);
-  transition: transform
-    ${(props) =>
-      props.active
-        ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
-        : "0.2s cubic-bezier(0, 0, 0, 1)"};
-
-  .border-left {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    width: 1px;
-    height: 100%;
-
-    background-color: #484850;
-  }
-
-  .slider-header {
-    width: 100%;
-
-    .icon-wrapper {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-
-      padding: 8px;
-      border-radius: 50%;
-
-      &:hover {
-        background-color: #323236;
-      }
-
-      svg {
-        font-size: 22px;
-      }
-    }
-  }
-`;
-
-const ItemContainer = styled.div<{ active: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.3em;
-
-  width: 88px;
-  margin-bottom: 28px;
-
-  font-size: 13px;
-  font-family: ${({ theme }) => theme.font.family.openSans};
-  color: #e0e0e0;
-
-  .icon-wrapper {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-
-    padding: 0.3em 1.2em;
-    border-radius: 1000px;
-
-    background-color: ${(props) =>
-      props.active ? props.theme.background.hoverAccent : "none"};
-    transition: background-color 0.1s cubic-bezier(0, 0, 0, 1);
-
-    svg {
-      font-size: 1.8em;
-    }
-  }
-
-  &:hover .icon-wrapper {
-    background-color: ${({ theme }) => theme.background.hoverAccent};
-    transition: background-color 0.15s cubic-bezier(0.2, 0, 0, 1);
-  }
-
-  .item-text {
-    font-weight: 500;
-  }
-`;
-
-const OpenLinkItemContainer = styled(ItemContainer)`
-  a {
-    all: unset;
-
-    color: inherit;
-    font-size: 1em;
-    width: 100%;
-    height: 100%;
-
-    display: inherit;
-    flex-direction: inherit;
-    justify-content: inherit;
-    align-items: inherit;
-  }
-`;
-
-const SliderItemContainer = styled.div`
-  width: 100%;
-  min-height: 40px;
-  min-width: 240px;
-
-  font-size: 15px;
-  padding: 0.6em 1.35em;
-  border-radius: 10000px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #e0e0e0;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.background.hoverAccent};
-  }
-`;
-
-const ColorThumbnail = styled.div<{ color: string }>`
-  width: 20px;
-  height: 20px;
-
-  border-radius: 4px;
-
-  background-color: ${(props) => props.color};
-`;
-
-interface IItemProps {
-  icon: React.ReactNode;
-  text: string;
-  selected?: boolean;
-  onClick?: () => void;
-}
-
-interface IOpenLinkItemProps {
-  icon: React.ReactNode;
-  text: string;
-  href: string;
-}
-
-interface ISliderItemProps {
-  content: React.ReactNode;
-  selected?: boolean;
-  onClick?: () => void;
-}
+import {
+  ColorThumbnail,
+  Container,
+  ItemContainer,
+  MainMenuBar,
+  OpenLinkItemContainer,
+  SliderContainer,
+  SliderItemContainer,
+} from "./FixedMenu.styled";
+import {
+  IItemProps,
+  IOpenLinkItemProps,
+  ISliderItemProps,
+  MenuSectionType,
+} from "./FixedMenu.type";
 
 function SliderItem({
   content,
@@ -218,12 +56,12 @@ function SliderItem({
 }
 
 function Slider({ selector }: { selector: () => React.ReactNode }) {
-  const setSection = useSetRecoilState(AMS);
+  const isClockPointerDown = useRecoilValue(ICPD);
+  const isTimingNow = useRecoilValue(ITN);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
 
   const closeSlider = () => {
-    setSection(null);
     setIsSliderActive(false);
   };
 
@@ -231,8 +69,16 @@ function Slider({ selector }: { selector: () => React.ReactNode }) {
     closeSlider();
   }, [isHideTimer]);
 
+  useEffect(() => {
+    if (!isClockPointerDown && !isTimingNow) return;
+    closeSlider();
+  }, [isClockPointerDown, isTimingNow]);
+
   return (
-    <SliderContainer active={isSliderActive}>
+    <SliderContainer
+      active={isSliderActive}
+      triggerInteractionHide={isClockPointerDown || isTimingNow}
+    >
       <div className="border-left"></div>
       <div className="slider-header">
         <div className="icon-wrapper" onClick={closeSlider}>
@@ -282,7 +128,9 @@ function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
 }
 
 export default function FixedMenu() {
-  const [section, setSection] = useRecoilState(AMS);
+  const isClockPointerDown = useRecoilValue(ICPD);
+  const isTimingNow = useRecoilValue(ITN);
+  const [section, setSection] = useState<MenuSectionType | null>(null);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
 
@@ -377,7 +225,7 @@ export default function FixedMenu() {
   };
 
   return (
-    <Container>
+    <Container triggerHide={isClockPointerDown || isTimingNow}>
       <Slider selector={sliderContentSelector} />
       <MainMenuBar>
         <div className="section">

@@ -96,8 +96,3 @@ export const isSliderActiveAtom = atom<boolean>({
   key: `is-slider-active/${v1()}`,
   default: false,
 });
-
-export const activedMenuSectionAtom = atom<MenuSectionType | null>({
-  key: `actived-menu-section/${v1()}`,
-  default: null,
-});
