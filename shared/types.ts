@@ -15,6 +15,11 @@ export interface IBottomSheetContentConstructorProp {
   hideBottomSheet: () => void;
 }
 
+export interface IOptionDataType {
+  clockColor: ClockColorType;
+  language: LanguageOptionType;
+}
+
 export type SetStateType<T> = Dispatch<SetStateAction<T>>;
 
 export type LanguageOptionType = "kor" | "en";

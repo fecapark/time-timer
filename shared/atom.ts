@@ -82,14 +82,16 @@ export const isActiveMenuAtom = atom<boolean>({
   default: false,
 });
 
+export const clockColorDefaultValue: ClockColorType = "red";
 export const clockColorValueAtom = atom<ClockColorType>({
   key: `clock-color-value/${v1()}`,
-  default: "red",
+  default: clockColorDefaultValue,
 });
 
+export const languageOptionDefaultValue: LanguageOptionType = "kor";
 export const languageOptionValueAtom = atom<LanguageOptionType>({
   key: `language-option-value/${v1()}`,
-  default: "kor",
+  default: languageOptionDefaultValue,
 });
 
 export const isSliderActiveAtom = atom<boolean>({

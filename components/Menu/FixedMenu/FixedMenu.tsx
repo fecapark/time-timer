@@ -39,6 +39,7 @@ import {
   MenuSectionType,
 } from "./FixedMenu.type";
 import { ClockColorType } from "../../../shared/types";
+import useOptionStorage from "../../../hooks/useOptionStorage";
 
 function SliderItem({
   content,
@@ -160,6 +161,9 @@ export default function FixedMenu() {
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
 
+  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
+    useOptionStorage();
+
   const setSupportModalActive = useModal({
     title:
       language === "kor"
@@ -182,6 +186,7 @@ export default function FixedMenu() {
         selected={language === "kor"}
         onClick={() => {
           setLanguage("kor");
+          setOptionStorageValue({ language: "kor" });
         }}
       />
       <SliderItem
@@ -189,6 +194,7 @@ export default function FixedMenu() {
         selected={language === "en"}
         onClick={() => {
           setLanguage("en");
+          setOptionStorageValue({ language: "en" });
         }}
       />
     </>
@@ -203,6 +209,9 @@ export default function FixedMenu() {
             selected={clockColor === colorName}
             onClick={() => {
               setClockColor(colorName as ClockColorType);
+              setOptionStorageValue({
+                clockColor: colorName as ClockColorType,
+              });
             }}
           />
         );
@@ -239,6 +248,13 @@ export default function FixedMenu() {
     if (section === "notification") return NotificationSection;
     return null;
   };
+
+  useEffect(() => {
+    if (!canAccessToOptionStorage) return;
+
+    setLanguage(optionValue.language);
+    setClockColor(optionValue.clockColor);
+  }, [optionValue, canAccessToOptionStorage]);
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
