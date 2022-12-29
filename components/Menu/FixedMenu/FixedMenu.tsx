@@ -185,7 +185,6 @@ export default function FixedMenu() {
         content="한국어"
         selected={language === "kor"}
         onClick={() => {
-          setLanguage("kor");
           setOptionStorageValue({ language: "kor" });
         }}
       />
@@ -193,7 +192,6 @@ export default function FixedMenu() {
         content="English"
         selected={language === "en"}
         onClick={() => {
-          setLanguage("en");
           setOptionStorageValue({ language: "en" });
         }}
       />
@@ -209,7 +207,6 @@ export default function FixedMenu() {
             content={<ColorThumbnail color={value} />}
             selected={clockColor === colorName}
             onClick={() => {
-              setClockColor(colorName as ClockColorType);
               setOptionStorageValue({
                 clockColor: colorName as ClockColorType,
               });

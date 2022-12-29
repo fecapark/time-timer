@@ -8,6 +8,7 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import useModal from "../../../hooks/useModal";
+import useOptionStorage from "../../../hooks/useOptionStorage";
 import {
   isActiveMenuAtom as IAM,
   languageOptionValueAtom as LOV,
@@ -94,7 +95,6 @@ export default function MobileMenu() {
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
-
   const setSupportModalActive = useModal({
     title:
       language === "kor"
@@ -109,6 +109,8 @@ export default function MobileMenu() {
         : "Preview alarm sound before start",
     content: <PreviewSoundModal />,
   });
+  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
+    useOptionStorage();
 
   const closeMenu = () => {
     setIsActive(false);
@@ -117,6 +119,13 @@ export default function MobileMenu() {
   useEffect(() => {
     closeMenu();
   }, [isHideTimer]);
+
+  useEffect(() => {
+    if (!canAccessToOptionStorage) return;
+
+    setLanguage(optionValue.language);
+    setClockColor(optionValue.clockColor);
+  }, [optionValue, canAccessToOptionStorage]);
 
   return (
     <MenuContainer isActive={isActive}>
@@ -133,14 +142,14 @@ export default function MobileMenu() {
               content="한국어"
               selected={language === "kor"}
               onClick={() => {
-                setLanguage("kor");
+                setOptionStorageValue({ language: "kor" });
               }}
             />
             <Item
               content="English"
               selected={language === "en"}
               onClick={() => {
-                setLanguage("en");
+                setOptionStorageValue({ language: "en" });
               }}
             />
           </ItemDrawer>
@@ -152,7 +161,9 @@ export default function MobileMenu() {
                   content={<ColorThumbnail color={value} />}
                   selected={clockColor === colorName}
                   onClick={() => {
-                    setClockColor(colorName as ClockColorType);
+                    setOptionStorageValue({
+                      clockColor: colorName as ClockColorType,
+                    });
                   }}
                 />
               );
