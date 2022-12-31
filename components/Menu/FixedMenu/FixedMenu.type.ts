@@ -30,4 +30,4 @@ export interface ISliderProps {
   onClose: () => void;
 }
 
-export type MenuSectionType = "language" | "color" | "notification";
+export type MenuSectionType = "language" | "display" | "notification";

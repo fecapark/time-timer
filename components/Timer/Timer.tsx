@@ -6,9 +6,10 @@ import {
   isTimingNowAtom as ITN,
   soundEffectAudioAtom as SEA,
   languageOptionValueAtom as LOV,
+  progressUnitValueAtom as PUV,
 } from "../../shared/atom";
 import { Container, TimeText } from "./Timer.styled";
-import { getTimeFromDegree } from "./Timer.util";
+import { getPercentageFromDegree, getTimeFromDegree } from "./Timer.util";
 import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
 import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
@@ -25,6 +26,7 @@ export default function Timer({ onTimingStart }: IProps) {
   const isClockPointerDown = useRecoilValue(ICPD);
   const soundEffectAudio = useRecoilValue(SEA);
   const language = useRecoilValue(LOV);
+  const progressUnit = useRecoilValue(PUV);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
@@ -117,10 +119,18 @@ export default function Timer({ onTimingStart }: IProps) {
         isHide={isHideTimer}
       >
         <div className="row">
-          <span className="min">{getTimeFromDegree(clockDegree).min}</span>
+          <span className="min">
+            {progressUnit === "time"
+              ? getTimeFromDegree(clockDegree).min
+              : getPercentageFromDegree(clockDegree).int}
+          </span>
         </div>
         <div className="row">
-          <span className="sec">{getTimeFromDegree(clockDegree).sec}</span>
+          <span className="sec">
+            {progressUnit === "time"
+              ? getTimeFromDegree(clockDegree).sec
+              : "." + getPercentageFromDegree(clockDegree).float}
+          </span>
         </div>
       </TimeText>
     </Container>

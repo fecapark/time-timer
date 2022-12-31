@@ -1,7 +1,11 @@
 import {
+  MdDesktopWindows,
   MdKeyboardArrowLeft,
   MdNotifications,
   MdOpenInNew,
+  MdOutlineArrowDropDown,
+  MdOutlineArrowDropUp,
+  MdOutlineDesktopWindows,
   MdOutlineNotifications,
   MdOutlinePalette,
   MdPalette,
@@ -16,6 +20,7 @@ import {
   clockColorValueAtom as CCV,
   isTimingNowAtom as ITN,
   isClockPointerDownAtom as ICPD,
+  progressUnitValueAtom as PUV,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useModal from "../../../hooks/useModal";
@@ -41,6 +46,7 @@ import {
 import { ClockColorType } from "../../../shared/types";
 import useOptionStorage from "../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
+import styled from "@emotion/styled";
 
 function SliderItem({
   content,
@@ -53,7 +59,7 @@ function SliderItem({
     <SliderItemContainer onClick={onClick}>
       <span>{content}</span>
       {selected ? (
-        <span style={{ fontSize: 13 }}>
+        <span style={{ fontSize: 13, fontWeight: 400, marginLeft: 40 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>
       ) : null}
@@ -115,6 +121,50 @@ function Slider({ selector, onClose }: ISliderProps) {
   );
 }
 
+const ItemDrawerContainer = styled.div<IItemDrawerStyleProps>`
+  .drawer {
+    padding-left: 16px;
+
+    overflow: hidden;
+    max-height: ${(props) =>
+      props.isOpened ? props.itemCount * 40 + 10 : "0"}px;
+    transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+`;
+
+const DrawerHeadItem = styled(SliderItemContainer)``;
+
+interface IItemDrawerStyleProps {
+  isOpened: boolean;
+  itemCount: number;
+}
+
+interface IItemDrawerProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+}
+
+function ItemDrawer({ content, children }: IItemDrawerProps) {
+  const [isOpened, setIsOpened] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsOpened((prev) => !prev);
+  };
+
+  return (
+    <ItemDrawerContainer
+      isOpened={isOpened}
+      itemCount={React.Children.count(children)}
+    >
+      <DrawerHeadItem onClick={toggleDrawer}>
+        <span>{content}</span>
+        {isOpened ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
+      </DrawerHeadItem>
+      <div className="drawer">{children}</div>
+    </ItemDrawerContainer>
+  );
+}
+
 function Item({
   defaultIcon,
   selectedIcon,
@@ -161,6 +211,7 @@ export default function FixedMenu() {
   const [section, setSection] = useState<MenuSectionType | null>(null);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
+  const [progressUnit, setProgressUnit] = useRecoilState(PUV);
   const setSupportModalActive = useModal({
     title:
       language === "kor"
@@ -197,22 +248,44 @@ export default function FixedMenu() {
         />
       </>
     ),
-    color: (
+    display: (
       <>
-        {Object.entries(Theme.clock.color).map(([colorName, value]) => {
-          return (
-            <SliderItem
-              key={value}
-              content={<ColorThumbnail color={value} />}
-              selected={clockColor === colorName}
-              onClick={() => {
-                setOptionStorageValue({
-                  clockColor: colorName as ClockColorType,
-                });
-              }}
-            />
-          );
-        })}
+        <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
+          {Object.entries(Theme.clock.color).map(([colorName, value]) => {
+            return (
+              <SliderItem
+                key={value}
+                content={<ColorThumbnail color={value} />}
+                selected={clockColor === colorName}
+                onClick={() => {
+                  setOptionStorageValue({
+                    clockColor: colorName as ClockColorType,
+                  });
+                }}
+              />
+            );
+          })}
+        </ItemDrawer>
+        <ItemDrawer content={language === "kor" ? "시간 단위" : "Progress"}>
+          <SliderItem
+            content={
+              language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
+            }
+            selected={progressUnit === "time"}
+            onClick={() => {
+              setOptionStorageValue({ progressUnit: "time" });
+            }}
+          />
+          <SliderItem
+            content={
+              language === "kor" ? "백분위로 나타내기" : "Show as percentage"
+            }
+            selected={progressUnit === "percentage"}
+            onClick={() => {
+              setOptionStorageValue({ progressUnit: "percentage" });
+            }}
+          />
+        </ItemDrawer>
       </>
     ),
     notification: (
@@ -249,6 +322,7 @@ export default function FixedMenu() {
     if (!canAccessToOptionStorage) return;
     setLanguage(optionValue.language);
     setClockColor(optionValue.clockColor);
+    setProgressUnit(optionValue.progressUnit);
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
@@ -268,11 +342,11 @@ export default function FixedMenu() {
             onClick={() => setSection("language")}
           />
           <Item
-            defaultIcon={<MdOutlinePalette />}
-            selectedIcon={<MdPalette />}
-            text={language === "kor" ? "색상" : "Color"}
-            selected={section === "color"}
-            onClick={() => setSection("color")}
+            defaultIcon={<MdOutlineDesktopWindows />}
+            selectedIcon={<MdDesktopWindows />}
+            text={language === "kor" ? "화면" : "Display"}
+            selected={section === "display"}
+            onClick={() => setSection("display")}
           ></Item>
           <Item
             defaultIcon={<MdOutlineNotifications />}

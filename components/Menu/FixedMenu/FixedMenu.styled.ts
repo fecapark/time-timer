@@ -153,6 +153,7 @@ export const SliderItemContainer = styled.div`
   min-width: 240px;
 
   font-size: 15px;
+  font-weight: 500;
   padding: 0.6em 1.35em;
   border-radius: 10000px;
 

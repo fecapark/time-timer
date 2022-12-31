@@ -8,11 +8,15 @@ import {
   isClockPointerDownAtom as ICPD,
   isTimingNowAtom as ITN,
   languageOptionValueAtom as LOV,
+  progressUnitValueAtom as PUV,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
 import RoundButton from "../../Button/RoundButton";
-import { getTimeFromDegree } from "../../Timer/Timer.util";
+import {
+  getPercentageFromDegree,
+  getTimeFromDegree,
+} from "../../Timer/Timer.util";
 import { Container, PauseButton, TimeText } from "./Footer.style";
 import { IoMdPause } from "react-icons/io";
 
@@ -22,6 +26,7 @@ export default function Footer() {
   const clockSize = useRecoilValue(CS);
   const clockDegree = useRecoilValue(CD);
   const language = useRecoilValue(LOV);
+  const progressUnit = useRecoilValue(PUV);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const setBottomSheetActive = useBottomSheet({
     constructor: BottomSheetTimer,
@@ -69,7 +74,9 @@ export default function Footer() {
           fontSize={timerFontSize}
           triggerHide={!isClockPointerDown && !isTimingNow}
         >
-          {getTimeFromDegree(clockDegree).sec}
+          {progressUnit === "time"
+            ? getTimeFromDegree(clockDegree).sec
+            : "." + getPercentageFromDegree(clockDegree).float}
         </TimeText>
       ) : null}
       {isHideTimer ? (

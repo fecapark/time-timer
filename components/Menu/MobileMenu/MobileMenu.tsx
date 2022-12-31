@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 import {
   MdMenuOpen,
   MdOpenInNew,
@@ -14,6 +15,7 @@ import {
   isActiveMenuAtom as IAM,
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
+  progressUnitValueAtom as PUV,
 } from "../../../shared/atom";
 import { ClockColorType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
@@ -41,7 +43,7 @@ function Item({ content, selected = false, onClick }: IItemProps) {
     <ItemContainer onClick={onClick}>
       <span>{content}</span>
       {selected ? (
-        <span style={{ fontSize: 13 }}>
+        <span style={{ fontSize: 13, fontWeight: 400, marginLeft: 40 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>
       ) : null}
@@ -95,6 +97,7 @@ export default function MobileMenu() {
   const [isActive, setIsActive] = useRecoilState(IAM);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
+  const [progressUnit, setProgressUnit] = useRecoilState(PUV);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const setSupportModalActive = useModal({
     title:
@@ -125,6 +128,7 @@ export default function MobileMenu() {
     if (!canAccessToOptionStorage) return;
     setLanguage(optionValue.language);
     setClockColor(optionValue.clockColor);
+    setProgressUnit(optionValue.progressUnit);
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
@@ -168,6 +172,26 @@ export default function MobileMenu() {
                 />
               );
             })}
+          </ItemDrawer>
+          <ItemDrawer content={language === "kor" ? "시간 단위" : "Progress"}>
+            <Item
+              content={
+                language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
+              }
+              selected={progressUnit === "time"}
+              onClick={() => {
+                setOptionStorageValue({ progressUnit: "time" });
+              }}
+            />
+            <Item
+              content={
+                language === "kor" ? "백분위로 나타내기" : "Show as percentage"
+              }
+              selected={progressUnit === "percentage"}
+              onClick={() => {
+                setOptionStorageValue({ progressUnit: "percentage" });
+              }}
+            />
           </ItemDrawer>
           <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
             <Item

@@ -14,6 +14,20 @@ export const getTimeFromDegree = (degree: number) => {
   };
 };
 
+export const getPercentageFromDegree = (degree: number) => {
+  const fullPercentage = Math.round(((360 - degree) / 360) * 10000) / 100;
+  const [integer, float] = fullPercentage.toString().split(".");
+  return {
+    int: integer.length === 1 ? `0${integer}` : integer,
+    float:
+      !float || float.length === 0
+        ? "00"
+        : float.length === 1
+        ? `${float}0`
+        : float,
+  };
+};
+
 export const requestNotificationPermission =
   (): Promise<RequestNotificationPermissionResult> => {
     const isClientSupportNotification = () => {

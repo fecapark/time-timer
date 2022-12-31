@@ -18,6 +18,7 @@ export interface IBottomSheetContentConstructorProp {
 export interface IOptionDataType {
   clockColor: ClockColorType;
   language: LanguageOptionType;
+  progressUnit: ProgressUnitType;
 }
 
 export type SetStateType<T> = Dispatch<SetStateAction<T>>;
@@ -26,4 +27,4 @@ export type LanguageOptionType = "kor" | "en";
 
 export type ClockColorType = keyof typeof Theme.clock.color;
 
-export type MenuSectionType = "language" | "color" | "notification";
+export type ProgressUnitType = "time" | "percentage";

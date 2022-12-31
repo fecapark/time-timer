@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   clockColorDefaultValue,
   languageOptionDefaultValue,
+  progressUnitDefaultValue,
 } from "../shared/atom";
 import { optionKey } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
@@ -19,6 +20,7 @@ export default function useOptionStorage(): [
     return {
       language: languageOptionDefaultValue,
       clockColor: clockColorDefaultValue,
+      progressUnit: progressUnitDefaultValue,
     };
   };
 

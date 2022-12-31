@@ -7,7 +7,7 @@ import {
   IBottomSheetContentConstructorProp,
   ClockColorType,
   LanguageOptionType,
-  MenuSectionType,
+  ProgressUnitType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -82,6 +82,11 @@ export const isActiveMenuAtom = atom<boolean>({
   default: false,
 });
 
+export const isSliderActiveAtom = atom<boolean>({
+  key: `is-slider-active/${v1()}`,
+  default: false,
+});
+
 export const clockColorDefaultValue: ClockColorType = "red";
 export const clockColorValueAtom = atom<ClockColorType>({
   key: `clock-color-value/${v1()}`,
@@ -94,7 +99,8 @@ export const languageOptionValueAtom = atom<LanguageOptionType>({
   default: languageOptionDefaultValue,
 });
 
-export const isSliderActiveAtom = atom<boolean>({
-  key: `is-slider-active/${v1()}`,
-  default: false,
+export const progressUnitDefaultValue: ProgressUnitType = "time";
+export const progressUnitValueAtom = atom<ProgressUnitType>({
+  key: `progress-unit-value/${v1()}`,
+  default: progressUnitDefaultValue,
 });

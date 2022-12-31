@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, MovingBall } from "./Switch.style";
 import { ISwitchProps } from "./Switch.type";
 import { MdCheck } from "react-icons/md";
+import useIsomorphicEffect from "../../hooks/useIsomorphicEffect";
 
 export default function Switch({ defaultState, onOn, onOff }: ISwitchProps) {
   const [switchState, setSwitchState] = useState(defaultState);
@@ -13,7 +14,7 @@ export default function Switch({ defaultState, onOn, onOff }: ISwitchProps) {
     });
   };
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (switchState === "on") onOn(setSwitchState);
     else onOff(setSwitchState);
   }, [switchState]);

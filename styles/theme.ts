@@ -13,6 +13,8 @@ const clock = {
     green: "#34a853",
     blue: "#1f75fe",
     purple: "#6b2cf5",
+    white: "#ffffff",
+    black: "#121215",
   },
 };
 
