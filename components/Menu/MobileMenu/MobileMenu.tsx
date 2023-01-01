@@ -274,6 +274,7 @@ export default function MobileMenu() {
   };
 
   useEffect(() => {
+    setMenuContent("main");
     closeMenu();
   }, [isHideTimer]);
 
