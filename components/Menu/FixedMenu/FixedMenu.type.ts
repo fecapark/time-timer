@@ -26,7 +26,8 @@ export interface ISliderContainerStyleProps {
 }
 
 export interface ISliderProps {
-  selector: () => React.ReactNode;
+  // selector: () => React.ReactNode;
+  children: React.ReactNode;
   onClose: () => void;
 }
 

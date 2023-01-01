@@ -4,6 +4,7 @@ import useModal from "../../../../hooks/useModal";
 import SupportingInfoModal from "../../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import PreviewSoundModal from "../../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import { SelectableItem } from "../../menu";
+import { FadeContentAnimationCSS } from "../FixedMenu.styled";
 
 export default function NotificationSectionContent() {
   const language = useRecoilValue(LOV);
@@ -24,7 +25,7 @@ export default function NotificationSectionContent() {
   });
 
   return (
-    <>
+    <div css={FadeContentAnimationCSS}>
       <SelectableItem
         content={
           language === "kor" ? "알람 소리 미리 듣기" : "Preview alarm sound"
@@ -43,6 +44,6 @@ export default function NotificationSectionContent() {
           setSupportModalActive(true);
         }}
       />
-    </>
+    </div>
   );
 }

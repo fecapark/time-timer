@@ -10,6 +10,7 @@ import {
 } from "../../../../shared/atom";
 import useOptionStorage from "../../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
+import { FadeContentAnimationCSS } from "../FixedMenu.styled";
 
 export default function DisplaySectionContent() {
   const language = useRecoilValue(LOV);
@@ -25,7 +26,7 @@ export default function DisplaySectionContent() {
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
-    <>
+    <div css={FadeContentAnimationCSS}>
       <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
         {Object.entries(Theme.clock.color).map(([colorName, value]) => {
           return (
@@ -62,6 +63,6 @@ export default function DisplaySectionContent() {
           }}
         />
       </ItemDrawer>
-    </>
+    </div>
   );
 }

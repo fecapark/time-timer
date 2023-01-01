@@ -1,3 +1,4 @@
+import { keyframes, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ItemContainer } from "../menu.styled";
 import { ISliderContainerStyleProps } from "./FixedMenu.type";
@@ -116,3 +117,16 @@ export const SectionItemContainer = styled.div<{ active: boolean }>`
 `;
 
 export const DrawerHeadItem = styled(ItemContainer)``;
+
+const FadeContentKeyframe = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+export const FadeContentAnimationCSS = css`
+  animation: ${FadeContentKeyframe} 0.5s cubic-bezier(0.2, 0, 0, 1) forwards;
+`;

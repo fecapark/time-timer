@@ -3,6 +3,7 @@ import { SelectableItem } from "../../menu";
 import { languageOptionValueAtom as LOV } from "../../../../shared/atom";
 import useOptionStorage from "../../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
+import { FadeContentAnimationCSS } from "../FixedMenu.styled";
 
 export default function LanguageSectionContent() {
   const [language, setLanguage] = useRecoilState(LOV);
@@ -15,7 +16,7 @@ export default function LanguageSectionContent() {
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
-    <>
+    <div css={FadeContentAnimationCSS}>
       <SelectableItem
         content="한국어"
         selected={language === "kor"}
@@ -30,6 +31,6 @@ export default function LanguageSectionContent() {
           setOptionStorageValue({ language: "en" });
         }}
       />
-    </>
+    </div>
   );
 }

@@ -1,26 +1,19 @@
 import React, { useEffect } from "react";
 import { MdArrowBack, MdMenuOpen } from "react-icons/md";
-import { useRecoilState, useRecoilValue } from "recoil";
-import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
+import { useRecoilState } from "recoil";
 import useMediaMatch from "../../../hooks/useMediaMatch";
-import useOptionStorage from "../../../hooks/useOptionStorage";
 import {
   isActiveMenuAtom as IAM,
-  languageOptionValueAtom as LOV,
-  clockColorValueAtom as CCV,
-  progressUnitValueAtom as PUV,
   mobileMenuContentAtom as MMC,
 } from "../../../shared/atom";
-import { ClockColorType, MenuContentType } from "../../../shared/types";
+import { MenuContentType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
-import { ItemDrawer, SelectableItem } from "../menu";
-import { ActionIconWrapper, ColorThumbnail } from "../menu.styled";
+import { ActionIconWrapper } from "../menu.styled";
 import DisplayMenuContent from "./contents/Display";
 import MainMenuContent from "./contents/Main";
 import {
   Background,
   ContentHeaderContainer,
-  FadeFromRightAnimationCSS,
   MenuContainer,
   MenuContentContainer,
 } from "./MobileMenu.styled";

@@ -8,15 +8,21 @@ import {
   MdTranslate,
 } from "react-icons/md";
 import { BsGithub } from "react-icons/bs";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isSliderActiveAtom as ISA,
   languageOptionValueAtom as LOV,
-  clockColorValueAtom as CCV,
   isTimingNowAtom as ITN,
   isClockPointerDownAtom as ICPD,
-  progressUnitValueAtom as PUV,
+  clockColorValueAtom,
+  progressUnitValueAtom,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -36,8 +42,10 @@ import { ActionIconWrapper, OpenLink } from "../menu.styled";
 import NotificationSectionContent from "./contents/Notification";
 import DisplaySectionContent from "./contents/Display";
 import LanguageSectionContent from "./contents/Language";
+import useOptionStorage from "../../../hooks/useOptionStorage";
+import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 
-function Slider({ selector, onClose }: ISliderProps) {
+function Slider({ children, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
@@ -86,7 +94,7 @@ function Slider({ selector, onClose }: ISliderProps) {
           <MdKeyboardArrowLeft />
         </ActionIconWrapper>
       </div>
-      <div>{selector()}</div>
+      <div>{children}</div>
     </SliderContainer>
   );
 }
@@ -108,8 +116,8 @@ function SectionItem({
     <SectionItemContainer
       active={selected}
       onClick={() => {
-        onClick();
         openSlider();
+        onClick();
       }}
     >
       <div className="icon-wrapper">
@@ -134,8 +142,11 @@ function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
 export default function FixedMenu() {
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
-  const language = useRecoilValue(LOV);
+  const setClockColor = useSetRecoilState(clockColorValueAtom);
+  const setProgressUnit = useSetRecoilState(progressUnitValueAtom);
+  const [language, setLanguage] = useRecoilState(LOV);
   const [section, setSection] = useState<MenuSectionType | null>(null);
+  const [optionValue, __, canAccessToOptionStorage] = useOptionStorage();
 
   const sectionContents: Record<MenuSectionType, React.ReactNode> = {
     language: <LanguageSectionContent />,
@@ -143,20 +154,26 @@ export default function FixedMenu() {
     notification: <NotificationSectionContent />,
   };
 
-  const sliderContentSelector = () => {
-    if (!section) return null;
-    if (section in sectionContents) return sectionContents[section];
-    return null;
-  };
+  useIsomorphicEffect(() => {
+    if (!canAccessToOptionStorage) return;
+    setLanguage(optionValue.language);
+    setClockColor(optionValue.clockColor);
+    setProgressUnit(optionValue.progressUnit);
+  }, [optionValue, canAccessToOptionStorage]);
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
       <Slider
-        selector={sliderContentSelector}
         onClose={() => {
           setSection(null);
         }}
-      />
+      >
+        {!section
+          ? null
+          : section in sectionContents
+          ? sectionContents[section]
+          : null}
+      </Slider>
       <MainMenuBar>
         <div className="section">
           <SectionItem
