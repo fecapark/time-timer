@@ -23,11 +23,11 @@ import { ClockColorType, MenuContentType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
+import { ItemDrawer, SelectableItem } from "../menu";
 import {
   ActionIconWrapper,
   ColorThumbnail,
   ItemContainer,
-  ItemDrawerContainer,
   OpenLink,
 } from "../menu.styled";
 import {
@@ -40,36 +40,10 @@ import {
 } from "./MobileMenu.styled";
 import {
   IContentHeaderProps,
-  IItemDrawerProps,
-  IItemProps,
   IMenuContentLinkerProps,
   IMenuContentValue,
   IOpenLinkItemProps,
 } from "./MobileMenu.type";
-
-function Item({ content, selected = false, onClick }: IItemProps) {
-  const language = useRecoilValue(LOV);
-
-  return (
-    <ItemContainer onClick={onClick}>
-      <span className="item-content">{content}</span>
-      {selected ? (
-        <span style={{ fontSize: 13, fontWeight: 400 }}>
-          {language === "kor" ? "사용중" : "Selected"}
-        </span>
-      ) : null}
-    </ItemContainer>
-  );
-}
-
-function HeadDrawerItem({ content, selected = false, onClick }: IItemProps) {
-  return (
-    <ItemContainer onClick={onClick}>
-      <span>{content}</span>
-      {selected ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
-    </ItemContainer>
-  );
-}
 
 function OpenLinkItem({ content, href }: IOpenLinkItemProps) {
   return (
@@ -79,28 +53,6 @@ function OpenLinkItem({ content, href }: IOpenLinkItemProps) {
         <MdOpenInNew />
       </OpenLink>
     </ItemContainer>
-  );
-}
-
-function ItemDrawer({ content, children }: IItemDrawerProps) {
-  const [isOpened, setIsOpened] = useState(false);
-
-  const toggleDrawer = () => {
-    setIsOpened((prev) => !prev);
-  };
-
-  return (
-    <ItemDrawerContainer
-      isOpened={isOpened}
-      itemCount={React.Children.count(children)}
-    >
-      <HeadDrawerItem
-        content={content}
-        selected={isOpened}
-        onClick={toggleDrawer}
-      />
-      <div className="drawer">{children}</div>
-    </ItemDrawerContainer>
   );
 }
 
@@ -162,14 +114,14 @@ export default function MobileMenu() {
       content: (
         <div css={FadeFromLeftAnimationCSS}>
           <ItemDrawer content={language === "kor" ? "언어" : "Language"}>
-            <Item
+            <SelectableItem
               content="한국어"
               selected={language === "kor"}
               onClick={() => {
                 setOptionStorageValue({ language: "kor" });
               }}
             />
-            <Item
+            <SelectableItem
               content="English"
               selected={language === "en"}
               onClick={() => {
@@ -182,7 +134,7 @@ export default function MobileMenu() {
             linkTo="display"
           />
           <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
-            <Item
+            <SelectableItem
               content={
                 language === "kor"
                   ? "알람 소리 미리 듣기"
@@ -193,7 +145,7 @@ export default function MobileMenu() {
                 setPreviewSoundModalActive(true);
               }}
             />
-            <Item
+            <SelectableItem
               content={
                 language === "kor"
                   ? "백그라운드 푸쉬 알림 지원"
@@ -228,7 +180,7 @@ export default function MobileMenu() {
           <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
             {Object.entries(Theme.clock.color).map(([colorName, value]) => {
               return (
-                <Item
+                <SelectableItem
                   key={value}
                   content={<ColorThumbnail color={value} />}
                   selected={clockColor === colorName}
@@ -242,7 +194,7 @@ export default function MobileMenu() {
             })}
           </ItemDrawer>
           <ItemDrawer content={language === "kor" ? "시간 단위" : "Progress"}>
-            <Item
+            <SelectableItem
               content={
                 language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
               }
@@ -251,7 +203,7 @@ export default function MobileMenu() {
                 setOptionStorageValue({ progressUnit: "time" });
               }}
             />
-            <Item
+            <SelectableItem
               content={
                 language === "kor" ? "백분위로 나타내기" : "Show as percentage"
               }

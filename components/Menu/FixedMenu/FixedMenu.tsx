@@ -36,7 +36,6 @@ import {
   IItemDrawerProps,
   IItemProps,
   IOpenLinkItemProps,
-  ISliderItemProps,
   ISliderProps,
   MenuSectionType,
 } from "./FixedMenu.type";
@@ -46,29 +45,10 @@ import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import {
   ActionIconWrapper,
   ColorThumbnail,
-  ItemContainer,
   ItemDrawerContainer,
   OpenLink,
 } from "../menu.styled";
-
-function SliderItem({
-  content,
-  selected = false,
-  onClick = () => {},
-}: ISliderItemProps) {
-  const language = useRecoilValue(LOV);
-
-  return (
-    <ItemContainer onClick={onClick}>
-      <span className="slider-item-content">{content}</span>
-      {selected ? (
-        <span style={{ fontSize: 13, fontWeight: 400 }}>
-          {language === "kor" ? "사용중" : "Selected"}
-        </span>
-      ) : null}
-    </ItemContainer>
-  );
-}
+import { ItemDrawer, SelectableItem } from "../menu";
 
 function Slider({ selector, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -124,28 +104,7 @@ function Slider({ selector, onClose }: ISliderProps) {
   );
 }
 
-function ItemDrawer({ content, children }: IItemDrawerProps) {
-  const [isOpened, setIsOpened] = useState(false);
-
-  const toggleDrawer = () => {
-    setIsOpened((prev) => !prev);
-  };
-
-  return (
-    <ItemDrawerContainer
-      isOpened={isOpened}
-      itemCount={React.Children.count(children)}
-    >
-      <DrawerHeadItem onClick={toggleDrawer}>
-        <span>{content}</span>
-        {isOpened ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
-      </DrawerHeadItem>
-      <div className="drawer">{children}</div>
-    </ItemDrawerContainer>
-  );
-}
-
-function Item({
+function SectionItem({
   defaultIcon,
   selectedIcon,
   text,
@@ -212,14 +171,14 @@ export default function FixedMenu() {
   const sectionContents: Record<MenuSectionType, React.ReactNode> = {
     language: (
       <>
-        <SliderItem
+        <SelectableItem
           content="한국어"
           selected={language === "kor"}
           onClick={() => {
             setOptionStorageValue({ language: "kor" });
           }}
         />
-        <SliderItem
+        <SelectableItem
           content="English"
           selected={language === "en"}
           onClick={() => {
@@ -233,7 +192,7 @@ export default function FixedMenu() {
         <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
           {Object.entries(Theme.clock.color).map(([colorName, value]) => {
             return (
-              <SliderItem
+              <SelectableItem
                 key={value}
                 content={<ColorThumbnail color={value} />}
                 selected={clockColor === colorName}
@@ -247,7 +206,7 @@ export default function FixedMenu() {
           })}
         </ItemDrawer>
         <ItemDrawer content={language === "kor" ? "시간 단위" : "Progress"}>
-          <SliderItem
+          <SelectableItem
             content={
               language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
             }
@@ -256,7 +215,7 @@ export default function FixedMenu() {
               setOptionStorageValue({ progressUnit: "time" });
             }}
           />
-          <SliderItem
+          <SelectableItem
             content={
               language === "kor" ? "백분위로 나타내기" : "Show as percentage"
             }
@@ -270,7 +229,7 @@ export default function FixedMenu() {
     ),
     notification: (
       <>
-        <SliderItem
+        <SelectableItem
           content={
             language === "kor" ? "알람 소리 미리 듣기" : "Preview alarm sound"
           }
@@ -278,7 +237,7 @@ export default function FixedMenu() {
             setPreviewSoundModalActive(true);
           }}
         />
-        <SliderItem
+        <SelectableItem
           content={
             language === "kor"
               ? "백그라운드 푸쉬 알림 지원"
@@ -315,26 +274,26 @@ export default function FixedMenu() {
       />
       <MainMenuBar>
         <div className="section">
-          <Item
+          <SectionItem
             defaultIcon={<MdTranslate />}
             text={language === "kor" ? "언어" : "Language"}
             selected={section === "language"}
             onClick={() => setSection("language")}
           />
-          <Item
+          <SectionItem
             defaultIcon={<MdOutlineDesktopWindows />}
             selectedIcon={<MdDesktopWindows />}
             text={language === "kor" ? "화면" : "Display"}
             selected={section === "display"}
             onClick={() => setSection("display")}
-          ></Item>
-          <Item
+          ></SectionItem>
+          <SectionItem
             defaultIcon={<MdOutlineNotifications />}
             selectedIcon={<MdNotifications />}
             text={language === "kor" ? "알림" : "Notification"}
             selected={section === "notification"}
             onClick={() => setSection("notification")}
-          ></Item>
+          ></SectionItem>
         </div>
         <div className="section">
           <OpenLinkItem

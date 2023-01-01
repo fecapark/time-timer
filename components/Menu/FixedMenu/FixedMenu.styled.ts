@@ -70,10 +70,6 @@ export const SliderContainer = styled.div<ISliderContainerStyleProps>`
   .slider-header {
     width: 100%;
   }
-
-  .slider-item-content {
-    margin-right: 40px;
-  }
 `;
 
 export const SectionItemContainer = styled.div<{ active: boolean }>`
