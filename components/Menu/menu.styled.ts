@@ -22,6 +22,20 @@ export const ItemContainer = styled.div`
     background-color: ${({ theme }) => theme.background.hoverAccent};
   }
 
+  svg {
+    font-size: 1.4em;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 16px;
+      font-size: 1.2em;
+    }
+  }
+
   @media screen and (max-width: 280px) {
     min-width: 100vw;
   }

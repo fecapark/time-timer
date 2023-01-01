@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 import useOptionStorage from "../../../../hooks/useOptionStorage";
-import { FadeFromRightAnimationCSS } from "../MobileMenu.styled";
+import { ContentTitle, FadeFromRightAnimationCSS } from "../MobileMenu.styled";
 import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
@@ -27,6 +27,9 @@ export default function DisplayMenuContent() {
 
   return (
     <div css={FadeFromRightAnimationCSS}>
+      <ContentTitle>
+        <span className="title">{language === "kor" ? "화면" : "Display"}</span>
+      </ContentTitle>
       <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
         {Object.entries(Theme.clock.color).map(([colorName, value]) => {
           return (

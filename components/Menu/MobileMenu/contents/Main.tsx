@@ -1,4 +1,10 @@
-import { MdArrowForward, MdOpenInNew } from "react-icons/md";
+import {
+  MdArrowForward,
+  MdOpenInNew,
+  MdOutlineDesktopWindows,
+  MdOutlineNotifications,
+  MdTranslate,
+} from "react-icons/md";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 import useModal from "../../../../hooks/useModal";
@@ -16,19 +22,28 @@ import {
   mobileMenuContentAtom as MMC,
   languageOptionValueAtom as LOV,
 } from "../../../../shared/atom";
+import { BsGithub } from "react-icons/bs";
 
-function OpenLinkItem({ content, href }: IOpenLinkItemProps) {
+function OpenLinkItem({
+  icon = <MdOpenInNew />,
+  content,
+  href,
+}: IOpenLinkItemProps) {
   return (
     <ItemContainer>
       <OpenLink href={href} target="_blank" rel="noopener noreferrer">
         <span>{content}</span>
-        <MdOpenInNew />
+        {icon}
       </OpenLink>
     </ItemContainer>
   );
 }
 
-function MenuContentLinker({ content, linkTo }: IMenuContentLinkerProps) {
+function MenuContentLinker({
+  icon = null,
+  content,
+  linkTo,
+}: IMenuContentLinkerProps) {
   const setMenuContent = useSetRecoilState(MMC);
 
   const switchContent = () => {
@@ -37,7 +52,10 @@ function MenuContentLinker({ content, linkTo }: IMenuContentLinkerProps) {
 
   return (
     <ItemContainer onClick={switchContent}>
-      <span>{content}</span>
+      <div className="info">
+        {icon}
+        <span>{content}</span>
+      </div>
       <MdArrowForward />
     </ItemContainer>
   );
@@ -120,6 +138,7 @@ export default function MainMenuContent({
       <div style={{ margin: "24px 0" }} />
       <OpenLinkItem content="Time Timer" href="https://www.timetimer.com" />
       <OpenLinkItem
+        icon={<BsGithub />}
         content="Github"
         href="https://github.com/fecapark/time-timer"
       />

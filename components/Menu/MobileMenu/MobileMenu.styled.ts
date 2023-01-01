@@ -112,3 +112,14 @@ export const ContentHeaderContainer = styled.div`
   margin-bottom: 12px;
   padding: 8px;
 `;
+
+export const ContentTitle = styled.h1`
+  font-size: 15px;
+  padding: 1em 1.35em;
+  padding-top: 0;
+
+  .title {
+    font-size: 1.5em;
+    font-weight: 600;
+  }
+`;

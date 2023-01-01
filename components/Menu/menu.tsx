@@ -29,30 +29,32 @@ export function SelectableItem({
 }
 
 function HeadDrawerItem({
+  icon,
   content,
-  selected = false,
   onClick,
+  selected = false,
 }: IHeadDrawerItemProps) {
   return (
     <ItemContainer onClick={onClick}>
-      <span>{content}</span>
+      <div className="info">
+        {icon}
+        <span>{content}</span>
+      </div>
       {selected ? <MdOutlineArrowDropUp /> : <MdOutlineArrowDropDown />}
     </ItemContainer>
   );
 }
 
-export function ItemDrawer({ content, children }: IItemDrawerProps) {
+export function ItemDrawer({
+  icon = null,
+  content,
+  children,
+}: IItemDrawerProps) {
   const [isOpened, setIsOpened] = useState(false);
 
   const toggleDrawer = () => {
-    console.log(content);
     setIsOpened((prev) => !prev);
   };
-
-  useEffect(() => {
-    console.log(content + "'s isOpened change to:");
-    console.log(isOpened);
-  }, [isOpened]);
 
   return (
     <ItemDrawerContainer
@@ -60,6 +62,7 @@ export function ItemDrawer({ content, children }: IItemDrawerProps) {
       itemCount={React.Children.count(children)}
     >
       <HeadDrawerItem
+        icon={icon}
         content={content}
         selected={isOpened}
         onClick={toggleDrawer}

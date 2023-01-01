@@ -2,6 +2,7 @@ import React from "react";
 import { MenuContentType } from "../../../shared/types";
 
 export interface IOpenLinkItemProps {
+  icon?: React.ReactNode;
   content: React.ReactNode;
   href: string;
 }
@@ -17,6 +18,7 @@ export interface IContentHeaderProps {
 }
 
 export interface IMenuContentLinkerProps {
+  icon?: React.ReactNode;
   content: React.ReactNode;
   linkTo: MenuContentType;
 }
