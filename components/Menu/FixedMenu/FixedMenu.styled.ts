@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { ItemContainer } from "../menu.styled";
 import { ISliderContainerStyleProps } from "./FixedMenu.type";
 
 export const Container = styled.div<{ triggerHide: boolean }>`
@@ -68,23 +69,6 @@ export const SliderContainer = styled.div<ISliderContainerStyleProps>`
 
   .slider-header {
     width: 100%;
-
-    .icon-wrapper {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-
-      padding: 8px;
-      border-radius: 50%;
-
-      &:hover {
-        background-color: #323236;
-      }
-
-      svg {
-        font-size: 22px;
-      }
-    }
   }
 
   .slider-item-content {
@@ -92,7 +76,7 @@ export const SliderContainer = styled.div<ISliderContainerStyleProps>`
   }
 `;
 
-export const ItemContainer = styled.div<{ active: boolean }>`
+export const SectionItemContainer = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -135,53 +119,4 @@ export const ItemContainer = styled.div<{ active: boolean }>`
   }
 `;
 
-export const OpenLinkItemContainer = styled(ItemContainer)`
-  a {
-    all: unset;
-
-    color: inherit;
-    font-size: 1em;
-    width: 100%;
-    height: 100%;
-
-    display: inherit;
-    flex-direction: inherit;
-    justify-content: inherit;
-    align-items: inherit;
-  }
-`;
-
-export const SliderItemContainer = styled.div`
-  width: 100%;
-  min-height: 40px;
-  min-width: 280px;
-
-  font-size: 15px;
-  font-weight: 500;
-  padding: 0.6em 1.35em;
-  border-radius: 10000px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #e0e0e0;
-  -webkit-tap-highlight-color: transparent;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.background.hoverAccent};
-  }
-
-  @media screen and (max-width: 280px) {
-    min-width: 100vw;
-  }
-`;
-
-export const ColorThumbnail = styled.div<{ color: string }>`
-  width: 20px;
-  height: 20px;
-
-  border-radius: 4px;
-
-  background-color: ${(props) => props.color};
-`;
+export const DrawerHeadItem = styled(ItemContainer)``;

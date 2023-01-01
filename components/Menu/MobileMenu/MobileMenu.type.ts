@@ -1,9 +1,5 @@
 import React from "react";
-
-export interface IItemDrawerStyleProps {
-  itemCount: number;
-  isOpened: boolean;
-}
+import { MenuContentType } from "../../../shared/types";
 
 export interface IItemDrawerProps {
   content: string;
@@ -24,4 +20,14 @@ export interface IOpenLinkItemProps {
 export interface IMenuContentValue {
   header: React.ReactNode;
   content: React.ReactNode;
+}
+
+export interface IContentHeaderProps {
+  icon: React.ReactNode;
+  onIconClick: () => void;
+}
+
+export interface IMenuContentLinkerProps {
+  content: React.ReactNode;
+  linkTo: MenuContentType;
 }

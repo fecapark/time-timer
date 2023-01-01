@@ -30,4 +30,9 @@ export interface ISliderProps {
   onClose: () => void;
 }
 
+export interface IItemDrawerProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+}
+
 export type MenuSectionType = "language" | "display" | "notification";

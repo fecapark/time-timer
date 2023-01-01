@@ -24,20 +24,25 @@ import { Theme } from "../../../styles/theme";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import {
-  Background,
+  ActionIconWrapper,
   ColorThumbnail,
+  ItemContainer,
+  ItemDrawerContainer,
+  OpenLink,
+} from "../menu.styled";
+import {
+  Background,
   ContentHeaderContainer,
   FadeFromLeftAnimationCSS,
   FadeFromRightAnimationCSS,
-  ItemContainer,
-  ItemDrawerContainer,
   MenuContainer,
   MenuContentContainer,
-  OpenLinkItemContainer,
 } from "./MobileMenu.styled";
 import {
+  IContentHeaderProps,
   IItemDrawerProps,
   IItemProps,
+  IMenuContentLinkerProps,
   IMenuContentValue,
   IOpenLinkItemProps,
 } from "./MobileMenu.type";
@@ -68,12 +73,12 @@ function HeadDrawerItem({ content, selected = false, onClick }: IItemProps) {
 
 function OpenLinkItem({ content, href }: IOpenLinkItemProps) {
   return (
-    <OpenLinkItemContainer>
-      <a href={href} target="_blank" rel="noopener noreferrer">
+    <ItemContainer>
+      <OpenLink href={href} target="_blank" rel="noopener noreferrer">
         <span>{content}</span>
         <MdOpenInNew />
-      </a>
-    </OpenLinkItemContainer>
+      </OpenLink>
+    </ItemContainer>
   );
 }
 
@@ -99,22 +104,10 @@ function ItemDrawer({ content, children }: IItemDrawerProps) {
   );
 }
 
-interface IContentHeaderProps {
-  icon: React.ReactNode;
-  onIconClick: () => void;
-}
-
-interface IMenuContentLinkerProps {
-  content: React.ReactNode;
-  linkTo: MenuContentType;
-}
-
 function ContentHeader({ icon, onIconClick }: IContentHeaderProps) {
   return (
     <ContentHeaderContainer>
-      <div className="icon-wrapper" onClick={onIconClick}>
-        {icon}
-      </div>
+      <ActionIconWrapper onClick={onIconClick}>{icon}</ActionIconWrapper>
     </ContentHeaderContainer>
   );
 }

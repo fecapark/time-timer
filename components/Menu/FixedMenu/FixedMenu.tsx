@@ -7,8 +7,6 @@ import {
   MdOutlineArrowDropUp,
   MdOutlineDesktopWindows,
   MdOutlineNotifications,
-  MdOutlinePalette,
-  MdPalette,
   MdTranslate,
 } from "react-icons/md";
 import { BsGithub } from "react-icons/bs";
@@ -28,15 +26,14 @@ import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/Suppor
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import {
-  ColorThumbnail,
   Container,
-  ItemContainer,
+  DrawerHeadItem,
   MainMenuBar,
-  OpenLinkItemContainer,
+  SectionItemContainer,
   SliderContainer,
-  SliderItemContainer,
 } from "./FixedMenu.styled";
 import {
+  IItemDrawerProps,
   IItemProps,
   IOpenLinkItemProps,
   ISliderItemProps,
@@ -46,7 +43,13 @@ import {
 import { ClockColorType } from "../../../shared/types";
 import useOptionStorage from "../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
-import styled from "@emotion/styled";
+import {
+  ActionIconWrapper,
+  ColorThumbnail,
+  ItemContainer,
+  ItemDrawerContainer,
+  OpenLink,
+} from "../menu.styled";
 
 function SliderItem({
   content,
@@ -56,14 +59,14 @@ function SliderItem({
   const language = useRecoilValue(LOV);
 
   return (
-    <SliderItemContainer onClick={onClick}>
+    <ItemContainer onClick={onClick}>
       <span className="slider-item-content">{content}</span>
       {selected ? (
         <span style={{ fontSize: 13, fontWeight: 400 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>
       ) : null}
-    </SliderItemContainer>
+    </ItemContainer>
   );
 }
 
@@ -112,36 +115,13 @@ function Slider({ selector, onClose }: ISliderProps) {
     >
       <div className="border-left"></div>
       <div className="slider-header">
-        <div className="icon-wrapper" onClick={closeSlider}>
+        <ActionIconWrapper onClick={closeSlider}>
           <MdKeyboardArrowLeft />
-        </div>
+        </ActionIconWrapper>
       </div>
       <div>{selector()}</div>
     </SliderContainer>
   );
-}
-
-const ItemDrawerContainer = styled.div<IItemDrawerStyleProps>`
-  .drawer {
-    padding-left: 16px;
-
-    overflow: hidden;
-    max-height: ${(props) =>
-      props.isOpened ? props.itemCount * 40 + 10 : "0"}px;
-    transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
-  }
-`;
-
-const DrawerHeadItem = styled(SliderItemContainer)``;
-
-interface IItemDrawerStyleProps {
-  isOpened: boolean;
-  itemCount: number;
-}
-
-interface IItemDrawerProps {
-  content: React.ReactNode;
-  children: React.ReactNode;
 }
 
 function ItemDrawer({ content, children }: IItemDrawerProps) {
@@ -179,7 +159,7 @@ function Item({
   };
 
   return (
-    <ItemContainer
+    <SectionItemContainer
       active={selected}
       onClick={() => {
         onClick();
@@ -190,18 +170,18 @@ function Item({
         {selected && selectedIcon ? selectedIcon : defaultIcon}
       </div>
       <span className="item-text">{text}</span>
-    </ItemContainer>
+    </SectionItemContainer>
   );
 }
 
 function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
   return (
-    <OpenLinkItemContainer active={false}>
-      <a href={href} target="_blank" rel="noopener noreferrer">
+    <SectionItemContainer active={false}>
+      <OpenLink href={href} target="_blank" rel="noopener noreferrer">
         <div className="icon-wrapper">{icon}</div>
         <span className="item-text">{text}</span>
-      </a>
-    </OpenLinkItemContainer>
+      </OpenLink>
+    </SectionItemContainer>
   );
 }
 

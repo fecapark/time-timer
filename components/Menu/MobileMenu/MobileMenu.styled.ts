@@ -1,6 +1,5 @@
 import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { IItemDrawerStyleProps } from "./MobileMenu.type";
 
 export const MenuContainer = styled.div<{ isActive: boolean }>`
   position: fixed;
@@ -109,83 +108,7 @@ export const FadeFromLeftAnimationCSS = css`
   animation: ${FadeFromLeftKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
 `;
 
-export const ItemDrawerContainer = styled.div<IItemDrawerStyleProps>`
-  .drawer {
-    padding-left: 16px;
-
-    overflow: hidden;
-    max-height: ${(props) =>
-      props.isOpened ? props.itemCount * 40 + 10 : "0"}px;
-    transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
-  }
-`;
-
-export const ItemContainer = styled.div`
-  width: 100%;
-  min-height: 40px;
-  min-width: 280px;
-
-  font-size: 15px;
-  padding: 0.6em 1.35em;
-  border-radius: 10000px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #e0e0e0;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.background.hoverAccent};
-  }
-
-  @media screen and (max-width: 280px) {
-    min-width: 100vw;
-  }
-`;
-
-export const OpenLinkItemContainer = styled(ItemContainer)`
-  a {
-    all: unset;
-
-    color: inherit;
-    font-size: 1em;
-    width: 100%;
-    height: 100%;
-
-    display: inherit;
-    justify-content: inherit;
-    align-items: inherit;
-  }
-`;
-
-export const ColorThumbnail = styled.div<{ color: string }>`
-  width: 20px;
-  height: 20px;
-
-  border-radius: 4px;
-
-  background-color: ${(props) => props.color};
-`;
-
 export const ContentHeaderContainer = styled.div`
   margin-bottom: 12px;
   padding: 8px;
-
-  .icon-wrapper {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 50%;
-    padding: 8px;
-
-    &:hover {
-      background-color: #323236;
-    }
-
-    svg {
-      font-size: 26px;
-    }
-  }
 `;
