@@ -26,6 +26,10 @@
 - [x] favicon 제작하기 (현재는 임시 이미지 사용 중)
 - [x] `meta content='og:...'` 적용하기
 - [x] 디스코드 공유 meta content 추가하기
+
+- [ ] 선택됨(Selected) margin-left 위치 변경하기
+- [ ] (Mobile menu 전용) MenuSectionLinker 만들고 적용해서 display 섹션 완성하기
+
 - [ ] CSS `cursor` 속성 작업하기
 - [ ] 스크롤바 커스터마이징 작업하기
 - [ ] duration (시계 최대시간 설정 섹션) 메뉴 옵션 만들기

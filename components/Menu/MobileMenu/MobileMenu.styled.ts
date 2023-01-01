@@ -1,3 +1,4 @@
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { IItemDrawerStyleProps } from "./MobileMenu.type";
 
@@ -60,27 +61,6 @@ export const MenuContentContainer = styled.div<{ isActive: boolean }>`
         : "0.2s cubic-bezier(0, 0, 0, 1)"};
   transform: translate3d(${(props) => (props.isActive ? "0" : "-100%")}, 0, 0);
 
-  .header {
-    margin-bottom: 12px;
-
-    .icon-wrapper {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-
-      border-radius: 50%;
-      padding: 8px;
-
-      &:hover {
-        background-color: #323236;
-      }
-
-      svg {
-        font-size: 26px;
-      }
-    }
-  }
-
   .content {
     height: 100%;
     overflow-y: auto;
@@ -97,6 +77,38 @@ export const MenuContentContainer = styled.div<{ isActive: boolean }>`
   }
 `;
 
+export const FadeFromRightKeyframe = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`;
+export const FadeFromRightAnimationCSS = css`
+  opacity: 0;
+  animation: ${FadeFromRightKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+`;
+
+export const FadeFromLeftKeyframe = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(-20px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`;
+export const FadeFromLeftAnimationCSS = css`
+  opacity: 0;
+  animation: ${FadeFromLeftKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+`;
+
 export const ItemDrawerContainer = styled.div<IItemDrawerStyleProps>`
   .drawer {
     padding-left: 16px;
@@ -111,7 +123,7 @@ export const ItemDrawerContainer = styled.div<IItemDrawerStyleProps>`
 export const ItemContainer = styled.div`
   width: 100%;
   min-height: 40px;
-  min-width: 240px;
+  min-width: 280px;
 
   font-size: 15px;
   padding: 0.6em 1.35em;
@@ -125,6 +137,10 @@ export const ItemContainer = styled.div`
 
   &:hover {
     background-color: ${({ theme }) => theme.background.hoverAccent};
+  }
+
+  @media screen and (max-width: 280px) {
+    min-width: 100vw;
   }
 `;
 
@@ -150,4 +166,26 @@ export const ColorThumbnail = styled.div<{ color: string }>`
   border-radius: 4px;
 
   background-color: ${(props) => props.color};
+`;
+
+export const ContentHeaderContainer = styled.div`
+  margin-bottom: 12px;
+  padding: 8px;
+
+  .icon-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    padding: 8px;
+
+    &:hover {
+      background-color: #323236;
+    }
+
+    svg {
+      font-size: 26px;
+    }
+  }
 `;

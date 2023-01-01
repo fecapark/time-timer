@@ -8,6 +8,7 @@ import {
   ClockColorType,
   LanguageOptionType,
   ProgressUnitType,
+  MenuContentType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -103,4 +104,9 @@ export const progressUnitDefaultValue: ProgressUnitType = "time";
 export const progressUnitValueAtom = atom<ProgressUnitType>({
   key: `progress-unit-value/${v1()}`,
   default: progressUnitDefaultValue,
+});
+
+export const mobileMenuContentAtom = atom<MenuContentType>({
+  key: `mobile-menu-content/${v1()}`,
+  default: "main",
 });

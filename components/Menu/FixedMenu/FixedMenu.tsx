@@ -57,9 +57,9 @@ function SliderItem({
 
   return (
     <SliderItemContainer onClick={onClick}>
-      <span>{content}</span>
+      <span className="slider-item-content">{content}</span>
       {selected ? (
-        <span style={{ fontSize: 13, fontWeight: 400, marginLeft: 40 }}>
+        <span style={{ fontSize: 13, fontWeight: 400 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>
       ) : null}

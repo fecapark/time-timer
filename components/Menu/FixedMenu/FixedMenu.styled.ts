@@ -86,6 +86,10 @@ export const SliderContainer = styled.div<ISliderContainerStyleProps>`
       }
     }
   }
+
+  .slider-item-content {
+    margin-right: 40px;
+  }
 `;
 
 export const ItemContainer = styled.div<{ active: boolean }>`
@@ -150,7 +154,7 @@ export const OpenLinkItemContainer = styled(ItemContainer)`
 export const SliderItemContainer = styled.div`
   width: 100%;
   min-height: 40px;
-  min-width: 240px;
+  min-width: 280px;
 
   font-size: 15px;
   font-weight: 500;
@@ -166,6 +170,10 @@ export const SliderItemContainer = styled.div`
 
   &:hover {
     background-color: ${({ theme }) => theme.background.hoverAccent};
+  }
+
+  @media screen and (max-width: 280px) {
+    min-width: 100vw;
   }
 `;
 

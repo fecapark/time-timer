@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface IItemDrawerStyleProps {
   itemCount: number;
   isOpened: boolean;
@@ -17,4 +19,9 @@ export interface IItemProps {
 export interface IOpenLinkItemProps {
   content: React.ReactNode;
   href: string;
+}
+
+export interface IMenuContentValue {
+  header: React.ReactNode;
+  content: React.ReactNode;
 }

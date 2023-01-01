@@ -1,12 +1,13 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  MdArrowBack,
+  MdArrowForward,
   MdMenuOpen,
   MdOpenInNew,
   MdOutlineArrowDropDown,
   MdOutlineArrowDropUp,
 } from "react-icons/md";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import useModal from "../../../hooks/useModal";
@@ -16,14 +17,18 @@ import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
   progressUnitValueAtom as PUV,
+  mobileMenuContentAtom as MMC,
 } from "../../../shared/atom";
-import { ClockColorType } from "../../../shared/types";
+import { ClockColorType, MenuContentType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import {
   Background,
   ColorThumbnail,
+  ContentHeaderContainer,
+  FadeFromLeftAnimationCSS,
+  FadeFromRightAnimationCSS,
   ItemContainer,
   ItemDrawerContainer,
   MenuContainer,
@@ -33,6 +38,7 @@ import {
 import {
   IItemDrawerProps,
   IItemProps,
+  IMenuContentValue,
   IOpenLinkItemProps,
 } from "./MobileMenu.type";
 
@@ -41,9 +47,9 @@ function Item({ content, selected = false, onClick }: IItemProps) {
 
   return (
     <ItemContainer onClick={onClick}>
-      <span>{content}</span>
+      <span className="item-content">{content}</span>
       {selected ? (
-        <span style={{ fontSize: 13, fontWeight: 400, marginLeft: 40 }}>
+        <span style={{ fontSize: 13, fontWeight: 400 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>
       ) : null}
@@ -93,11 +99,48 @@ function ItemDrawer({ content, children }: IItemDrawerProps) {
   );
 }
 
+interface IContentHeaderProps {
+  icon: React.ReactNode;
+  onIconClick: () => void;
+}
+
+interface IMenuContentLinkerProps {
+  content: React.ReactNode;
+  linkTo: MenuContentType;
+}
+
+function ContentHeader({ icon, onIconClick }: IContentHeaderProps) {
+  return (
+    <ContentHeaderContainer>
+      <div className="icon-wrapper" onClick={onIconClick}>
+        {icon}
+      </div>
+    </ContentHeaderContainer>
+  );
+}
+
+function MenuContentLinker({ content, linkTo }: IMenuContentLinkerProps) {
+  const setMenuContent = useSetRecoilState(MMC);
+
+  const switchContent = () => {
+    setMenuContent(linkTo);
+  };
+
+  return (
+    <ItemContainer onClick={switchContent}>
+      <span>{content}</span>
+      <MdArrowForward />
+    </ItemContainer>
+  );
+}
+
 export default function MobileMenu() {
+  const contentRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useRecoilState(IAM);
   const [language, setLanguage] = useRecoilState(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
   const [progressUnit, setProgressUnit] = useRecoilState(PUV);
+  const [menuContent, setMenuContent] = useRecoilState(MMC);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const setSupportModalActive = useModal({
     title:
@@ -120,27 +163,11 @@ export default function MobileMenu() {
     setIsActive(false);
   };
 
-  useEffect(() => {
-    closeMenu();
-  }, [isHideTimer]);
-
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setLanguage(optionValue.language);
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-  }, [optionValue, canAccessToOptionStorage]);
-
-  return (
-    <MenuContainer isActive={isActive}>
-      <Background isActive={isActive} onClick={closeMenu} />
-      <MenuContentContainer isActive={isActive}>
-        <div className="header" style={{ padding: 8 }}>
-          <div className="icon-wrapper" onClick={closeMenu}>
-            <MdMenuOpen />
-          </div>
-        </div>
-        <div className="content">
+  const contents: Record<MenuContentType, IMenuContentValue> = {
+    main: {
+      header: <ContentHeader icon={<MdMenuOpen />} onIconClick={closeMenu} />,
+      content: (
+        <div css={FadeFromLeftAnimationCSS}>
           <ItemDrawer content={language === "kor" ? "언어" : "Language"}>
             <Item
               content="한국어"
@@ -157,6 +184,54 @@ export default function MobileMenu() {
               }}
             />
           </ItemDrawer>
+          <MenuContentLinker
+            content={language === "kor" ? "화면" : "Display"}
+            linkTo="display"
+          />
+          <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
+            <Item
+              content={
+                language === "kor"
+                  ? "알람 소리 미리 듣기"
+                  : "Preview alarm sound"
+              }
+              onClick={() => {
+                closeMenu();
+                setPreviewSoundModalActive(true);
+              }}
+            />
+            <Item
+              content={
+                language === "kor"
+                  ? "백그라운드 푸쉬 알림 지원"
+                  : "About push notification"
+              }
+              onClick={() => {
+                closeMenu();
+                setSupportModalActive(true);
+              }}
+            />
+          </ItemDrawer>
+          <div style={{ margin: "24px 0" }} />
+          <OpenLinkItem content="Time Timer" href="https://www.timetimer.com" />
+          <OpenLinkItem
+            content="Github"
+            href="https://github.com/fecapark/time-timer"
+          />
+        </div>
+      ),
+    },
+    display: {
+      header: (
+        <ContentHeader
+          icon={<MdArrowBack />}
+          onIconClick={() => {
+            setMenuContent("main");
+          }}
+        />
+      ),
+      content: (
+        <div css={FadeFromRightAnimationCSS}>
           <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
             {Object.entries(Theme.clock.color).map(([colorName, value]) => {
               return (
@@ -193,44 +268,39 @@ export default function MobileMenu() {
               }}
             />
           </ItemDrawer>
-          <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
-            <Item
-              content={
-                language === "kor"
-                  ? "알람 소리 미리 듣기"
-                  : "Preview alarm sound"
-              }
-              onClick={() => {
-                closeMenu();
-                setPreviewSoundModalActive(true);
-              }}
-            />
-            <Item
-              content={
-                language === "kor"
-                  ? "백그라운드 푸쉬 알림 지원"
-                  : "About push notification"
-              }
-              onClick={() => {
-                closeMenu();
-                setSupportModalActive(true);
-              }}
-            />
-          </ItemDrawer>
-          <div style={{ margin: "24px 0" }} />
-          <OpenLinkItem content="Time Timer" href="https://www.timetimer.com" />
-          <OpenLinkItem
-            content="Github"
-            href="https://github.com/fecapark/time-timer"
-          />
         </div>
-        <div className="footer">
-          <span>
-            Copyright &copy; 2022 Sanghyeok Park.
-            <br />
-            All rights reserved.
-          </span>
+      ),
+    },
+  };
+
+  useEffect(() => {
+    closeMenu();
+  }, [isHideTimer]);
+
+  useIsomorphicEffect(() => {
+    if (!canAccessToOptionStorage) return;
+    setLanguage(optionValue.language);
+    setClockColor(optionValue.clockColor);
+    setProgressUnit(optionValue.progressUnit);
+  }, [optionValue, canAccessToOptionStorage]);
+
+  return (
+    <MenuContainer isActive={isActive}>
+      <Background isActive={isActive} onClick={closeMenu} />
+      <MenuContentContainer isActive={isActive}>
+        {contents[menuContent].header}
+        <div ref={contentRef} className="content">
+          {contents[menuContent].content}
         </div>
+        {menuContent === "main" ? (
+          <div className="footer">
+            <span>
+              Copyright &copy; 2022 Sanghyeok Park.
+              <br />
+              All rights reserved.
+            </span>
+          </div>
+        ) : null}
       </MenuContentContainer>
     </MenuContainer>
   );
