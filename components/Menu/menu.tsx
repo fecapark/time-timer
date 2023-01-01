@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
 import { useRecoilValue } from "recoil";
 import { languageOptionValueAtom as LOV } from "../../shared/atom";
@@ -45,8 +45,14 @@ export function ItemDrawer({ content, children }: IItemDrawerProps) {
   const [isOpened, setIsOpened] = useState(false);
 
   const toggleDrawer = () => {
+    console.log(content);
     setIsOpened((prev) => !prev);
   };
+
+  useEffect(() => {
+    console.log(content + "'s isOpened change to:");
+    console.log(isOpened);
+  }, [isOpened]);
 
   return (
     <ItemDrawerContainer

@@ -3,8 +3,6 @@ import {
   MdKeyboardArrowLeft,
   MdNotifications,
   MdOpenInNew,
-  MdOutlineArrowDropDown,
-  MdOutlineArrowDropUp,
   MdOutlineDesktopWindows,
   MdOutlineNotifications,
   MdTranslate,
@@ -21,34 +19,23 @@ import {
   progressUnitValueAtom as PUV,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
-import useModal from "../../../hooks/useModal";
-import SupportingInfoModal from "../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
-import PreviewSoundModal from "../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import useMediaMatch from "../../../hooks/useMediaMatch";
 import {
   Container,
-  DrawerHeadItem,
   MainMenuBar,
   SectionItemContainer,
   SliderContainer,
 } from "./FixedMenu.styled";
 import {
-  IItemDrawerProps,
   IItemProps,
   IOpenLinkItemProps,
   ISliderProps,
   MenuSectionType,
 } from "./FixedMenu.type";
-import { ClockColorType } from "../../../shared/types";
-import useOptionStorage from "../../../hooks/useOptionStorage";
-import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
-import {
-  ActionIconWrapper,
-  ColorThumbnail,
-  ItemDrawerContainer,
-  OpenLink,
-} from "../menu.styled";
-import { ItemDrawer, SelectableItem } from "../menu";
+import { ActionIconWrapper, OpenLink } from "../menu.styled";
+import NotificationSectionContent from "./contents/Notification";
+import DisplaySectionContent from "./contents/Display";
+import LanguageSectionContent from "./contents/Language";
 
 function Slider({ selector, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -147,108 +134,13 @@ function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
 export default function FixedMenu() {
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
+  const language = useRecoilValue(LOV);
   const [section, setSection] = useState<MenuSectionType | null>(null);
-  const [language, setLanguage] = useRecoilState(LOV);
-  const [clockColor, setClockColor] = useRecoilState(CCV);
-  const [progressUnit, setProgressUnit] = useRecoilState(PUV);
-  const setSupportModalActive = useModal({
-    title:
-      language === "kor"
-        ? "백그라운드 푸쉬 알림 지원을 확인하세요"
-        : "Check background push notification supports",
-    content: <SupportingInfoModal notSupport={false} />,
-  });
-  const setPreviewSoundModalActive = useModal({
-    title:
-      language === "kor"
-        ? "알람 소리를 미리 들어보세요"
-        : "Preview alarm sound before start",
-    content: <PreviewSoundModal />,
-  });
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
 
   const sectionContents: Record<MenuSectionType, React.ReactNode> = {
-    language: (
-      <>
-        <SelectableItem
-          content="한국어"
-          selected={language === "kor"}
-          onClick={() => {
-            setOptionStorageValue({ language: "kor" });
-          }}
-        />
-        <SelectableItem
-          content="English"
-          selected={language === "en"}
-          onClick={() => {
-            setOptionStorageValue({ language: "en" });
-          }}
-        />
-      </>
-    ),
-    display: (
-      <>
-        <ItemDrawer content={language === "kor" ? "색상" : "Color"}>
-          {Object.entries(Theme.clock.color).map(([colorName, value]) => {
-            return (
-              <SelectableItem
-                key={value}
-                content={<ColorThumbnail color={value} />}
-                selected={clockColor === colorName}
-                onClick={() => {
-                  setOptionStorageValue({
-                    clockColor: colorName as ClockColorType,
-                  });
-                }}
-              />
-            );
-          })}
-        </ItemDrawer>
-        <ItemDrawer content={language === "kor" ? "시간 단위" : "Progress"}>
-          <SelectableItem
-            content={
-              language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
-            }
-            selected={progressUnit === "time"}
-            onClick={() => {
-              setOptionStorageValue({ progressUnit: "time" });
-            }}
-          />
-          <SelectableItem
-            content={
-              language === "kor" ? "백분위로 나타내기" : "Show as percentage"
-            }
-            selected={progressUnit === "percentage"}
-            onClick={() => {
-              setOptionStorageValue({ progressUnit: "percentage" });
-            }}
-          />
-        </ItemDrawer>
-      </>
-    ),
-    notification: (
-      <>
-        <SelectableItem
-          content={
-            language === "kor" ? "알람 소리 미리 듣기" : "Preview alarm sound"
-          }
-          onClick={() => {
-            setPreviewSoundModalActive(true);
-          }}
-        />
-        <SelectableItem
-          content={
-            language === "kor"
-              ? "백그라운드 푸쉬 알림 지원"
-              : "About push notification"
-          }
-          onClick={() => {
-            setSupportModalActive(true);
-          }}
-        />
-      </>
-    ),
+    language: <LanguageSectionContent />,
+    display: <DisplaySectionContent />,
+    notification: <NotificationSectionContent />,
   };
 
   const sliderContentSelector = () => {
@@ -256,13 +148,6 @@ export default function FixedMenu() {
     if (section in sectionContents) return sectionContents[section];
     return null;
   };
-
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setLanguage(optionValue.language);
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-  }, [optionValue, canAccessToOptionStorage]);
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
