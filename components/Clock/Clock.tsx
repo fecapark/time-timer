@@ -13,6 +13,7 @@ import {
   isMovedToRightWhenStoped,
   isRotatedOverOneRound,
   range,
+  rebaseClockDegree,
   updateClockShapeByDegree,
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
@@ -22,8 +23,11 @@ import {
   clockDegreeAtom as CD,
   clockSizeAtom as CS,
   isClockPointerDownAtom as ICPD,
+  isClockPointerDownAtom,
   isTimingNowAtom as ITN,
+  maxClockTimeAtom as MCT,
 } from "../../shared/atom";
+import { getTimeFromDegree } from "../Timer/Timer.util";
 
 let canSetClockDegree = false;
 let isOverLimited = false;
@@ -37,10 +41,11 @@ export default function Clock() {
   const [centerPos, setCenterPos] = useState<Vector2>(new Vector2(0, 0));
   const [prevRelPos, setPrevRelPos] = useState<Vector2 | null>(null);
   const isTimingNow = useRecoilValue(ITN);
-  const setIsClockPointerDown = useSetRecoilState(ICPD);
+  const [isClockPointerDown, setIsClockPointerDown] = useRecoilState(ICPD);
   const setClockSize = useSetRecoilState(CS);
   const [clockDegree, setClockDegree] = useRecoilState(CD);
   const clockColor = useRecoilValue(CCV);
+  const maxClockTime = useRecoilValue(MCT);
 
   const onPointerDown = (e: PointerEvent) => {
     canSetClockDegree = true;
@@ -50,7 +55,7 @@ export default function Clock() {
 
     const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
     const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-    const degree = getRotationDegree(relPos);
+    const degree = getRotationDegree(relPos, maxClockTime);
 
     setIsClockPointerDown(true);
     setClockDegree(degree);
@@ -62,7 +67,7 @@ export default function Clock() {
 
     const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
     const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-    let degree = isOverLimited ? 0 : getRotationDegree(relPos);
+    let degree = isOverLimited ? 0 : getRotationDegree(relPos, maxClockTime);
 
     if (isRotatedOverOneRound(relPos, prevRelPos)) {
       isOverLimited = true;
@@ -82,6 +87,15 @@ export default function Clock() {
     isOverLimited = false;
     setIsClockPointerDown(false);
   };
+
+  const rebaseDegree = () => {
+    setClockDegree(rebaseClockDegree(clockDegree, maxClockTime));
+  };
+
+  useEffect(() => {
+    if (isClockPointerDown) return;
+    rebaseDegree();
+  }, [isClockPointerDown, maxClockTime]);
 
   useEffect(() => {
     if (!handlerRef.current) return;
@@ -167,9 +181,16 @@ export default function Clock() {
               accent={i % 5 == 0}
               gap={24}
               key={i}
-              spanAccent={(360 - clockDegree) * 10 >= i * 60}
+              spanAccent={
+                (360 - clockDegree) * Math.round((maxClockTime * 60) / 360) >=
+                i * maxClockTime
+              }
             >
-              {i % 5 == 0 ? <span>{i}</span> : null}
+              {i %
+                (maxClockTime >= 60 ? 5 : 5 * Math.round(30 / maxClockTime)) ==
+              0 ? (
+                <span>{Math.round((i * maxClockTime) / 6) / 10}</span>
+              ) : null}
             </Graduation>
           ))}
           <ClockBackground ref={backgroundRef} />

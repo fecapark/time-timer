@@ -1,6 +1,7 @@
 import { Theme } from "../../styles/theme";
 import { ClockColorType } from "../../shared/types";
 import { Vector2 } from "../../utils/vector";
+import { getTimeFromDegree } from "../Timer/Timer.util";
 
 export function getRotatedPosition(radius: number, degree: number) {
   degree = 270 - degree;
@@ -26,7 +27,10 @@ export const getPointerPosFromCenter = (
   return pointerPos.sub(centerPos.sub(moveAreaPos));
 };
 
-export const getRotationDegree = (pointerPos: Vector2) => {
+export const getRotationDegree = (
+  pointerPos: Vector2,
+  maxClockTime: number
+) => {
   const unitSecond = 15;
 
   const relPos = pointerPos.normalize();
@@ -34,7 +38,7 @@ export const getRotationDegree = (pointerPos: Vector2) => {
   let degree = Math.acos(relPos.dot(new Vector2(0, -1))) * (180 / Math.PI);
   degree = isRightSide ? degree : 360 - degree;
 
-  degree -= degree % (unitSecond / 10);
+  degree -= degree % (unitSecond / (maxClockTime / 6));
 
   return degree;
 };
@@ -67,4 +71,16 @@ export const updateClockShapeByDegree = (
       conic-gradient(#0000001e ${degree}deg, ${Theme.clock.color[clockColor]}dd ${degree}deg)
     `;
   });
+};
+
+export const rebaseClockDegree = (degree: number, maxClockTime: number) => {
+  function timeToDegree(totalSec: number, maxClockTime: number) {
+    const ratio = totalSec / (maxClockTime * 60);
+    return 360 - ratio * 360;
+  }
+
+  const { min, sec } = getTimeFromDegree(degree, maxClockTime);
+  const totalSec = parseInt(min, 10) * 60 + parseInt(sec, 10);
+
+  return timeToDegree(totalSec, maxClockTime);
 };

@@ -9,6 +9,7 @@ import {
   isTimingNowAtom as ITN,
   languageOptionValueAtom as LOV,
   progressUnitValueAtom as PUV,
+  maxClockTimeAtom as MCT,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
@@ -27,6 +28,7 @@ export default function Footer() {
   const clockDegree = useRecoilValue(CD);
   const language = useRecoilValue(LOV);
   const progressUnit = useRecoilValue(PUV);
+  const maxClockTime = useRecoilValue(MCT);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const setBottomSheetActive = useBottomSheet({
     constructor: BottomSheetTimer,
@@ -75,7 +77,7 @@ export default function Footer() {
           triggerHide={!isClockPointerDown && !isTimingNow}
         >
           {progressUnit === "time"
-            ? getTimeFromDegree(clockDegree).sec
+            ? getTimeFromDegree(clockDegree, maxClockTime).sec
             : "." + getPercentageFromDegree(clockDegree).float}
         </TimeText>
       ) : null}

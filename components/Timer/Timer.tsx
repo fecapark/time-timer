@@ -7,6 +7,7 @@ import {
   soundEffectAudioAtom as SEA,
   languageOptionValueAtom as LOV,
   progressUnitValueAtom as PUV,
+  maxClockTimeAtom as MCT,
 } from "../../shared/atom";
 import { Container, TimeText } from "./Timer.styled";
 import { getPercentageFromDegree, getTimeFromDegree } from "./Timer.util";
@@ -27,13 +28,15 @@ export default function Timer({ onTimingStart }: IProps) {
   const soundEffectAudio = useRecoilValue(SEA);
   const language = useRecoilValue(LOV);
   const progressUnit = useRecoilValue(PUV);
+  const maxClockTime = useRecoilValue(MCT);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
 
   const startTimer = () => {
     const getNextDegree = (prevDegree: number, elapsedTime: number) => {
-      const result = prevDegree + elapsedTime / 10;
+      const timeParseFactor = maxClockTime / 6;
+      const result = prevDegree + elapsedTime / timeParseFactor;
       const degreeOvered = result > 360;
 
       if (degreeOvered && timerInterval) {
@@ -121,14 +124,14 @@ export default function Timer({ onTimingStart }: IProps) {
         <div className="row">
           <span className="min">
             {progressUnit === "time"
-              ? getTimeFromDegree(clockDegree).min
+              ? getTimeFromDegree(clockDegree, maxClockTime).min
               : getPercentageFromDegree(clockDegree).int}
           </span>
         </div>
         <div className="row">
           <span className="sec">
             {progressUnit === "time"
-              ? getTimeFromDegree(clockDegree).sec
+              ? getTimeFromDegree(clockDegree, maxClockTime).sec
               : "." + getPercentageFromDegree(clockDegree).float}
           </span>
         </div>

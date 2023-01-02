@@ -26,7 +26,6 @@ export interface ISliderContainerStyleProps {
 }
 
 export interface ISliderProps {
-  // selector: () => React.ReactNode;
   children: React.ReactNode;
   onClose: () => void;
 }
@@ -36,4 +35,4 @@ export interface IItemDrawerProps {
   children: React.ReactNode;
 }
 
-export type MenuSectionType = "language" | "display" | "notification";
+export type MenuSectionType = "time" | "language" | "display" | "notification";

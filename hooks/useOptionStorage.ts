@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   clockColorDefaultValue,
   languageOptionDefaultValue,
+  maxClockTimeDefaultValue,
   progressUnitDefaultValue,
 } from "../shared/atom";
 import { optionKey } from "../shared/const";
@@ -21,6 +22,7 @@ export default function useOptionStorage(): [
       language: languageOptionDefaultValue,
       clockColor: clockColorDefaultValue,
       progressUnit: progressUnitDefaultValue,
+      maxClockTime: maxClockTimeDefaultValue,
     };
   };
 

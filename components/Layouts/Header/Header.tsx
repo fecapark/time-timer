@@ -6,6 +6,7 @@ import {
   isTimingNowAtom as ITN,
   isActiveMenuAtom as IAM,
   progressUnitValueAtom as PUV,
+  maxClockTimeAtom as MCT,
 } from "../../../shared/atom";
 import { Container, IconContainer, TimeText } from "./Header.style";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -23,6 +24,7 @@ export default function Header() {
   const clockDegree = useRecoilValue(CD);
   const clockSize = useRecoilValue(CS);
   const progressUnit = useRecoilValue(PUV);
+  const maxClockTime = useRecoilValue(MCT);
   const setIsActiveMenu = useSetRecoilState(IAM);
   const [timerFontSize, setTimerFontSize] = useState(55);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
@@ -67,7 +69,7 @@ export default function Header() {
           triggerHide={!isClockPointerDown && !isTimingNow}
         >
           {progressUnit === "time"
-            ? getTimeFromDegree(clockDegree).min
+            ? getTimeFromDegree(clockDegree, maxClockTime).min
             : getPercentageFromDegree(clockDegree).int}
         </TimeText>
       ) : null}

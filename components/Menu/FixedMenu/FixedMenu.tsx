@@ -8,21 +8,17 @@ import {
   MdTranslate,
 } from "react-icons/md";
 import { BsGithub } from "react-icons/bs";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { IoMdTime } from "react-icons/io";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isSliderActiveAtom as ISA,
   languageOptionValueAtom as LOV,
   isTimingNowAtom as ITN,
   isClockPointerDownAtom as ICPD,
-  clockColorValueAtom,
-  progressUnitValueAtom,
+  clockColorValueAtom as CCV,
+  progressUnitValueAtom as PUV,
+  maxClockTimeAtom as MCT,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -44,6 +40,7 @@ import DisplaySectionContent from "./contents/Display";
 import LanguageSectionContent from "./contents/Language";
 import useOptionStorage from "../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
+import TimeSectionContent from "./contents/Time";
 
 function Slider({ children, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -142,8 +139,9 @@ function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
 export default function FixedMenu() {
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
-  const setClockColor = useSetRecoilState(clockColorValueAtom);
-  const setProgressUnit = useSetRecoilState(progressUnitValueAtom);
+  const setClockColor = useSetRecoilState(CCV);
+  const setProgressUnit = useSetRecoilState(PUV);
+  const setMaxClockTime = useSetRecoilState(MCT);
   const [language, setLanguage] = useRecoilState(LOV);
   const [section, setSection] = useState<MenuSectionType | null>(null);
   const [optionValue, __, canAccessToOptionStorage] = useOptionStorage();
@@ -152,6 +150,7 @@ export default function FixedMenu() {
     language: <LanguageSectionContent />,
     display: <DisplaySectionContent />,
     notification: <NotificationSectionContent />,
+    time: <TimeSectionContent />,
   };
 
   useIsomorphicEffect(() => {
@@ -159,6 +158,7 @@ export default function FixedMenu() {
     setLanguage(optionValue.language);
     setClockColor(optionValue.clockColor);
     setProgressUnit(optionValue.progressUnit);
+    setMaxClockTime(optionValue.maxClockTime);
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
@@ -176,6 +176,12 @@ export default function FixedMenu() {
       </Slider>
       <MainMenuBar>
         <div className="section">
+          <SectionItem
+            defaultIcon={<IoMdTime />}
+            text={language === "kor" ? "시간" : "Time"}
+            selected={section === "time"}
+            onClick={() => setSection("time")}
+          />
           <SectionItem
             defaultIcon={<MdTranslate />}
             text={language === "kor" ? "언어" : "Language"}
