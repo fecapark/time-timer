@@ -32,7 +32,7 @@ export type ClockColorType = keyof typeof Theme.clock.color;
 
 export type ProgressUnitType = "time" | "percentage";
 
-export type MenuContentType = "main" | "display";
+export type MenuContentType = "main" | "display" | "time";
 
 export type MaxClockTimeType = typeof maxClockTimes[number];
 

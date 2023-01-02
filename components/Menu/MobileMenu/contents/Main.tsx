@@ -92,6 +92,14 @@ export default function MainMenuContent({
 
   return (
     <div css={FadeFromLeftAnimationCSS}>
+      <MenuContentLinker
+        content={language === "kor" ? "시간" : "Time"}
+        linkTo="time"
+      />
+      <MenuContentLinker
+        content={language === "kor" ? "화면" : "Display"}
+        linkTo="display"
+      />
       <ItemDrawer content={language === "kor" ? "언어" : "Language"}>
         <SelectableItem
           content="한국어"
@@ -108,10 +116,6 @@ export default function MainMenuContent({
           }}
         />
       </ItemDrawer>
-      <MenuContentLinker
-        content={language === "kor" ? "화면" : "Display"}
-        linkTo="display"
-      />
       <ItemDrawer content={language === "kor" ? "알림" : "Notification"}>
         <SelectableItem
           content={

@@ -19,6 +19,7 @@ import {
   clockColorValueAtom as CCV,
   progressUnitValueAtom as PUV,
   maxClockTimeAtom as MCT,
+  clockTimeUnitAtom as CTU,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -142,6 +143,7 @@ export default function FixedMenu() {
   const setClockColor = useSetRecoilState(CCV);
   const setProgressUnit = useSetRecoilState(PUV);
   const setMaxClockTime = useSetRecoilState(MCT);
+  const setClockTimeUnit = useSetRecoilState(CTU);
   const [language, setLanguage] = useRecoilState(LOV);
   const [section, setSection] = useState<MenuSectionType | null>(null);
   const [optionValue, __, canAccessToOptionStorage] = useOptionStorage();
@@ -159,6 +161,7 @@ export default function FixedMenu() {
     setClockColor(optionValue.clockColor);
     setProgressUnit(optionValue.progressUnit);
     setMaxClockTime(optionValue.maxClockTime);
+    setClockTimeUnit(optionValue.clockTimeUnit);
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
@@ -183,18 +186,18 @@ export default function FixedMenu() {
             onClick={() => setSection("time")}
           />
           <SectionItem
-            defaultIcon={<MdTranslate />}
-            text={language === "kor" ? "언어" : "Language"}
-            selected={section === "language"}
-            onClick={() => setSection("language")}
-          />
-          <SectionItem
             defaultIcon={<MdOutlineDesktopWindows />}
             selectedIcon={<MdDesktopWindows />}
             text={language === "kor" ? "화면" : "Display"}
             selected={section === "display"}
             onClick={() => setSection("display")}
           ></SectionItem>
+          <SectionItem
+            defaultIcon={<MdTranslate />}
+            text={language === "kor" ? "언어" : "Language"}
+            selected={section === "language"}
+            onClick={() => setSection("language")}
+          />
           <SectionItem
             defaultIcon={<MdOutlineNotifications />}
             selectedIcon={<MdNotifications />}

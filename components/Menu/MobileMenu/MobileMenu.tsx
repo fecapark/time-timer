@@ -1,8 +1,15 @@
 import React, { useEffect } from "react";
 import { MdArrowBack, MdMenuOpen } from "react-icons/md";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import useMediaMatch from "../../../hooks/useMediaMatch";
+import useOptionStorage from "../../../hooks/useOptionStorage";
 import {
+  languageOptionValueAtom as LOV,
+  clockColorValueAtom as CCV,
+  progressUnitValueAtom as PUV,
+  maxClockTimeAtom as MCT,
+  clockTimeUnitAtom as CTU,
   isActiveMenuAtom as IAM,
   mobileMenuContentAtom as MMC,
 } from "../../../shared/atom";
@@ -11,6 +18,7 @@ import { Theme } from "../../../styles/theme";
 import { ActionIconWrapper } from "../menu.styled";
 import DisplayMenuContent from "./contents/Display";
 import MainMenuContent from "./contents/Main";
+import TimeMenuContent from "./contents/Time";
 import {
   Background,
   ContentHeaderContainer,
@@ -28,9 +36,15 @@ function ContentHeader({ icon, onIconClick }: IContentHeaderProps) {
 }
 
 export default function MobileMenu() {
+  const setLanguage = useSetRecoilState(LOV);
+  const setClockColor = useSetRecoilState(CCV);
+  const setProgressUnit = useSetRecoilState(PUV);
+  const setMaxClockTime = useSetRecoilState(MCT);
+  const setClockTimeUnit = useSetRecoilState(CTU);
   const [isActive, setIsActive] = useRecoilState(IAM);
   const [menuContent, setMenuContent] = useRecoilState(MMC);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+  const [optionValue, _, canAccessToOptionStorage] = useOptionStorage();
 
   const closeMenu = () => {
     setIsActive(false);
@@ -49,12 +63,25 @@ export default function MobileMenu() {
       header: <ContentHeader icon={<MdArrowBack />} onIconClick={goMainMenu} />,
       content: <DisplayMenuContent />,
     },
+    time: {
+      header: <ContentHeader icon={<MdArrowBack />} onIconClick={goMainMenu} />,
+      content: <TimeMenuContent />,
+    },
   };
 
   useEffect(() => {
     goMainMenu();
     closeMenu();
   }, [isHideTimer]);
+
+  useIsomorphicEffect(() => {
+    if (!canAccessToOptionStorage) return;
+    setLanguage(optionValue.language);
+    setClockColor(optionValue.clockColor);
+    setProgressUnit(optionValue.progressUnit);
+    setMaxClockTime(optionValue.maxClockTime);
+    setClockTimeUnit(optionValue.clockTimeUnit);
+  }, [optionValue, canAccessToOptionStorage]);
 
   return (
     <MenuContainer isActive={isActive}>
