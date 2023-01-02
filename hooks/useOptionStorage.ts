@@ -4,6 +4,7 @@ import {
   languageOptionDefaultValue,
   maxClockTimeDefaultValue,
   progressUnitDefaultValue,
+  clockTimeUnitDefaultValue,
 } from "../shared/atom";
 import { optionKey } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
@@ -23,6 +24,7 @@ export default function useOptionStorage(): [
       clockColor: clockColorDefaultValue,
       progressUnit: progressUnitDefaultValue,
       maxClockTime: maxClockTimeDefaultValue,
+      clockTimeUnit: clockTimeUnitDefaultValue,
     };
   };
 

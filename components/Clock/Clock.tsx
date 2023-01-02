@@ -23,9 +23,9 @@ import {
   clockDegreeAtom as CD,
   clockSizeAtom as CS,
   isClockPointerDownAtom as ICPD,
-  isClockPointerDownAtom,
   isTimingNowAtom as ITN,
   maxClockTimeAtom as MCT,
+  clockTimeUnitAtom as CTU,
 } from "../../shared/atom";
 import { getTimeFromDegree } from "../Timer/Timer.util";
 
@@ -46,6 +46,7 @@ export default function Clock() {
   const [clockDegree, setClockDegree] = useRecoilState(CD);
   const clockColor = useRecoilValue(CCV);
   const maxClockTime = useRecoilValue(MCT);
+  const clockTimeUnit = useRecoilValue(CTU);
 
   const onPointerDown = (e: PointerEvent) => {
     canSetClockDegree = true;
@@ -55,7 +56,7 @@ export default function Clock() {
 
     const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
     const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-    const degree = getRotationDegree(relPos, maxClockTime);
+    const degree = getRotationDegree(relPos, maxClockTime, clockTimeUnit);
 
     setIsClockPointerDown(true);
     setClockDegree(degree);
@@ -67,7 +68,9 @@ export default function Clock() {
 
     const offsetPos = new Vector2(e.clientX, e.clientY).sub(moveAreaPos);
     const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
-    let degree = isOverLimited ? 0 : getRotationDegree(relPos, maxClockTime);
+    let degree = isOverLimited
+      ? 0
+      : getRotationDegree(relPos, maxClockTime, clockTimeUnit);
 
     if (isRotatedOverOneRound(relPos, prevRelPos)) {
       isOverLimited = true;

@@ -10,6 +10,7 @@ import {
   ProgressUnitType,
   MenuContentType,
   MaxClockTimeType,
+  ClockTimeUnitType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -116,4 +117,10 @@ export const maxClockTimeDefaultValue: MaxClockTimeType = 60;
 export const maxClockTimeAtom = atom<MaxClockTimeType>({
   key: `max-clock-time/${v1()}`,
   default: maxClockTimeDefaultValue,
+});
+
+export const clockTimeUnitDefaultValue: ClockTimeUnitType = 15;
+export const clockTimeUnitAtom = atom<ClockTimeUnitType>({
+  key: `clock-time-unit/${v1()}`,
+  default: clockTimeUnitDefaultValue,
 });

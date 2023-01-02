@@ -3,9 +3,10 @@ import { FadeContentAnimationCSS } from "../FixedMenu.styled";
 import {
   languageOptionValueAtom as LOV,
   maxClockTimeAtom as MCT,
+  clockTimeUnitAtom as CTU,
 } from "../../../../shared/atom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { maxClockTimes } from "../../../../shared/const";
+import { clockTimeUnits, maxClockTimes } from "../../../../shared/const";
 import useOptionStorage from "../../../../hooks/useOptionStorage";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 
@@ -19,12 +20,14 @@ import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 export default function TimeSectionContent() {
   const language = useRecoilValue(LOV);
   const [maxClockTime, setMaxClockTime] = useRecoilState(MCT);
+  const [clockTimeUnit, setClockTimeUnit] = useRecoilState(CTU);
   const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
     useOptionStorage();
 
   useIsomorphicEffect(() => {
     if (!canAccessToOptionStorage) return;
     setMaxClockTime(optionValue.maxClockTime);
+    setClockTimeUnit(optionValue.clockTimeUnit);
   }, [optionValue, canAccessToOptionStorage]);
 
   return (
@@ -67,7 +70,33 @@ export default function TimeSectionContent() {
             : "Set interval per rotation"
         }
       >
-        <></>
+        {clockTimeUnits.map((aTimeUnit) => {
+          const isOverMin = aTimeUnit >= 60;
+          const time = isOverMin ? Math.round(aTimeUnit / 60) : aTimeUnit;
+          const unit =
+            language === "kor"
+              ? isOverMin
+                ? "분"
+                : "초"
+              : isOverMin
+              ? "mins"
+              : "secs";
+
+          return (
+            <SelectableItem
+              key={aTimeUnit}
+              content={`${time} ${
+                language === "en" && time === 1
+                  ? unit.slice(0, unit.length - 1)
+                  : unit
+              }`}
+              selected={aTimeUnit === clockTimeUnit}
+              onClick={() => {
+                setOptionStorageValue({ clockTimeUnit: aTimeUnit });
+              }}
+            />
+          );
+        })}
       </ItemDrawer>
     </div>
   );

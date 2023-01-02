@@ -29,16 +29,15 @@ export const getPointerPosFromCenter = (
 
 export const getRotationDegree = (
   pointerPos: Vector2,
-  maxClockTime: number
+  maxClockTime: number,
+  clockTimeUnit: number
 ) => {
-  const unitSecond = 15;
-
   const relPos = pointerPos.normalize();
   const isRightSide = relPos.x >= 0;
   let degree = Math.acos(relPos.dot(new Vector2(0, -1))) * (180 / Math.PI);
   degree = isRightSide ? degree : 360 - degree;
 
-  degree -= degree % (unitSecond / (maxClockTime / 6));
+  degree -= degree % (clockTimeUnit / (maxClockTime / 6));
 
   return degree;
 };
