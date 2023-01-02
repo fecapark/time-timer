@@ -86,7 +86,7 @@ export const Graduation = styled.div<IGraduationStyleProps>`
     rotate3d(0, 0, 1, ${(props) => -props.rotate}deg);
   background-color: ${(props) => (props.accent ? "white" : "grey")};
 
-  span {
+  & > span {
     font-weight: 500;
     font-size: 22px;
     color: ${(props) => (props.spanAccent ? "white" : "#525252")};
@@ -104,6 +104,12 @@ export const Graduation = styled.div<IGraduationStyleProps>`
 
     @media screen and (max-width: 600px) {
       font-size: 26px;
+    }
+
+    .min {
+      color: ${(props) => (props.spanAccent ? "#e0e0e0" : "#424242")};
+      margin-left: 0.2em;
+      font-size: 0.6em;
     }
   }
 `;

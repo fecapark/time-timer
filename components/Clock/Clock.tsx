@@ -88,6 +88,23 @@ export default function Clock() {
     setIsClockPointerDown(false);
   };
 
+  const parseIndexToGraduationValue = (index: number) => {
+    const gValue = Math.round((index * maxClockTime) / 6) / 10;
+
+    // If gValue is float
+    if (gValue !== Math.floor(gValue)) {
+      const float = gValue - Math.floor(gValue);
+      return (
+        <span>
+          {Math.floor(gValue)}
+          <span className="min">/{60 * float}</span>
+        </span>
+      );
+    }
+
+    return <span>{gValue}</span>;
+  };
+
   const rebaseDegree = () => {
     setClockDegree(rebaseClockDegree(clockDegree, maxClockTime));
   };
@@ -188,9 +205,9 @@ export default function Clock() {
             >
               {i %
                 (maxClockTime >= 60 ? 5 : 5 * Math.round(30 / maxClockTime)) ==
-              0 ? (
-                <span>{Math.round((i * maxClockTime) / 6) / 10}</span>
-              ) : null}
+              0
+                ? parseIndexToGraduationValue(i)
+                : null}
             </Graduation>
           ))}
           <ClockBackground ref={backgroundRef} />
