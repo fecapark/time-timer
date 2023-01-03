@@ -54,6 +54,21 @@ export const ContentContainer = styled.div<{ active: boolean }>`
   transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
 
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #00000000;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffffff55;
+    border-radius: 1000px;
+  }
+
+  ${({ theme }) => theme.shareCSS.scrollbarMoz("thin", "#ffffff55")}
 `;
 
 export const ContentHeader = styled.div`
