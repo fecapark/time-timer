@@ -1,3 +1,5 @@
+import { getUnpackedSettings } from "http2";
+
 const background = {
   primary: "#1f1f1f",
   secondary: "#28292a",
@@ -38,6 +40,12 @@ const shareCSS = {
     -webkit-user-drag: none;
     cursor: default;
   `,
+  scrollbarMoz: (width?: string, color?: string) => {
+    return `
+      ${width !== undefined ? `scrollbar-width: ${width};` : ""}
+      ${color !== undefined ? `scrollbar-color: ${color};` : ""}
+    `;
+  },
 };
 
 const responsiveSizes = {

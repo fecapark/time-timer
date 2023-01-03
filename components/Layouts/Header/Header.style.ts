@@ -9,6 +9,7 @@ export const IconContainer = styled.div`
   border-radius: 50%;
 
   transform: translate3d(-8px, -8px, 0);
+  cursor: pointer;
 
   &:hover {
     background-color: #323236;

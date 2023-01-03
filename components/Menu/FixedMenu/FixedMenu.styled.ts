@@ -34,6 +34,24 @@ export const MainMenuBar = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #00000000;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffffff55;
+    border-radius: 1000px;
+  }
+
+  ${({ theme }) => theme.shareCSS.scrollbarMoz("thin", "#ffffff55")}
 `;
 
 export const SliderContainer = styled.div<ISliderContainerStyleProps>`
@@ -56,6 +74,24 @@ export const SliderContainer = styled.div<ISliderContainerStyleProps>`
         : props.active
         ? "0.3s cubic-bezier(0.2, 0, 0, 1)"
         : "0.2s cubic-bezier(0, 0, 0, 1)"};
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #00000000;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ffffff55;
+    border-radius: 1000px;
+  }
+
+  ${({ theme }) => theme.shareCSS.scrollbarMoz("thin", "#ffffff55")}
 
   .border-left {
     position: absolute;
