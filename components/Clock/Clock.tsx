@@ -14,6 +14,7 @@ import {
   isRotatedOverOneRound,
   range,
   rebaseClockDegree,
+  setCursorGrabbing,
   updateClockShapeByDegree,
 } from "./Clock.util";
 import { Vector2 } from "../../utils/vector";
@@ -58,6 +59,7 @@ export default function Clock() {
     const relPos = getPointerPosFromCenter(offsetPos, centerPos, moveAreaPos);
     const degree = getRotationDegree(relPos, maxClockTime, clockTimeUnit);
 
+    setCursorGrabbing(moveAreaRef, true);
     setIsClockPointerDown(true);
     setClockDegree(degree);
   };
@@ -88,6 +90,8 @@ export default function Clock() {
 
     canSetClockDegree = false;
     isOverLimited = false;
+
+    setCursorGrabbing(moveAreaRef, false);
     setIsClockPointerDown(false);
   };
 

@@ -2,6 +2,7 @@ import { Theme } from "../../styles/theme";
 import { ClockColorType } from "../../shared/types";
 import { Vector2 } from "../../utils/vector";
 import { getTimeFromDegree } from "../Timer/Timer.util";
+import { RefObject } from "react";
 
 export function getRotatedPosition(radius: number, degree: number) {
   degree = 270 - degree;
@@ -82,4 +83,17 @@ export const rebaseClockDegree = (degree: number, maxClockTime: number) => {
   const totalSec = parseInt(min, 10) * 60 + parseInt(sec, 10);
 
   return timeToDegree(totalSec, maxClockTime);
+};
+
+export const setCursorGrabbing = (
+  ref: RefObject<HTMLDivElement>,
+  state: boolean
+) => {
+  if (!ref.current) return;
+
+  if (state) {
+    ref.current.style.cursor = "grabbing";
+  } else {
+    ref.current.style.cursor = "";
+  }
 };

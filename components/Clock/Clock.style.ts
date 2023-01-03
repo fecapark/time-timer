@@ -24,6 +24,7 @@ export const MainClock = styled.div`
   align-items: center;
 
   touch-action: none;
+  cursor: grab;
 `;
 
 export const ClockCenter = styled.div`
