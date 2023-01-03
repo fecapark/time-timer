@@ -17,6 +17,7 @@ export const ItemContainer = styled.div`
 
   color: #e0e0e0;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 
   &:hover {
     background-color: ${({ theme }) => theme.background.hoverAccent};
@@ -57,6 +58,7 @@ export const ActionIconWrapper = styled.div`
 
   padding: 8px;
   border-radius: 50%;
+  cursor: pointer;
 
   &:hover {
     background-color: #323236;

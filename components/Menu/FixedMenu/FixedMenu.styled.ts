@@ -88,6 +88,7 @@ export const SectionItemContainer = styled.div<{ active: boolean }>`
   color: #e0e0e0;
 
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 
   .icon-wrapper {
     display: inline-flex;
