@@ -30,7 +30,8 @@
 - [x] (Mobile menu 전용) MenuSectionLinker 만들고 적용해서 display 섹션 완성하기
 - [x] duration (시계 최대시간 설정 섹션) 메뉴 옵션 만들기
 - [x] 회전당 시간 단위 변경 옵션 만들기
+- [x] CSS `cursor` 속성 작업하기
 
-- [ ] CSS `cursor` 속성 작업하기
 - [ ] 스크롤바 커스터마이징 작업하기
+- [ ] 데스크탑 pwa 작업하기
 - [ ] 푸쉬 알림 브라우저 미지원 기능 개선하기
