@@ -205,10 +205,7 @@ export default function Clock() {
               accent={i % 5 == 0}
               gap={24}
               key={i}
-              spanAccent={
-                (360 - clockDegree) * Math.round((maxClockTime * 60) / 360) >=
-                i * maxClockTime
-              }
+              spanAccent={360 - clockDegree >= i * 6}
             >
               {i %
                 (maxClockTime >= 60 ? 5 : 5 * Math.round(30 / maxClockTime)) ==
