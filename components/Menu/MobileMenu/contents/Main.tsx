@@ -1,10 +1,4 @@
-import {
-  MdArrowForward,
-  MdOpenInNew,
-  MdOutlineDesktopWindows,
-  MdOutlineNotifications,
-  MdTranslate,
-} from "react-icons/md";
+import { MdArrowForward, MdOpenInNew } from "react-icons/md";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 import useModal from "../../../../hooks/useModal";

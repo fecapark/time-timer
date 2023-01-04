@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState, Dispatch, SetStateAction, useRef } from "react";
-import { RotatingLines } from "react-loader-spinner";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
