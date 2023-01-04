@@ -28,7 +28,6 @@ import {
   maxClockTimeAtom as MCT,
   clockTimeUnitAtom as CTU,
 } from "../../shared/atom";
-import { getTimeFromDegree } from "../Timer/Timer.util";
 
 let canSetClockDegree = false;
 let isOverLimited = false;
