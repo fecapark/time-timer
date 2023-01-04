@@ -10,13 +10,13 @@ import { Theme } from "../styles/theme";
 function TwitterCardMetaSet() {
   return (
     <>
-      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Time Timer | 타임 타이머" />
       <meta
         name="twitter:description"
         content="최고의 집중을 위해 제작된 1시간 타이머를 웹에서 무료로 이용해보세요."
       />
       <meta name="twitter:image" content="/share-thumbnail.png" />
+      <meta name="twitter:card" content="summary_large_image" />
     </>
   );
 }
@@ -24,14 +24,15 @@ function TwitterCardMetaSet() {
 function OpenGraphMetaSet() {
   return (
     <>
-      <meta property="og:url" content="https://timer.fecapark.com" />
-      <meta property="og:type" content="website" />
-      <meta property="og:image" content="/share-thumbnail.png" />
+      <meta property="site_name" content="Time Timer | 타임 타이머" />
+      <meta property="og:title" content="Time Timer | 타임 타이머"></meta>
       <meta
         property="og:description"
         content="최고의 집중을 위해 제작된 1시간 타이머를 웹에서 무료로 이용해보세요."
       />
-      <meta property="og:title" content="Time Timer | 타임 타이머"></meta>
+      <meta property="og:url" content="https://timer.fecapark.com" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="/share-thumbnail.png" />
     </>
   );
 }
