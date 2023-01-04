@@ -15,7 +15,7 @@ function TwitterCardMetaSet() {
         name="twitter:description"
         content="최고의 집중을 위해 제작된 1시간 타이머를 웹에서 무료로 이용해보세요."
       />
-      <meta name="twitter:image" content="/share-thumbnail.png" />
+      <meta name="twitter:image" content="/resources/share-thumbnail.png" />
       <meta name="twitter:card" content="summary_large_image" />
     </>
   );
@@ -32,7 +32,7 @@ function OpenGraphMetaSet() {
       />
       <meta property="og:url" content="https://timer.fecapark.com" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content="/share-thumbnail.png" />
+      <meta property="og:image" content="/resources/share-thumbnail.png" />
     </>
   );
 }
@@ -43,22 +43,22 @@ function MetaIconSet() {
       <link
         rel="apple-touch-icon"
         sizes="180x180"
-        href="/apple-touch-icon.png"
+        href="/resources/apple-touch-icon.png"
       />
       <link
         rel="icon"
         type="image/png"
         sizes="32x32"
-        href="/favicon-32x32.png"
+        href="/resources/favicon-32x32.png"
       />
       <link
         rel="icon"
         type="image/png"
         sizes="16x16"
-        href="/favicon-16x16.png"
+        href="/resources/favicon-16x16.png"
       />
       <link rel="manifest" href="/site.webmanifest" />
-      <link rel="mask-icon" href="/final-logo.svg" color="#000000" />
+      <link rel="mask-icon" href="/resources/final-logo.svg" color="#000000" />
       <meta name="msapplication-TileColor" content="#1f1f1f" />
       <meta name="theme-color" content={Theme.background.primary} />
     </>
