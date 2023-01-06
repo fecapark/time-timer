@@ -1,4 +1,6 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { Theme } from "../../../styles/theme";
 
 export const IconContainer = styled.div`
   display: inline-flex;
@@ -21,10 +23,12 @@ export const IconContainer = styled.div`
   }
 `;
 
-export const TimeText = styled.div<{
+interface TimeTextStyleProps {
   triggerHide: boolean;
   fontSize: number;
-}>`
+}
+
+export const TimeText = styled.div<TimeTextStyleProps>`
   font-size: ${(props) => props.fontSize}px;
   font-weight: 100;
   line-height: 1em;
@@ -48,10 +52,7 @@ export const TimeText = styled.div<{
         : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
 `;
 
-export const Container = styled.header<{
-  hasMenuIcon: boolean;
-  triggerHide: boolean;
-}>`
+export const ContainerCSS = css`
   font-size: 18px;
 
   width: 100%;
@@ -60,27 +61,11 @@ export const Container = styled.header<{
   padding: 0 2em;
 
   display: flex;
-  justify-content: ${(props) =>
-    props.hasMenuIcon ? "space-between" : "center"};
+  justify-content: center;
   align-items: flex-start;
 
-  transform: translate3d(
-    0,
-    ${(props) => {
-      if (!props.triggerHide) return "0";
-      const res = 18 * 1.32 + props.theme.font.bodySize * 3;
-      return (-res).toString() + "px";
-    }},
-    0
-  );
-  transition: transform
-    ${(props) =>
-      props.triggerHide
-        ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.4s"
-        : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
-
   .logo {
-    ${({ theme }) => theme.shareCSS.noDrag};
+    ${Theme.shareCSS.noDrag};
 
     display: flex;
     gap: 0.11em;
@@ -104,14 +89,41 @@ export const Container = styled.header<{
     visibility: hidden;
   }
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.responsiveSizes.resizeClockWidth}px) {
+  @media screen and (max-width: ${Theme.responsiveSizes.resizeClockWidth}px) {
     justify-self: flex-start;
   }
 
+  @media screen and (max-width: ${Theme.responsiveSizes.hideTimer}px) {
+    font-size: 15px;
+  }
+`;
+
+export const Container = styled.header<{
+  hasMenuIcon: boolean;
+  triggerHide: boolean;
+}>`
+  ${ContainerCSS}
+
+  justify-content: ${(props) =>
+    props.hasMenuIcon ? "space-between" : "center"};
+
+  transform: translate3d(
+    0,
+    ${(props) => {
+      if (!props.triggerHide) return "0";
+      const res = 18 * 1.32 + props.theme.font.bodySize * 3;
+      return (-res).toString() + "px";
+    }},
+    0
+  );
+  transition: transform
+    ${(props) =>
+      props.triggerHide
+        ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.4s"
+        : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
+
   @media screen and (max-width: ${({ theme }) =>
       theme.responsiveSizes.hideTimer}px) {
-    font-size: 15px;
     transition: transform
       ${(props) =>
         props.triggerHide

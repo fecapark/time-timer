@@ -12,5 +12,5 @@ const nextConfig = {
   basePath: isDevServer ? "/absproxy/3000" : "",
 };
 
-module.exports = withPWA(nextConfig);
-// module.exports = nextConfig;
+// module.exports = withPWA(nextConfig);
+module.exports = nextConfig;
