@@ -43,7 +43,6 @@ const Main = styled.div`
 `;
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(true);
   const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);
   const [isHideTimer, mediaSetted] = useMediaMatch(
     Theme.mediaQueries.hideTimerMaxWidth
@@ -73,9 +72,6 @@ export default function Home() {
         {mediaSetted ? !isHideTimer ? <FixedMenu /> : <MobileMenu /> : null}
         <BottomSheet />
         <Modal />
-        {!mediaSetted || showIntro ? (
-          <Intro setShowIntro={setShowIntro} />
-        ) : null}
       </Container>
     </>
   );
