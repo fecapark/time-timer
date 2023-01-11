@@ -25,6 +25,7 @@ const font = {
     primary: "'Roboto', 'Noto Sans KR', sans-serif",
     openSans: "'Open Sans', 'Noto Sans KR', sans-serif",
     poppins: "'Poppins', sans-serif",
+    raleway: "'Raleway', 'Noto Sans KR', sans-serif",
   },
   color: {
     primary: "#ffffff",

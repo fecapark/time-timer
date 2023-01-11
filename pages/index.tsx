@@ -27,6 +27,8 @@ const Container = styled.div`
   justify-content: space-between;
 
   padding: 2.5em 0;
+
+  overflow-y: hidden;
 `;
 
 const Main = styled.div`

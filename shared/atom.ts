@@ -11,6 +11,7 @@ import {
   MenuContentType,
   MaxClockTimeType,
   ClockTimeUnitType,
+  FlexableNavSectionType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({
@@ -123,4 +124,14 @@ export const clockTimeUnitDefaultValue: ClockTimeUnitType = 15;
 export const clockTimeUnitAtom = atom<ClockTimeUnitType>({
   key: `clock-time-unit/${v1()}`,
   default: clockTimeUnitDefaultValue,
+});
+
+export const currentFlexableNavSectionAtom = atom<FlexableNavSectionType>({
+  key: `current-flexable-nav-section/${v1()}`,
+  default: "overview",
+});
+
+export const onFlexableNavTransitionAtom = atom<boolean>({
+  key: `on-flexable-nav-transition/${v1()}`,
+  default: false,
 });

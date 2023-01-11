@@ -41,7 +41,7 @@ export const ContentContainer = styled.div<{ active: boolean }>`
   border-top-right-radius: 24px;
 
   z-index: 100;
-  background-color: #212124;
+  background-color: ${({ theme }) => theme.background.secondary};
 
   transform: translate3d(0, ${(props) => (props.active ? "0" : "100%")}, 0);
   transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);

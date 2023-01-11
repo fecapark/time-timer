@@ -37,9 +37,8 @@ const GlobalStyle = css`
   }
 
   #__next {
-    /* overflow-y: scroll; */
+    overflow-y: scroll;
     overflow-x: hidden;
-    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
 `;
