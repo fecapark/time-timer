@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { IntroContainer, Logo } from "./Intro.styled";
 
 export default function Intro({
-  setShowIntro,
+  setIntroTimeouted,
 }: {
-  setShowIntro: Dispatch<SetStateAction<boolean>>;
+  setIntroTimeouted: Dispatch<SetStateAction<boolean>>;
 }) {
   const logoRef = useRef<HTMLDivElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ export default function Intro({
 
           setHideWhole(true);
           introRef.current!.ontransitionend = () => {
-            setShowIntro(false);
+            setIntroTimeouted(true);
             introRef.current!.ontransitionend = null;
           };
         }, 500);
