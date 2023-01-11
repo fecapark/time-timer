@@ -2,6 +2,13 @@ import React from "react";
 import { atom } from "recoil";
 import { v1 } from "uuid";
 import {
+  clockColorDefaultValue,
+  clockTimeUnitDefaultValue,
+  languageOptionDefaultValue,
+  maxClockTimeDefaultValue,
+  progressUnitDefaultValue,
+} from "./const";
+import {
   IAudioData,
   IModalContentPayload,
   IBottomSheetContentConstructorProp,
@@ -91,19 +98,16 @@ export const isSliderActiveAtom = atom<boolean>({
   default: false,
 });
 
-export const clockColorDefaultValue: ClockColorType = "red";
 export const clockColorValueAtom = atom<ClockColorType>({
   key: `clock-color-value/${v1()}`,
   default: clockColorDefaultValue,
 });
 
-export const languageOptionDefaultValue: LanguageOptionType = "kor";
 export const languageOptionValueAtom = atom<LanguageOptionType>({
   key: `language-option-value/${v1()}`,
   default: languageOptionDefaultValue,
 });
 
-export const progressUnitDefaultValue: ProgressUnitType = "time";
 export const progressUnitValueAtom = atom<ProgressUnitType>({
   key: `progress-unit-value/${v1()}`,
   default: progressUnitDefaultValue,
@@ -114,13 +118,11 @@ export const mobileMenuContentAtom = atom<MenuContentType>({
   default: "main",
 });
 
-export const maxClockTimeDefaultValue: MaxClockTimeType = 60;
 export const maxClockTimeAtom = atom<MaxClockTimeType>({
   key: `max-clock-time/${v1()}`,
   default: maxClockTimeDefaultValue,
 });
 
-export const clockTimeUnitDefaultValue: ClockTimeUnitType = 15;
 export const clockTimeUnitAtom = atom<ClockTimeUnitType>({
   key: `clock-time-unit/${v1()}`,
   default: clockTimeUnitDefaultValue,
