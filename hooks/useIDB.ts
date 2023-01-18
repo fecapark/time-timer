@@ -2,7 +2,7 @@ import { set, get } from "idb-keyval";
 import { optionDefaultValue } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
 
-const OPTION_DB_KEY = "option-db";
+export const OPTION_DB_KEY = "option-db";
 
 export async function checkSetDefaultOption() {
   const data = getOptionFromDB();
@@ -28,9 +28,11 @@ export async function setOptionToDB(
       prev = optionDefaultValue;
     }
 
+    const res = setter(prev);
     await set(OPTION_DB_KEY, setter(prev));
-    return;
+    return res;
   }
 
-  set(OPTION_DB_KEY, setter);
+  await set(OPTION_DB_KEY, setter);
+  return setter;
 }

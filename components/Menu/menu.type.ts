@@ -8,6 +8,7 @@ export interface IItemDrawerStyleProps {
 export interface ISelectableItemProps {
   content: React.ReactNode;
   selected?: boolean;
+  isLoading?: boolean;
   onClick?: () => void;
 }
 
