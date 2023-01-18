@@ -15,4 +15,3 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-return messaging;
