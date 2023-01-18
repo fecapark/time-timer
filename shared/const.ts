@@ -21,7 +21,7 @@ export const clockTimeUnitDefaultValue: ClockTimeUnitType = 15;
 
 export const progressUnitDefaultValue: ProgressUnitType = "time";
 
-export const languageOptionDefaultValue: LanguageOptionType = "kor";
+export const languageOptionDefaultValue: LanguageOptionType = "en";
 
 export const clockColorDefaultValue: ClockColorType = "red";
 

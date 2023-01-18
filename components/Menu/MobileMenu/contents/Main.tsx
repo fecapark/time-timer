@@ -1,8 +1,6 @@
 import { MdArrowForward, MdOpenInNew } from "react-icons/md";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 import useModal from "../../../../hooks/useModal";
-import useOptionStorage from "../../../../hooks/useOptionStorage";
 import PreviewSoundModal from "../../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import { ItemDrawer, SelectableItem } from "../../menu";
@@ -17,6 +15,7 @@ import {
   languageOptionValueAtom as LOV,
 } from "../../../../shared/atom";
 import { BsGithub } from "react-icons/bs";
+import { useOptionQuery } from "../../menu.util";
 
 function OpenLinkItem({
   icon = <MdOpenInNew />,
@@ -76,13 +75,9 @@ export default function MainMenuContent({
     content: <PreviewSoundModal />,
   });
 
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
-
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setLanguage(optionValue.language);
-  }, [optionValue, canAccessToOptionStorage]);
+  const { mutate } = useOptionQuery({
+    language: setLanguage,
+  });
 
   return (
     <div css={FadeFromLeftAnimationCSS}>
@@ -99,14 +94,14 @@ export default function MainMenuContent({
           content="한국어"
           selected={language === "kor"}
           onClick={() => {
-            setOptionStorageValue({ language: "kor" });
+            mutate({ language: "kor" });
           }}
         />
         <SelectableItem
           content="English"
           selected={language === "en"}
           onClick={() => {
-            setOptionStorageValue({ language: "en" });
+            mutate({ language: "en" });
           }}
         />
       </ItemDrawer>

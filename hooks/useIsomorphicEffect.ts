@@ -9,5 +9,7 @@ export default function useIsomorphicEffect(
   effect: EffectCallback,
   deps?: DependencyList
 ) {
-  window ? useLayoutEffect(effect, deps) : useEffect(effect, deps);
+  typeof document !== "undefined"
+    ? useLayoutEffect(effect, deps)
+    : useEffect(effect, deps);
 }

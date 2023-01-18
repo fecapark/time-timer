@@ -9,7 +9,10 @@ export async function checkSetDefaultOption() {
 
   if (data === undefined) {
     setOptionToDB(optionDefaultValue);
+    return true;
   }
+
+  return false;
 }
 
 export async function getOptionFromDB(): Promise<IOptionDataType | undefined> {

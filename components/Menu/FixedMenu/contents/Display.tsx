@@ -8,28 +8,19 @@ import {
   clockColorValueAtom as CCV,
   progressUnitValueAtom as PUV,
 } from "../../../../shared/atom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FadeContentAnimationCSS } from "../FixedMenu.styled";
-import { OPTION_DB_KEY, getOptionFromDB } from "../../../../hooks/useIDB";
-import { mergeSetOptionData, useOptionSetEffect } from "../../menu.util";
+import { useOptionQuery } from "../../menu.util";
 
 export default function DisplaySectionContent() {
   const language = useRecoilValue(LOV);
   const setClockColor = useSetRecoilState(CCV);
   const setProgressUnit = useSetRecoilState(PUV);
 
-  const queryClient = useQueryClient();
-  const { isLoading, data: optionData } = useQuery(
-    [OPTION_DB_KEY],
-    getOptionFromDB
-  );
-  const { mutate } = useMutation(mergeSetOptionData, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([OPTION_DB_KEY]);
-    },
-  });
-
-  useOptionSetEffect(optionData, {
+  const {
+    isLoading,
+    data: optionData,
+    mutate,
+  } = useOptionQuery({
     clockColor: setClockColor,
     progressUnit: setProgressUnit,
   });

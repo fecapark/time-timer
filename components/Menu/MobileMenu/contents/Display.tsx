@@ -1,6 +1,4 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
-import useOptionStorage from "../../../../hooks/useOptionStorage";
 import { ContentTitle, FadeFromRightAnimationCSS } from "../MobileMenu.styled";
 import {
   languageOptionValueAtom as LOV,
@@ -11,19 +9,17 @@ import { ItemDrawer, SelectableItem } from "../../menu";
 import { Theme } from "../../../../styles/theme";
 import { ColorThumbnail } from "../../menu.styled";
 import { ClockColorType } from "../../../../shared/types";
+import { useOptionQuery } from "../../menu.util";
 
 export default function DisplayMenuContent() {
   const language = useRecoilValue(LOV);
   const [clockColor, setClockColor] = useRecoilState(CCV);
   const [progressUnit, setProgressUnit] = useRecoilState(PUV);
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-  }, [optionValue, canAccessToOptionStorage]);
+  const { mutate } = useOptionQuery({
+    clockColor: setClockColor,
+    progressUnit: setProgressUnit,
+  });
 
   return (
     <div css={FadeFromRightAnimationCSS}>
@@ -38,7 +34,7 @@ export default function DisplayMenuContent() {
               content={<ColorThumbnail color={value} />}
               selected={clockColor === colorName}
               onClick={() => {
-                setOptionStorageValue({
+                mutate({
                   clockColor: colorName as ClockColorType,
                 });
               }}
@@ -53,7 +49,7 @@ export default function DisplayMenuContent() {
           }
           selected={progressUnit === "time"}
           onClick={() => {
-            setOptionStorageValue({ progressUnit: "time" });
+            mutate({ progressUnit: "time" });
           }}
         />
         <SelectableItem
@@ -62,7 +58,7 @@ export default function DisplayMenuContent() {
           }
           selected={progressUnit === "percentage"}
           onClick={() => {
-            setOptionStorageValue({ progressUnit: "percentage" });
+            mutate({ progressUnit: "percentage" });
           }}
         />
       </ItemDrawer>

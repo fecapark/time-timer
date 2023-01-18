@@ -35,12 +35,10 @@ import { ActionIconWrapper, OpenLink } from "../menu.styled";
 import NotificationSectionContent from "./contents/Notification";
 import DisplaySectionContent from "./contents/Display";
 import LanguageSectionContent from "./contents/Language";
-import useOptionStorage from "../../../hooks/useOptionStorage";
-import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import TimeSectionContent from "./contents/Time";
 import { useQuery } from "@tanstack/react-query";
 import { getOptionFromDB, OPTION_DB_KEY } from "../../../hooks/useIDB";
-import { RotatingLines } from "react-loader-spinner";
+import { useOptionSetEffect } from "../menu.util";
 
 function Slider({ children, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -48,6 +46,9 @@ function Slider({ children, onClose }: ISliderProps) {
   const isTimingNow = useRecoilValue(ITN);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+
+  const { data: optionData } = useQuery([OPTION_DB_KEY], getOptionFromDB);
+  useOptionSetEffect;
 
   const closeSlider = () => {
     setIsSliderActive(false);
@@ -148,8 +149,6 @@ export default function FixedMenu() {
     notification: <NotificationSectionContent />,
     time: <TimeSectionContent />,
   };
-
-  useIsomorphicEffect(() => {}, []);
 
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>

@@ -16,6 +16,7 @@ import {
 import { MenuContentType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import { ActionIconWrapper } from "../menu.styled";
+import { loadOptionQueryDataToAtomEffect } from "../menu.util";
 import DisplayMenuContent from "./contents/Display";
 import MainMenuContent from "./contents/Main";
 import TimeMenuContent from "./contents/Time";
@@ -36,15 +37,9 @@ function ContentHeader({ icon, onIconClick }: IContentHeaderProps) {
 }
 
 export default function MobileMenu() {
-  const setLanguage = useSetRecoilState(LOV);
-  const setClockColor = useSetRecoilState(CCV);
-  const setProgressUnit = useSetRecoilState(PUV);
-  const setMaxClockTime = useSetRecoilState(MCT);
-  const setClockTimeUnit = useSetRecoilState(CTU);
   const [isActive, setIsActive] = useRecoilState(IAM);
   const [menuContent, setMenuContent] = useRecoilState(MMC);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
-  const [optionValue, _, canAccessToOptionStorage] = useOptionStorage();
 
   const closeMenu = () => {
     setIsActive(false);
@@ -74,14 +69,7 @@ export default function MobileMenu() {
     closeMenu();
   }, [isHideTimer]);
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setLanguage(optionValue.language);
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-    setMaxClockTime(optionValue.maxClockTime);
-    setClockTimeUnit(optionValue.clockTimeUnit);
-  }, [optionValue, canAccessToOptionStorage]);
+  // loadOptionQueryDataToAtomEffect();
 
   return (
     <MenuContainer isActive={isActive}>

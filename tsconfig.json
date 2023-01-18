@@ -22,7 +22,7 @@
     "environment.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "worker/firebase-messaging-sw.js"
+    "public/firebase-messaging-sw.js"
   ],
   "exclude": ["node_modules"]
 }
