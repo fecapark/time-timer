@@ -5,10 +5,16 @@ import {
   maxClockTimeDefaultValue,
   progressUnitDefaultValue,
   clockTimeUnitDefaultValue,
-} from "../shared/atom";
+} from "../shared/const";
 import { optionKey } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
 import useIsomorphicEffect from "./useIsomorphicEffect";
+
+/*
+
+Deprecated
+
+*/
 
 export default function useOptionStorage(): [
   IOptionDataType,

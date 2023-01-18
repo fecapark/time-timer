@@ -1,5 +1,3 @@
-import { getUnpackedSettings } from "http2";
-
 const background = {
   primary: "#1f1f1f",
   secondary: "#28292a",
@@ -25,6 +23,7 @@ const font = {
     primary: "'Roboto', 'Noto Sans KR', sans-serif",
     openSans: "'Open Sans', 'Noto Sans KR', sans-serif",
     poppins: "'Poppins', sans-serif",
+    raleway: "'Raleway', 'Noto Sans KR', sans-serif",
   },
   color: {
     primary: "#ffffff",

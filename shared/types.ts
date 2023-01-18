@@ -37,3 +37,5 @@ export type MenuContentType = "main" | "display" | "time";
 export type MaxClockTimeType = typeof maxClockTimes[number];
 
 export type ClockTimeUnitType = typeof clockTimeUnits[number];
+
+export type FlexableNavSectionType = "overview" | "logs";

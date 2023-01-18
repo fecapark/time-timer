@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { ClockColorType } from "../../../../shared/types";
 import { Theme } from "../../../../styles/theme";
 import { ItemDrawer, SelectableItem } from "../../menu";
@@ -8,22 +8,22 @@ import {
   clockColorValueAtom as CCV,
   progressUnitValueAtom as PUV,
 } from "../../../../shared/atom";
-import useOptionStorage from "../../../../hooks/useOptionStorage";
-import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
 import { FadeContentAnimationCSS } from "../FixedMenu.styled";
+import { useOptionQuery } from "../../menu.util";
 
 export default function DisplaySectionContent() {
   const language = useRecoilValue(LOV);
-  const [clockColor, setClockColor] = useRecoilState(CCV);
-  const [progressUnit, setProgressUnit] = useRecoilState(PUV);
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
+  const setClockColor = useSetRecoilState(CCV);
+  const setProgressUnit = useSetRecoilState(PUV);
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-  }, [optionValue, canAccessToOptionStorage]);
+  const {
+    isLoading,
+    data: optionData,
+    mutate,
+  } = useOptionQuery({
+    clockColor: setClockColor,
+    progressUnit: setProgressUnit,
+  });
 
   return (
     <div css={FadeContentAnimationCSS}>
@@ -32,10 +32,11 @@ export default function DisplaySectionContent() {
           return (
             <SelectableItem
               key={value}
+              isLoading={isLoading}
               content={<ColorThumbnail color={value} />}
-              selected={clockColor === colorName}
+              selected={optionData?.clockColor === colorName}
               onClick={() => {
-                setOptionStorageValue({
+                mutate({
                   clockColor: colorName as ClockColorType,
                 });
               }}
@@ -48,18 +49,18 @@ export default function DisplaySectionContent() {
           content={
             language === "kor" ? "분과 초로 나타내기" : "Show as min/sec"
           }
-          selected={progressUnit === "time"}
+          selected={optionData?.progressUnit === "time"}
           onClick={() => {
-            setOptionStorageValue({ progressUnit: "time" });
+            mutate({ progressUnit: "time" });
           }}
         />
         <SelectableItem
           content={
             language === "kor" ? "백분위로 나타내기" : "Show as percentage"
           }
-          selected={progressUnit === "percentage"}
+          selected={optionData?.progressUnit === "percentage"}
           onClick={() => {
-            setOptionStorageValue({ progressUnit: "percentage" });
+            mutate({ progressUnit: "percentage" });
           }}
         />
       </ItemDrawer>

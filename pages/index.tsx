@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import Clock from "../components/Clock/Clock";
-import Intro from "../components/Intro/Intro";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import FixedMenu from "../components/Menu/FixedMenu/FixedMenu";
@@ -27,6 +26,8 @@ const Container = styled.div`
   justify-content: space-between;
 
   padding: 2.5em 0;
+
+  overflow-y: hidden;
 `;
 
 const Main = styled.div`
@@ -41,7 +42,6 @@ const Main = styled.div`
 `;
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState(true);
   const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);
   const [isHideTimer, mediaSetted] = useMediaMatch(
     Theme.mediaQueries.hideTimerMaxWidth
@@ -71,9 +71,6 @@ export default function Home() {
         {mediaSetted ? !isHideTimer ? <FixedMenu /> : <MobileMenu /> : null}
         <BottomSheet />
         <Modal />
-        {!mediaSetted || showIntro ? (
-          <Intro setShowIntro={setShowIntro} />
-        ) : null}
       </Container>
     </>
   );

@@ -7,28 +7,17 @@ import {
 } from "../../../../shared/atom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { clockTimeUnits, maxClockTimes } from "../../../../shared/const";
-import useOptionStorage from "../../../../hooks/useOptionStorage";
-import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
-
-/*
-
-1. 최대 시간 설정
-2. 회전시 틱당 시간 설정
-
-*/
+import { useOptionQuery } from "../../menu.util";
 
 export default function TimeSectionContent() {
   const language = useRecoilValue(LOV);
   const [maxClockTime, setMaxClockTime] = useRecoilState(MCT);
   const [clockTimeUnit, setClockTimeUnit] = useRecoilState(CTU);
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setMaxClockTime(optionValue.maxClockTime);
-    setClockTimeUnit(optionValue.clockTimeUnit);
-  }, [optionValue, canAccessToOptionStorage]);
+  const { mutate } = useOptionQuery({
+    maxClockTime: setMaxClockTime,
+    clockTimeUnit: setClockTimeUnit,
+  });
 
   return (
     <div css={FadeContentAnimationCSS}>
@@ -57,7 +46,7 @@ export default function TimeSectionContent() {
               }`}
               selected={aTime === maxClockTime}
               onClick={() => {
-                setOptionStorageValue({ maxClockTime: aTime });
+                mutate({ maxClockTime: aTime });
               }}
             />
           );
@@ -92,7 +81,7 @@ export default function TimeSectionContent() {
               }`}
               selected={aTimeUnit === clockTimeUnit}
               onClick={() => {
-                setOptionStorageValue({ clockTimeUnit: aTimeUnit });
+                mutate({ clockTimeUnit: aTimeUnit });
               }}
             />
           );

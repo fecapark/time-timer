@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const withPWA = require("next-pwa")({
-  // dest: "public",
-  customWorkerDir: "worker",
+  dest: "public",
 });
 const isDevServer = process.env.NODE_ENV === "development";
 

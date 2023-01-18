@@ -16,10 +16,6 @@ import {
   languageOptionValueAtom as LOV,
   isTimingNowAtom as ITN,
   isClockPointerDownAtom as ICPD,
-  clockColorValueAtom as CCV,
-  progressUnitValueAtom as PUV,
-  maxClockTimeAtom as MCT,
-  clockTimeUnitAtom as CTU,
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import useMediaMatch from "../../../hooks/useMediaMatch";
@@ -39,9 +35,10 @@ import { ActionIconWrapper, OpenLink } from "../menu.styled";
 import NotificationSectionContent from "./contents/Notification";
 import DisplaySectionContent from "./contents/Display";
 import LanguageSectionContent from "./contents/Language";
-import useOptionStorage from "../../../hooks/useOptionStorage";
-import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
 import TimeSectionContent from "./contents/Time";
+import { useQuery } from "@tanstack/react-query";
+import { getOptionFromDB, OPTION_DB_KEY } from "../../../hooks/useIDB";
+import { useOptionSetEffect } from "../menu.util";
 
 function Slider({ children, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -49,6 +46,9 @@ function Slider({ children, onClose }: ISliderProps) {
   const isTimingNow = useRecoilValue(ITN);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+
+  const { data: optionData } = useQuery([OPTION_DB_KEY], getOptionFromDB);
+  useOptionSetEffect;
 
   const closeSlider = () => {
     setIsSliderActive(false);
@@ -140,13 +140,8 @@ function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
 export default function FixedMenu() {
   const isClockPointerDown = useRecoilValue(ICPD);
   const isTimingNow = useRecoilValue(ITN);
-  const setClockColor = useSetRecoilState(CCV);
-  const setProgressUnit = useSetRecoilState(PUV);
-  const setMaxClockTime = useSetRecoilState(MCT);
-  const setClockTimeUnit = useSetRecoilState(CTU);
-  const [language, setLanguage] = useRecoilState(LOV);
+  const language = useRecoilValue(LOV);
   const [section, setSection] = useState<MenuSectionType | null>(null);
-  const [optionValue, __, canAccessToOptionStorage] = useOptionStorage();
 
   const sectionContents: Record<MenuSectionType, React.ReactNode> = {
     language: <LanguageSectionContent />,
@@ -155,15 +150,6 @@ export default function FixedMenu() {
     time: <TimeSectionContent />,
   };
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setLanguage(optionValue.language);
-    setClockColor(optionValue.clockColor);
-    setProgressUnit(optionValue.progressUnit);
-    setMaxClockTime(optionValue.maxClockTime);
-    setClockTimeUnit(optionValue.clockTimeUnit);
-  }, [optionValue, canAccessToOptionStorage]);
-
   return (
     <Container triggerHide={isClockPointerDown || isTimingNow}>
       <Slider
@@ -171,9 +157,7 @@ export default function FixedMenu() {
           setSection(null);
         }}
       >
-        {!section
-          ? null
-          : section in sectionContents
+        {section && section in sectionContents
           ? sectionContents[section]
           : null}
       </Slider>

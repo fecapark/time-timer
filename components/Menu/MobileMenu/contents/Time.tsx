@@ -1,6 +1,4 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import useIsomorphicEffect from "../../../../hooks/useIsomorphicEffect";
-import useOptionStorage from "../../../../hooks/useOptionStorage";
 import {
   languageOptionValueAtom as LOV,
   maxClockTimeAtom as MCT,
@@ -9,19 +7,17 @@ import {
 import { clockTimeUnits, maxClockTimes } from "../../../../shared/const";
 import { ItemDrawer, SelectableItem } from "../../menu";
 import { ContentTitle, FadeFromRightAnimationCSS } from "../MobileMenu.styled";
+import { useOptionQuery } from "../../menu.util";
 
 export default function TimeMenuContent() {
   const language = useRecoilValue(LOV);
   const [maxClockTime, setMaxClockTime] = useRecoilState(MCT);
   const [clockTimeUnit, setClockTimeUnit] = useRecoilState(CTU);
-  const [optionValue, setOptionStorageValue, canAccessToOptionStorage] =
-    useOptionStorage();
 
-  useIsomorphicEffect(() => {
-    if (!canAccessToOptionStorage) return;
-    setClockTimeUnit(optionValue.clockTimeUnit);
-    setMaxClockTime(optionValue.maxClockTime);
-  }, [optionValue, canAccessToOptionStorage]);
+  const { mutate } = useOptionQuery({
+    maxClockTime: setMaxClockTime,
+    clockTimeUnit: setClockTimeUnit,
+  });
 
   return (
     <div css={FadeFromRightAnimationCSS}>
@@ -53,7 +49,7 @@ export default function TimeMenuContent() {
               }`}
               selected={aTime === maxClockTime}
               onClick={() => {
-                setOptionStorageValue({ maxClockTime: aTime });
+                mutate({ maxClockTime: aTime });
               }}
             />
           );
@@ -88,7 +84,7 @@ export default function TimeMenuContent() {
               }`}
               selected={aTimeUnit === clockTimeUnit}
               onClick={() => {
-                setOptionStorageValue({ clockTimeUnit: aTimeUnit });
+                mutate({ clockTimeUnit: aTimeUnit });
               }}
             />
           );

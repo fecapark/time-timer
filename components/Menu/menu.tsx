@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
+import { RotatingLines } from "react-loader-spinner";
 import { useRecoilValue } from "recoil";
 import { languageOptionValueAtom as LOV } from "../../shared/atom";
 import { ItemContainer, ItemDrawerContainer } from "./menu.styled";
@@ -12,6 +13,7 @@ import {
 export function SelectableItem({
   content,
   selected = false,
+  isLoading = false,
   onClick,
 }: ISelectableItemProps) {
   const language = useRecoilValue(LOV);
@@ -19,7 +21,9 @@ export function SelectableItem({
   return (
     <ItemContainer onClick={onClick}>
       <span>{content}</span>
-      {selected ? (
+      {isLoading ? (
+        <RotatingLines strokeColor="grey" width="16" />
+      ) : selected ? (
         <span style={{ fontSize: 13, fontWeight: 400 }}>
           {language === "kor" ? "사용중" : "Selected"}
         </span>

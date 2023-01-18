@@ -16,13 +16,6 @@
     "incremental": true,
     "types": ["@emotion/react/types/css-prop"]
   },
-  "include": [
-    "service-worker.d.ts",
-    "next-env.d.ts",
-    "environment.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "worker/firebase-messaging-sw.js"
-  ],
+  "include": ["next-env.d.ts", "environment.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
