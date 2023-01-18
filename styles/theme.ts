@@ -1,5 +1,3 @@
-import { getUnpackedSettings } from "http2";
-
 const background = {
   primary: "#1f1f1f",
   secondary: "#28292a",

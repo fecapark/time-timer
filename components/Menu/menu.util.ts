@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { SetterOrUpdater, useRecoilValue, useSetRecoilState } from "recoil";
+import { SetterOrUpdater } from "recoil";
 import {
   getOptionFromDB,
   OPTION_DB_KEY,

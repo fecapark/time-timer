@@ -1,5 +1,5 @@
 import React from "react";
-import { atom, RecoilState } from "recoil";
+import { atom } from "recoil";
 import { v1 } from "uuid";
 import {
   clockColorDefaultValue,
@@ -19,7 +19,6 @@ import {
   MaxClockTimeType,
   ClockTimeUnitType,
   FlexableNavSectionType,
-  IOptionDataType,
 } from "./types";
 
 export const isClockPointerDownAtom = atom<boolean>({

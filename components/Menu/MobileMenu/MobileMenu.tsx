@@ -1,22 +1,14 @@
 import React, { useEffect } from "react";
 import { MdArrowBack, MdMenuOpen } from "react-icons/md";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import useIsomorphicEffect from "../../../hooks/useIsomorphicEffect";
+import { useRecoilState } from "recoil";
 import useMediaMatch from "../../../hooks/useMediaMatch";
-import useOptionStorage from "../../../hooks/useOptionStorage";
 import {
-  languageOptionValueAtom as LOV,
-  clockColorValueAtom as CCV,
-  progressUnitValueAtom as PUV,
-  maxClockTimeAtom as MCT,
-  clockTimeUnitAtom as CTU,
   isActiveMenuAtom as IAM,
   mobileMenuContentAtom as MMC,
 } from "../../../shared/atom";
 import { MenuContentType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import { ActionIconWrapper } from "../menu.styled";
-import { loadOptionQueryDataToAtomEffect } from "../menu.util";
 import DisplayMenuContent from "./contents/Display";
 import MainMenuContent from "./contents/Main";
 import TimeMenuContent from "./contents/Time";
@@ -68,8 +60,6 @@ export default function MobileMenu() {
     goMainMenu();
     closeMenu();
   }, [isHideTimer]);
-
-  // loadOptionQueryDataToAtomEffect();
 
   return (
     <MenuContainer isActive={isActive}>

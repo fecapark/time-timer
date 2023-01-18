@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import Clock from "../components/Clock/Clock";
-import Intro from "../components/Intro/Intro";
 import Footer from "../components/Layouts/Footer/Footer";
 import Header from "../components/Layouts/Header/Header";
 import FixedMenu from "../components/Menu/FixedMenu/FixedMenu";

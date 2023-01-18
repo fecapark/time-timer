@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import type { AppProps } from "next/app";
-import { RecoilRoot, useRecoilState } from "recoil";
+import { RecoilRoot } from "recoil";
 import GlobalTheme from "../styles/global";
 import { Theme } from "../styles/theme";
 import { Analytics } from "@vercel/analytics/react";

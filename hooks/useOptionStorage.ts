@@ -10,6 +10,12 @@ import { optionKey } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
 import useIsomorphicEffect from "./useIsomorphicEffect";
 
+/*
+
+Deprecated
+
+*/
+
 export default function useOptionStorage(): [
   IOptionDataType,
   (toSet: Partial<IOptionDataType>) => void,
