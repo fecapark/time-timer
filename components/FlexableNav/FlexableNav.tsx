@@ -1,8 +1,7 @@
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useRecoilState } from "recoil";
-import useRefEffect from "../../hooks/useRefEffect";
 import { onFlexableNavTransitionAtom as OFNT } from "../../shared/atom";
 
 interface IFlexableNavItemStyleProps {
@@ -19,7 +18,8 @@ interface IFlexableNavItemProps {
   flexedIcon: React.ReactNode;
   isFlexed: boolean;
   activeColor?: string;
-  onFlexedClick: () => void;
+  onFlexedClick?: () => void;
+  onFlexingEnd?: () => void;
 }
 
 interface IFlexableNavProps {
@@ -216,18 +216,17 @@ export function FlexableNavItem({
   isFlexed,
   activeColor,
   position,
-  onFlexedClick,
+  onFlexedClick = () => {},
+  onFlexingEnd = () => {},
 }: IFlexableNavItemProps) {
   const [isTransitioning, setIsTransitioning] = useRecoilState(OFNT);
-  const ref = useRef<HTMLDivElement>(null);
 
-  const onSwitchTransitionEnd = (e: TransitionEvent) => {
+  const onSwitchTransitionEnd = (e: React.TransitionEvent) => {
     if (!isTransitioning) return;
     if (e.propertyName !== "width") return;
 
-    requestAnimationFrame(() => {
-      setIsTransitioning(false);
-    });
+    setIsTransitioning(false);
+    onFlexingEnd();
   };
 
   const onSwitchClick = () => {
@@ -241,17 +240,8 @@ export function FlexableNavItem({
     });
   };
 
-  useRefEffect(() => {
-    ref.current!.addEventListener("transitionend", onSwitchTransitionEnd);
-
-    return () => {
-      ref.current!.removeEventListener("transitionend", onSwitchTransitionEnd);
-    };
-  }, [ref]);
-
   return (
     <FlexableNavItemContainer
-      ref={ref}
       isFlexed={isFlexed}
       onClick={onSwitchClick}
       position={position}
@@ -260,6 +250,7 @@ export function FlexableNavItem({
       }}
       canHover={!isTransitioning}
       isTransitioning={isTransitioning}
+      onTransitionEnd={onSwitchTransitionEnd}
     >
       {isFlexed ? (
         <>

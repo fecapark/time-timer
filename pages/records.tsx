@@ -152,6 +152,7 @@ export default function Records() {
           isFlexed={curNavSection === "logs"}
           flexedIcon={<MdViewQuilt />}
           onFlexedClick={() => {
+            console.log("switched to overview");
             setCurNavSection("overview");
           }}
         />
@@ -163,6 +164,7 @@ export default function Records() {
           isFlexed={curNavSection === "overview"}
           flexedIcon={<MdFormatListBulleted />}
           onFlexedClick={() => {
+            console.log("switched to logs");
             setCurNavSection("logs");
           }}
         />
