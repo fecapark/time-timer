@@ -2,40 +2,81 @@ import { set, get } from "idb-keyval";
 import { optionDefaultValue } from "../shared/const";
 import { IOptionDataType } from "../shared/types";
 
+type ObjectExcludedFunctionType = Exclude<object, Function>;
+
 export const OPTION_DB_KEY = "option-db";
+export const RECORD_DB_KEY = "timeline-db";
+export const BEHAVIOR_DB_KEY = "behavior-db";
 
-export async function checkSetDefaultOption() {
-  const data = getOptionFromDB();
-
-  if (data === undefined) {
-    setOptionToDB(optionDefaultValue);
-    return true;
-  }
-
-  return false;
-}
-
-export async function getOptionFromDB(): Promise<IOptionDataType | undefined> {
-  const data = await get(OPTION_DB_KEY);
-  return data;
-}
-
-export async function setOptionToDB(
-  setter: ((prev: IOptionDataType) => IOptionDataType) | IOptionDataType
+function defaultValueSetterFactory<T extends ObjectExcludedFunctionType>(
+  key: string,
+  defaultValue: T
 ) {
-  if (typeof setter === "function") {
-    let prev = await getOptionFromDB();
+  async function setter() {
+    const data = await getterFactory<T>(key);
 
-    if (prev === undefined) {
-      await setOptionToDB(optionDefaultValue);
-      prev = optionDefaultValue;
+    if (data === undefined) {
+      await setterFactory<T>(key, defaultValue, defaultValue);
+      return true;
     }
 
-    const res = setter(prev);
-    await set(OPTION_DB_KEY, setter(prev));
-    return res;
+    return false;
   }
 
-  await set(OPTION_DB_KEY, setter);
-  return setter;
+  return setter();
+}
+
+function getterFactory<T extends ObjectExcludedFunctionType>(key: string) {
+  async function getter(): Promise<T | undefined> {
+    return await get(key);
+  }
+
+  return getter();
+}
+
+async function setterFactory<T extends ObjectExcludedFunctionType>(
+  key: string,
+  dataSetter: ((prev: T) => T) | T,
+  defaultValue: T
+) {
+  async function setter(dataSetter: ((prev: T) => T) | T) {
+    if (typeof dataSetter === "function") {
+      let prev: T | undefined = await getterFactory<T>(key);
+
+      if (prev === undefined) {
+        await setter(defaultValue);
+        prev = defaultValue;
+      }
+
+      const res = dataSetter(prev);
+      await set(key, res);
+      return res;
+    }
+
+    await set(key, dataSetter);
+    return dataSetter;
+  }
+
+  return setter(dataSetter);
+}
+
+export async function checkSetDefaultOption() {
+  return defaultValueSetterFactory<IOptionDataType>(
+    OPTION_DB_KEY,
+    optionDefaultValue
+  );
+}
+
+export function getOptionFromDB() {
+  return getterFactory<IOptionDataType>(OPTION_DB_KEY);
+}
+
+export function setOptionToDB(
+  setter: ((prev: IOptionDataType) => IOptionDataType) | IOptionDataType
+) {
+  return setterFactory<IOptionDataType>(
+    OPTION_DB_KEY,
+    setter,
+    optionDefaultValue
+  );
 }

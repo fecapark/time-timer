@@ -7,8 +7,11 @@ import FlexableNav, {
 import { Theme } from "../styles/theme";
 import { ClockColorType } from "../shared/types";
 import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { currentFlexableNavSectionAtom as CFNS } from "../shared/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  clockColorValueAtom,
+  currentFlexableNavSectionAtom as CFNS,
+} from "../shared/atom";
 
 interface IValueDisplayerStyleProps {
   inHead?: boolean;
@@ -95,6 +98,7 @@ const ValueItem = styled.div`
 
   &[data-head="true"] {
     font-size: 20px;
+    margin-bottom: 2em;
   }
 `;
 
@@ -138,7 +142,7 @@ const ValueInfo = styled.span`
 `;
 
 export default function Records() {
-  const [testColor, setTestColor] = useState<ClockColorType>("green");
+  const clockColor = useRecoilValue(clockColorValueAtom);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
 
   return (
@@ -148,11 +152,10 @@ export default function Records() {
           position="left"
           title="Overview"
           description="Gather your time records at a glance."
-          activeColor={`${Theme.clock.color[testColor]}99`}
+          activeColor={`${Theme.clock.color[clockColor]}99`}
           isFlexed={curNavSection === "logs"}
           flexedIcon={<MdViewQuilt />}
           onFlexedClick={() => {
-            console.log("switched to overview");
             setCurNavSection("overview");
           }}
         />
@@ -160,11 +163,10 @@ export default function Records() {
           position="right"
           title="Logs"
           description="Watch your records as a timeline."
-          activeColor={`${Theme.clock.color[testColor]}99`}
+          activeColor={`${Theme.clock.color[clockColor]}99`}
           isFlexed={curNavSection === "overview"}
           flexedIcon={<MdFormatListBulleted />}
           onFlexedClick={() => {
-            console.log("switched to logs");
             setCurNavSection("logs");
           }}
         />
@@ -177,15 +179,7 @@ export default function Records() {
           </ContentHeader>
           <ContentBody data-name="total-time">
             <ValueItem data-head="true">
-              <ValueDisplayer testColor={testColor} inHead={true}>
-                <span className="big">1234.</span>
-                <span className="mid">89</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>For whole days</ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor} inHead={true}>
                 <span className="big">2.</span>
                 <span className="mid">39</span>
                 <span className="small">H</span>
@@ -193,7 +187,7 @@ export default function Records() {
               <ValueInfo>For today</ValueInfo>
             </ValueItem>
             <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor}>
                 <span className="big">127.</span>
                 <span className="mid">21</span>
                 <span className="small">H</span>
@@ -201,12 +195,20 @@ export default function Records() {
               <ValueInfo>For a week</ValueInfo>
             </ValueItem>
             <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor}>
                 <span className="big">474.</span>
                 <span className="mid">03</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>For a month</ValueInfo>
+            </ValueItem>
+            <ValueItem>
+              <ValueDisplayer testColor={clockColor}>
+                <span className="big">1234.</span>
+                <span className="mid">89</span>
+                <span className="small">H</span>
+              </ValueDisplayer>
+              <ValueInfo>For whole days</ValueInfo>
             </ValueItem>
           </ContentBody>
         </div>
@@ -215,7 +217,7 @@ export default function Records() {
             <h2>Time Table</h2>
             <h3>Visualize your recorded times per a day.</h3>
           </ContentHeader>
-          <GrassGraph color={Theme.clock.color[testColor]} />
+          <GrassGraph color={Theme.clock.color[clockColor]} />
         </div>
         <div>
           <ContentHeader>
@@ -224,7 +226,7 @@ export default function Records() {
           </ContentHeader>
           <ContentBody data-name="behavior">
             <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor}>
                 <span className="big">78</span>
                 <span className="small">%</span>
               </ValueDisplayer>
@@ -235,7 +237,7 @@ export default function Records() {
               </ValueInfo>
             </ValueItem>
             <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor}>
                 <span className="big">12</span>
               </ValueDisplayer>
               <ValueInfo>
@@ -245,7 +247,7 @@ export default function Records() {
               </ValueInfo>
             </ValueItem>
             <ValueItem>
-              <ValueDisplayer testColor={testColor}>
+              <ValueDisplayer testColor={clockColor}>
                 <span className="big">6</span>
                 <span className="mid">.8</span>
                 <span className="small">H</span>

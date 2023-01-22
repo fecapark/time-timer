@@ -27,6 +27,8 @@ interface IFlexableNavProps {
 }
 
 const FlexableNavContainer = styled.div`
+  max-width: 1760px;
+
   width: 100%;
   height: 250px;
 
@@ -38,11 +40,14 @@ const FlexableNavContainer = styled.div`
     height: 450px;
     font-size: 16px;
   }
+
+  @media screen and (min-width: 1269px) {
+    height: 550px;
+    font-size: 18px;
+  }
 `;
 
 const FlexableNavItemContainer = styled.div<IFlexableNavItemStyleProps>`
-  color: #eaf4f0;
-
   position: relative;
   ${({ theme }) => theme.shareCSS.noDrag};
 
@@ -58,6 +63,9 @@ const FlexableNavItemContainer = styled.div<IFlexableNavItemStyleProps>`
   border-radius: 24px;
 
   font-family: ${({ theme }) => theme.font.family.openSans};
+  color: #eaf4f0;
+
+  cursor: ${(props) => (props.isFlexed ? "pointer" : "default")};
 
   transition: ${(props) =>
     props.isTransitioning
