@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
+import { clear } from "idb-keyval";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import {
   checkSetDefaultOption,
+  checkSetDefaultBehavior,
   getOptionFromDB,
   OPTION_DB_KEY,
+  getBehaviorFromDB,
+  BEHAVIOR_DB_KEY,
 } from "../../hooks/useIDB";
 import useIsomorphicEffect from "../../hooks/useIsomorphicEffect";
 import {
@@ -16,17 +20,40 @@ import {
 } from "../../shared/atom";
 
 export default function AppMiddleware() {
-  const [isOptionLoaded, setIsOptionLoaded] = useState(false);
+  const [isDefaultLoaded, setIsDefaultLoaded] = useState(false);
   const setClockColor = useSetRecoilState(CCV);
   const setProgressUnit = useSetRecoilState(PUV);
   const setMaxClockTime = useSetRecoilState(MCT);
   const setClockTimeUnit = useSetRecoilState(CTU);
   const setLanguage = useSetRecoilState(LOV);
-  const { refetch } = useQuery([OPTION_DB_KEY], getOptionFromDB);
 
+  /*
+    Queries
+  */
+  const { refetch: optionRefetch } = useQuery([OPTION_DB_KEY], getOptionFromDB);
+  const { refetch: behaviorRefetch } = useQuery(
+    [BEHAVIOR_DB_KEY],
+    getBehaviorFromDB
+  );
+
+  /*
+    Default value set effect
+  */
+  useIsomorphicEffect(() => {
+    const setDefaultValues = async () => {
+      await checkSetDefaultOption();
+      await checkSetDefaultBehavior();
+      setIsDefaultLoaded(true);
+    };
+    setDefaultValues();
+  }, []);
+
+  /*
+    Refetch effect after default value setted
+  */
   useIsomorphicEffect(() => {
     const refetchAndSetOptionsToAtom = async () => {
-      const { data } = await refetch();
+      const { data } = await optionRefetch();
       if (data === undefined) return;
 
       setClockColor(data.clockColor);
@@ -36,17 +63,14 @@ export default function AppMiddleware() {
       setLanguage(data.language);
     };
 
-    if (!isOptionLoaded) return;
-    refetchAndSetOptionsToAtom();
-  }, [isOptionLoaded]);
-
-  useIsomorphicEffect(() => {
-    const setDefaultOption = async () => {
-      await checkSetDefaultOption();
-      setIsOptionLoaded(true);
+    const refetchBehavior = async () => {
+      await behaviorRefetch();
     };
-    setDefaultOption();
-  }, []);
+
+    if (!isDefaultLoaded) return;
+    refetchAndSetOptionsToAtom();
+    refetchBehavior();
+  }, [isDefaultLoaded]);
 
   return <></>;
 }

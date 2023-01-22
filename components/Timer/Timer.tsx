@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockDegreeAtom as CD,
@@ -18,8 +18,13 @@ import RoundButton from "../Button/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
+import { useMutation } from "@tanstack/react-query";
+import { BEHAVIOR_DB_KEY, setBehaviorToDB } from "../../hooks/useIDB";
+import { isTomorrow } from "../../utils/time";
 
 let timerInterval: NodeJS.Timer | null = null;
+let startTime: Date | null = null;
+let isPausedBefore: boolean = false;
 
 export default function Timer({ onTimingStart }: IProps) {
   const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
@@ -33,17 +38,27 @@ export default function Timer({ onTimingStart }: IProps) {
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
 
+  /*
+    Queries
+  */
+  const { mutate: mutateBehavior } = useMutation(
+    [BEHAVIOR_DB_KEY],
+    setBehaviorToDB,
+    {
+      onSuccess: () => {
+        isPausedBefore = false;
+        startTime = null;
+      },
+    }
+  );
+
+  /* 
+    Functions
+  */
   const startTimer = () => {
     const getNextDegree = (prevDegree: number, elapsedTime: number) => {
       const timeParseFactor = maxClockTime / 6;
       const result = prevDegree + elapsedTime / timeParseFactor;
-      const degreeOvered = result > 360;
-
-      if (degreeOvered && timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-
       return Math.min(360, result);
     };
 
@@ -60,25 +75,59 @@ export default function Timer({ onTimingStart }: IProps) {
     }
 
     let prevTime = new Date().getTime();
+    startTime = new Date();
     timerInterval = setInterval(onInterval, 1000);
   };
 
   const pauseTimer = () => {
+    isPausedBefore = true;
     setIsTimingNow(false);
   };
 
+  /*
+    Effects
+  */
   useEffect(() => {
     if (isTimingNow) return;
     if (!timerInterval) return;
 
     clearInterval(timerInterval);
     timerInterval = null;
+
+    const endTime = new Date();
+    mutateBehavior((prev) => {
+      let res = prev;
+
+      res.finishBehavior.wholeCount += 1;
+      res.finishBehavior.pauseCount += isPausedBefore ? 1 : 0;
+
+      if (res.daysInARow.recentDate === null) {
+        res.daysInARow.currentDays = 1;
+      } else if (isTomorrow(res.daysInARow.recentDate, endTime)) {
+        res.daysInARow.currentDays += 1;
+      } else {
+        res.daysInARow.currentDays = 1;
+      }
+
+      if (res.daysInARow.currentDays > res.daysInARow.maximumDays) {
+        res.daysInARow.maximumDays = res.daysInARow.currentDays;
+      }
+
+      res.daysInARow.recentDate = endTime;
+
+      const timingDuration =
+        startTime === null ? 0 : endTime.getTime() - startTime.getTime();
+      if (timingDuration > res.longestDuration) {
+        res.longestDuration = timingDuration;
+      }
+
+      return res;
+    });
   }, [isTimingNow]);
 
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
     if (!isTimingEnd) return;
-
     setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
 

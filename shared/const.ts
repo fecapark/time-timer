@@ -1,6 +1,7 @@
 import {
   ClockColorType,
   ClockTimeUnitType,
+  IBehaviorDataType,
   IOptionDataType,
   LanguageOptionType,
   MaxClockTimeType,
@@ -31,4 +32,17 @@ export const optionDefaultValue: IOptionDataType = {
   progressUnit: progressUnitDefaultValue,
   maxClockTime: maxClockTimeDefaultValue,
   clockTimeUnit: clockTimeUnitDefaultValue,
+};
+
+export const behaviorDefaultValue: IBehaviorDataType = {
+  finishBehavior: {
+    pauseCount: 0,
+    wholeCount: 0,
+  },
+  daysInARow: {
+    maximumDays: 0,
+    currentDays: 0,
+    recentDate: null,
+  },
+  longestDuration: 0,
 };

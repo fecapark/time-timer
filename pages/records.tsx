@@ -12,6 +12,8 @@ import {
   clockColorValueAtom,
   currentFlexableNavSectionAtom as CFNS,
 } from "../shared/atom";
+import { BEHAVIOR_DB_KEY, getBehaviorFromDB } from "../hooks/useIDB";
+import { useQuery } from "@tanstack/react-query";
 
 interface IValueDisplayerStyleProps {
   inHead?: boolean;
@@ -145,6 +147,41 @@ export default function Records() {
   const clockColor = useRecoilValue(clockColorValueAtom);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
 
+  const { isLoading, data } = useQuery([BEHAVIOR_DB_KEY], getBehaviorFromDB);
+
+  const getPausePercentage = () => {
+    if (data === undefined || isLoading) return null;
+
+    const { pauseCount, wholeCount } = data.finishBehavior;
+    if (wholeCount === 0) return "0";
+
+    const ratio = 1 - pauseCount / wholeCount;
+    const percentage = Math.floor(ratio * 100).toString();
+
+    return percentage;
+  };
+
+  const getMaximumRowDays = () => {
+    if (data === undefined || isLoading) return null;
+    return data.daysInARow.maximumDays.toString();
+  };
+
+  const getLongestTimingDuration = () => {
+    if (data === undefined || isLoading) return null;
+    const hour = data.longestDuration / 1000 / 60 / 60;
+    const fixedHourAtOne = hour.toFixed(1).toString();
+
+    console.log(hour, fixedHourAtOne);
+
+    return {
+      int: fixedHourAtOne.slice(0, fixedHourAtOne.length - 2),
+      float: fixedHourAtOne.slice(
+        fixedHourAtOne.length - 2,
+        fixedHourAtOne.length
+      ),
+    };
+  };
+
   return (
     <Container>
       <FlexableNav>
@@ -227,7 +264,7 @@ export default function Records() {
           <ContentBody data-name="behavior">
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">78</span>
+                <span className="big">{getPausePercentage()}</span>
                 <span className="small">%</span>
               </ValueDisplayer>
               <ValueInfo>
@@ -238,7 +275,7 @@ export default function Records() {
             </ValueItem>
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">12</span>
+                <span className="big">{getMaximumRowDays()}</span>
               </ValueDisplayer>
               <ValueInfo>
                 Maximum days
@@ -248,8 +285,8 @@ export default function Records() {
             </ValueItem>
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">6</span>
-                <span className="mid">.8</span>
+                <span className="big">{getLongestTimingDuration()?.int}</span>
+                <span className="mid">{getLongestTimingDuration()?.float}</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>Longest timing duration</ValueInfo>

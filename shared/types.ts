@@ -24,6 +24,35 @@ export interface IOptionDataType {
   clockTimeUnit: ClockTimeUnitType;
 }
 
+export interface ITimeRecordDataType {}
+
+/*
+  #1. Finish timing without pause
+    a. 일시정지로 끝낸 횟수
+    b. 총 끝낸 횟수
+
+  #2. Maximum days in a row
+    a. 가장 긴 연속날
+    b. 현재 연속 날
+    c. 가장 최근 날짜 (Date)
+
+  #3. Longest timing duration
+    a. 가장 길게 집중한 시간
+*/
+
+export interface IBehaviorDataType {
+  finishBehavior: {
+    pauseCount: number;
+    wholeCount: number;
+  };
+  daysInARow: {
+    maximumDays: number;
+    currentDays: number;
+    recentDate: Date | null;
+  };
+  longestDuration: number;
+}
+
 export type SetStateType<T> = Dispatch<SetStateAction<T>>;
 
 export type LanguageOptionType = "kor" | "en";
