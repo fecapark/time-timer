@@ -77,8 +77,7 @@ export default function AppMiddleware() {
 
     const refetchTimeRecords = async () => {
       await timeRecordsRefetch();
-
-      // clear();
+      clear();
     };
 
     if (!isDefaultLoaded) return;

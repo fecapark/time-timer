@@ -215,6 +215,37 @@ export default function Records() {
     };
   }, [timeRecordDatas, isTimeRecordsLoading]);
 
+  const timeValues = useMemo(() => {
+    function parseMSToMin(ms: number) {
+      return ms / 1000 / 60;
+    }
+
+    if (timeRecordDatas === undefined || isTimeRecordsLoading) return [];
+
+    const res: number[] = [];
+    let currentDate = new Date();
+    timeRecordDatas.forEach((aRecord) => {
+      const dayGapWithCurrentDate = getDayGapBetween(
+        currentDate,
+        aRecord.endTime
+      );
+
+      for (let i = 0; i < dayGapWithCurrentDate; i++) {
+        res.push(0);
+      }
+
+      if (res.length === 0) {
+        res.push(parseMSToMin(aRecord.duration));
+      } else {
+        res[res.length - 1] += parseMSToMin(aRecord.duration);
+      }
+
+      currentDate = aRecord.endTime;
+    });
+
+    return res;
+  }, [timeRecordDatas, isTimeRecordsLoading]);
+
   /*
     Functions
   */
@@ -323,7 +354,11 @@ export default function Records() {
             <h2>Time Table</h2>
             <h3>Visualize your recorded times per a day.</h3>
           </ContentHeader>
-          <GrassGraph color={Theme.clock.color[clockColor]} />
+          <GrassGraph
+            recentDatas={timeValues}
+            color={Theme.clock.color[clockColor]}
+            colorBoundary={[10, 30, 60, 120]}
+          />
         </div>
         <div>
           <ContentHeader>

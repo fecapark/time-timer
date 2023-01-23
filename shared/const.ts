@@ -49,44 +49,29 @@ export const behaviorDefaultValue: IBehaviorDataType = {
 };
 
 export const timeRecordsDefaultValue: Array<ITimeRecordDataType> = [
-  // {
-  //   duration: 30 * 60 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 23),
-  //   endTime: new Date(2023, 0, 23),
-  // },
-  // {
-  //   duration: 12 * 60 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 23),
-  //   endTime: new Date(2023, 0, 23),
-  // },
-  // {
-  //   duration: 59 * 60 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 22),
-  //   endTime: new Date(2023, 0, 22),
-  // },
-  // {
-  //   duration: 18 * 60 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 18),
-  //   endTime: new Date(2023, 0, 18),
-  // },
-  // {
-  //   duration: 300 * 60 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 16),
-  //   endTime: new Date(2023, 0, 16),
-  // },
-  // {
-  //   duration: 450 * 60 * 60 * 1000,
-  //   startTime: new Date(2022, 11, 20),
-  //   endTime: new Date(2022, 11, 20),
-  // },
-  // {
-  //   duration: 100 * 60 * 60 * 1000,
-  //   startTime: new Date(2022, 8, 3),
-  //   endTime: new Date(2022, 8, 3),
-  // },
-  // {
-  //   duration: 1000 * 60 * 60 * 1000,
-  //   startTime: new Date(2022, 1, 23),
-  //   endTime: new Date(2022, 1, 23),
-  // },
+  {
+    duration: 58 * 60 * 1000,
+    startTime: new Date(2023, 0, 23),
+    endTime: new Date(2023, 0, 23),
+  },
+  {
+    duration: 12 * 60 * 1000,
+    startTime: new Date(2023, 0, 23),
+    endTime: new Date(2023, 0, 23),
+  },
+  {
+    duration: 82 * 60 * 1000,
+    startTime: new Date(2023, 0, 21),
+    endTime: new Date(2023, 0, 21),
+  },
+  {
+    duration: 40 * 60 * 1000,
+    startTime: new Date(2023, 0, 20),
+    endTime: new Date(2023, 0, 20),
+  },
+  {
+    duration: 48 * 60 * 1000,
+    startTime: new Date(2023, 0, 16),
+    endTime: new Date(2023, 0, 16),
+  },
 ];

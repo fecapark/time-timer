@@ -5,19 +5,42 @@ import { range } from "../Clock/Clock.util";
 
 interface IGrassGraphProps {
   color: string;
+  recentDatas: Array<number>;
+  colorBoundary: [number, number, number, number];
 }
 
 interface IGrassProps {
   value: number;
   color: string;
+  colorBoundary: [number, number, number, number];
 }
 
 interface IGrassColorsetInfoProps {
   color: string;
+  colorBoundary: [number, number, number, number];
+  leftText: string;
+  rightText: string;
 }
 
 const Container = styled.div`
   width: 100%;
+  display: flex;
+
+  .grid-date-info {
+    width: 40px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 28px;
+    padding-left: 8px;
+
+    font-size: 11px;
+  }
+`;
+
+const ContentContainer = styled.div`
+  width: calc(100% - 40px);
 
   display: flex;
   flex-direction: column;
@@ -41,6 +64,7 @@ const GrassGrid = styled.div`
   grid-auto-columns: 10px;
   grid-template-rows: repeat(7, 10px);
   gap: 4px;
+  justify-content: flex-end;
 
   width: 100%;
 
@@ -74,50 +98,80 @@ const GrassColorsetInfoContainer = styled.div`
   }
 `;
 
-const getGrassColorByValue = (value: number, hex: string) => {
-  if (value < 10) return `${hex}33`;
-  if (value < 30) return `${hex}66`;
-  if (value < 60) return `${hex}aa`;
-  if (value < 120) return `${hex}dd`;
+const getGrassColorByValue = (
+  value: number,
+  hex: string,
+  boundary: [number, number, number, number]
+) => {
+  if (value < boundary[0]) return `${hex}33`;
+  if (value < boundary[1]) return `${hex}66`;
+  if (value < boundary[2]) return `${hex}aa`;
+  if (value < boundary[3]) return `${hex}dd`;
   return `${hex}ff`;
 };
 
-function Grass({ value, color }: IGrassProps) {
-  return <GrassBlock backgroundColor={getGrassColorByValue(value, color)} />;
+function Grass({ value, color, colorBoundary }: IGrassProps) {
+  return (
+    <GrassBlock
+      backgroundColor={getGrassColorByValue(value, color, colorBoundary)}
+    />
+  );
 }
 
-function GrassColorsetInfo({ color }: IGrassColorsetInfoProps) {
-  const minuteBoundaries = [0, 10, 30, 60, 120];
-
+function GrassColorsetInfo({
+  color,
+  colorBoundary,
+  leftText,
+  rightText,
+}: IGrassColorsetInfoProps) {
   return (
     <GrassColorsetInfoContainer>
-      <span style={{ marginRight: 6 }}>0min</span>
-      {minuteBoundaries.map((aBoundary) => (
+      <span style={{ marginRight: 6 }}>{leftText}</span>
+      {[0, ...colorBoundary].map((aBoundary) => (
         <div
           key={aBoundary}
           className="color"
           style={{
-            backgroundColor: getGrassColorByValue(aBoundary, color),
+            backgroundColor: getGrassColorByValue(
+              aBoundary,
+              color,
+              colorBoundary
+            ),
           }}
         ></div>
       ))}
-      <span style={{ marginLeft: 6 }}>2hrs</span>
+      <span style={{ marginLeft: 6 }}>{rightText}</span>
     </GrassColorsetInfoContainer>
   );
 }
 
-export default function GrassGraph({ color }: IGrassGraphProps) {
+export default function GrassGraph({
+  color,
+  recentDatas,
+  colorBoundary,
+}: IGrassGraphProps) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [gridMaxItems, setGridMaxItems] = useState(0);
 
-  const slicedItems = useMemo(() => {
-    const realItems = range(1000);
-    return realItems.slice(
-      Math.max(realItems.length - gridMaxItems, 0),
-      realItems.length
-    );
-  }, [gridMaxItems]);
+  /* 
+    Memos
+  */
+  const parsedDatas = useMemo(() => {
+    const res: number[] = [];
+    console.log(recentDatas);
+    for (let i = gridMaxItems - 1; i >= 0; i--) {
+      if (i < recentDatas.length) {
+        res.push(recentDatas[i]);
+      } else {
+        res.push(0);
+      }
+    }
+    return res;
+  }, [recentDatas, gridMaxItems]);
 
+  /* 
+    Effects
+  */
   useRefEffect(() => {
     const onResize = () => {
       const { width: gridWidth } = gridRef.current!.getBoundingClientRect();
@@ -141,16 +195,33 @@ export default function GrassGraph({ color }: IGrassGraphProps) {
 
   return (
     <Container>
-      <div className="grid-timeline-info">
-        <span>Past</span>
-        <span>Present</span>
+      <ContentContainer>
+        <div className="grid-timeline-info">
+          <span>Past</span>
+          <span>Present</span>
+        </div>
+        <GrassGrid ref={gridRef}>
+          {parsedDatas.map((v, i) => {
+            return (
+              <Grass
+                key={i}
+                color={color}
+                value={v}
+                colorBoundary={colorBoundary}
+              />
+            );
+          })}
+        </GrassGrid>
+        <GrassColorsetInfo
+          leftText="0min"
+          rightText="2hrs"
+          color={color}
+          colorBoundary={colorBoundary}
+        />
+      </ContentContainer>
+      <div className="grid-date-info">
+        <span>Today</span>
       </div>
-      <GrassGrid ref={gridRef}>
-        {slicedItems.map((_, i) => {
-          return <Grass key={i} color={color} value={Math.random() * 180} />;
-        })}
-      </GrassGrid>
-      <GrassColorsetInfo color={color} />
     </Container>
   );
 }
