@@ -6,14 +6,20 @@ import FlexableNav, {
 } from "../components/FlexableNav/FlexableNav";
 import { Theme } from "../styles/theme";
 import { ClockColorType } from "../shared/types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockColorValueAtom,
   currentFlexableNavSectionAtom as CFNS,
 } from "../shared/atom";
-import { BEHAVIOR_DB_KEY, getBehaviorFromDB } from "../hooks/useIDB";
+import {
+  BEHAVIOR_DB_KEY,
+  getBehaviorFromDB,
+  getTimeRecordsFromDB,
+  TIME_RECORD_DB_KEY,
+} from "../hooks/useIDB";
 import { useQuery } from "@tanstack/react-query";
+import { getDayGapBetween } from "../utils/time";
 
 interface IValueDisplayerStyleProps {
   inHead?: boolean;
@@ -147,12 +153,85 @@ export default function Records() {
   const clockColor = useRecoilValue(clockColorValueAtom);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
 
-  const { isLoading, data } = useQuery([BEHAVIOR_DB_KEY], getBehaviorFromDB);
+  /*
+    Queries
+  */
+  const { isLoading: isBehaviorLoading, data: behaviorData } = useQuery(
+    [BEHAVIOR_DB_KEY],
+    getBehaviorFromDB
+  );
+  const { isLoading: isTimeRecordsLoading, data: timeRecordDatas } = useQuery(
+    [TIME_RECORD_DB_KEY],
+    getTimeRecordsFromDB
+  );
+
+  /*
+    Memos
+  */
+  const durationSums = useMemo(() => {
+    function parseMSToH(ms: number) {
+      return ms / 1000 / 60 / 60;
+    }
+
+    if (timeRecordDatas === undefined || isTimeRecordsLoading)
+      return {
+        today: null,
+        week: null,
+        month: null,
+        all: null,
+      };
+
+    const durationSums = {
+      today: 0,
+      week: 0,
+      month: 0,
+      all: 0,
+    };
+
+    const now = new Date();
+    timeRecordDatas.forEach((aRecord) => {
+      const dayGapWithRecord = getDayGapBetween(aRecord.endTime, now);
+
+      durationSums.all += aRecord.duration;
+
+      if (dayGapWithRecord < 30) {
+        durationSums.month += aRecord.duration;
+      }
+
+      if (dayGapWithRecord < 7) {
+        durationSums.week += aRecord.duration;
+      }
+
+      if (dayGapWithRecord === 0) {
+        durationSums.today += aRecord.duration;
+      }
+    });
+
+    return {
+      today: splitIntAndFloatPartWithFixed(parseMSToH(durationSums.today), 1),
+      week: splitIntAndFloatPartWithFixed(parseMSToH(durationSums.week), 1),
+      month: splitIntAndFloatPartWithFixed(parseMSToH(durationSums.month), 1),
+      all: splitIntAndFloatPartWithFixed(parseMSToH(durationSums.all), 1),
+    };
+  }, [timeRecordDatas, isTimeRecordsLoading]);
+
+  /*
+    Functions
+  */
+
+  function splitIntAndFloatPartWithFixed(num: number, fixed: number = 1) {
+    const fixedNum = num.toFixed(fixed);
+
+    return {
+      int: fixedNum.slice(0, fixedNum.length - (fixed + 1)),
+      float: fixedNum.slice(fixedNum.length - (fixed + 1), fixedNum.length),
+    };
+  }
 
   const getPausePercentage = () => {
-    if (data === undefined || isLoading) return null;
+    if (behaviorData === undefined || isBehaviorLoading) return null;
 
-    const { pauseCount, wholeCount } = data.finishBehavior;
+    const { pauseCount, wholeCount } = behaviorData.finishBehavior;
     if (wholeCount === 0) return "0";
 
     const ratio = 1 - pauseCount / wholeCount;
@@ -162,24 +241,14 @@ export default function Records() {
   };
 
   const getMaximumRowDays = () => {
-    if (data === undefined || isLoading) return null;
-    return data.daysInARow.maximumDays.toString();
+    if (behaviorData === undefined || isBehaviorLoading) return null;
+    return behaviorData.daysInARow.maximumDays.toString();
   };
 
   const getLongestTimingDuration = () => {
-    if (data === undefined || isLoading) return null;
-    const hour = data.longestDuration / 1000 / 60 / 60;
-    const fixedHourAtOne = hour.toFixed(1).toString();
-
-    console.log(hour, fixedHourAtOne);
-
-    return {
-      int: fixedHourAtOne.slice(0, fixedHourAtOne.length - 2),
-      float: fixedHourAtOne.slice(
-        fixedHourAtOne.length - 2,
-        fixedHourAtOne.length
-      ),
-    };
+    if (behaviorData === undefined || isBehaviorLoading) return null;
+    const hour = behaviorData.longestDuration / 1000 / 60 / 60;
+    return splitIntAndFloatPartWithFixed(hour, 1);
   };
 
   return (
@@ -217,32 +286,32 @@ export default function Records() {
           <ContentBody data-name="total-time">
             <ValueItem data-head="true">
               <ValueDisplayer testColor={clockColor} inHead={true}>
-                <span className="big">2.</span>
-                <span className="mid">39</span>
+                <span className="big">{durationSums.today?.int}</span>
+                <span className="mid">{durationSums.today?.float}</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>For today</ValueInfo>
             </ValueItem>
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">127.</span>
-                <span className="mid">21</span>
+                <span className="big">{durationSums.week?.int}</span>
+                <span className="mid">{durationSums.week?.float}</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>For a week</ValueInfo>
             </ValueItem>
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">474.</span>
-                <span className="mid">03</span>
+                <span className="big">{durationSums.month?.int}</span>
+                <span className="mid">{durationSums.month?.float}</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>For a month</ValueInfo>
             </ValueItem>
             <ValueItem>
               <ValueDisplayer testColor={clockColor}>
-                <span className="big">1234.</span>
-                <span className="mid">89</span>
+                <span className="big">{durationSums.all?.int}</span>
+                <span className="mid">{durationSums.all?.float}</span>
                 <span className="small">H</span>
               </ValueDisplayer>
               <ValueInfo>For whole days</ValueInfo>

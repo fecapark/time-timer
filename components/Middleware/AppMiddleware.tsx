@@ -9,6 +9,9 @@ import {
   OPTION_DB_KEY,
   getBehaviorFromDB,
   BEHAVIOR_DB_KEY,
+  TIME_RECORD_DB_KEY,
+  getTimeRecordsFromDB,
+  checkSetDefaultTimeRecords,
 } from "../../hooks/useIDB";
 import useIsomorphicEffect from "../../hooks/useIsomorphicEffect";
 import {
@@ -35,6 +38,10 @@ export default function AppMiddleware() {
     [BEHAVIOR_DB_KEY],
     getBehaviorFromDB
   );
+  const { refetch: timeRecordsRefetch } = useQuery(
+    [TIME_RECORD_DB_KEY],
+    getTimeRecordsFromDB
+  );
 
   /*
     Default value set effect
@@ -43,6 +50,7 @@ export default function AppMiddleware() {
     const setDefaultValues = async () => {
       await checkSetDefaultOption();
       await checkSetDefaultBehavior();
+      await checkSetDefaultTimeRecords();
       setIsDefaultLoaded(true);
     };
     setDefaultValues();
@@ -67,9 +75,16 @@ export default function AppMiddleware() {
       await behaviorRefetch();
     };
 
+    const refetchTimeRecords = async () => {
+      await timeRecordsRefetch();
+
+      // clear();
+    };
+
     if (!isDefaultLoaded) return;
     refetchAndSetOptionsToAtom();
     refetchBehavior();
+    refetchTimeRecords();
   }, [isDefaultLoaded]);
 
   return <></>;

@@ -1,15 +1,24 @@
 import { set, get } from "idb-keyval";
-import { behaviorDefaultValue, optionDefaultValue } from "../shared/const";
-import { IBehaviorDataType, IOptionDataType } from "../shared/types";
+import {
+  behaviorDefaultValue,
+  optionDefaultValue,
+  timeRecordsDefaultValue,
+} from "../shared/const";
+import {
+  IBehaviorDataType,
+  IOptionDataType,
+  ITimeRecordDataType,
+} from "../shared/types";
 
 type ObjectExcludedFunctionType = Exclude<object, Function>;
+type SetterPropType<T> = ((prev: T) => T) | T;
 
 /*
   Keys
 */
 
 export const OPTION_DB_KEY = "option-db";
-export const RECORD_DB_KEY = "time-record-db";
+export const TIME_RECORD_DB_KEY = "time-record-db";
 export const BEHAVIOR_DB_KEY = "behavior-db";
 
 /*
@@ -44,10 +53,10 @@ function getterFactory<T extends ObjectExcludedFunctionType>(key: string) {
 
 async function setterFactory<T extends ObjectExcludedFunctionType>(
   key: string,
-  dataSetter: ((prev: T) => T) | T,
+  dataSetter: SetterPropType<T>,
   defaultValue: T
 ) {
-  async function setter(dataSetter: ((prev: T) => T) | T) {
+  async function setter(dataSetter: SetterPropType<T>) {
     if (typeof dataSetter === "function") {
       let prev: T | undefined = await getterFactory<T>(key);
 
@@ -57,8 +66,6 @@ async function setterFactory<T extends ObjectExcludedFunctionType>(
       }
 
       const res = dataSetter(prev);
-
-      console.log(res);
 
       await set(key, res);
       return res;
@@ -89,6 +96,13 @@ export function checkSetDefaultBehavior() {
   );
 }
 
+export function checkSetDefaultTimeRecords() {
+  return defaultValueSetterFactory<Array<ITimeRecordDataType>>(
+    TIME_RECORD_DB_KEY,
+    timeRecordsDefaultValue
+  );
+}
+
 /*
   Getters
 */
@@ -101,13 +115,15 @@ export function getBehaviorFromDB() {
   return getterFactory<IBehaviorDataType>(BEHAVIOR_DB_KEY);
 }
 
+export function getTimeRecordsFromDB() {
+  return getterFactory<Array<ITimeRecordDataType>>(TIME_RECORD_DB_KEY);
+}
+
 /*
   Setters
 */
 
-export function setOptionToDB(
-  setter: ((prev: IOptionDataType) => IOptionDataType) | IOptionDataType
-) {
+export function setOptionToDB(setter: SetterPropType<IOptionDataType>) {
   return setterFactory<IOptionDataType>(
     OPTION_DB_KEY,
     setter,
@@ -115,12 +131,20 @@ export function setOptionToDB(
   );
 }
 
-export function setBehaviorToDB(
-  setter: ((prev: IBehaviorDataType) => IBehaviorDataType) | IBehaviorDataType
-) {
+export function setBehaviorToDB(setter: SetterPropType<IBehaviorDataType>) {
   return setterFactory<IBehaviorDataType>(
     BEHAVIOR_DB_KEY,
     setter,
     behaviorDefaultValue
+  );
+}
+
+export function setTimeRecordsToDB(
+  setter: SetterPropType<Array<ITimeRecordDataType>>
+) {
+  return setterFactory<Array<ITimeRecordDataType>>(
+    TIME_RECORD_DB_KEY,
+    setter,
+    timeRecordsDefaultValue
   );
 }

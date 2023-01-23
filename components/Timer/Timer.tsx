@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockDegreeAtom as CD,
@@ -19,8 +19,14 @@ import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
 import { useMutation } from "@tanstack/react-query";
-import { BEHAVIOR_DB_KEY, setBehaviorToDB } from "../../hooks/useIDB";
+import {
+  BEHAVIOR_DB_KEY,
+  setBehaviorToDB,
+  setTimeRecordsToDB,
+  TIME_RECORD_DB_KEY,
+} from "../../hooks/useIDB";
 import { isTomorrow } from "../../utils/time";
+import { ITimeRecordDataType } from "../../shared/types";
 
 let timerInterval: NodeJS.Timer | null = null;
 let startTime: Date | null = null;
@@ -47,9 +53,13 @@ export default function Timer({ onTimingStart }: IProps) {
     {
       onSuccess: () => {
         isPausedBefore = false;
-        startTime = null;
       },
     }
+  );
+
+  const { mutate: mutateTimeRecords } = useMutation(
+    [TIME_RECORD_DB_KEY],
+    setTimeRecordsToDB
   );
 
   /* 
@@ -94,7 +104,13 @@ export default function Timer({ onTimingStart }: IProps) {
     clearInterval(timerInterval);
     timerInterval = null;
 
+    if (startTime === null) return;
+
     const endTime = new Date();
+    const timingDuration = endTime.getTime() - startTime.getTime();
+
+    if (timingDuration < 10 * 60 * 1000) return;
+
     mutateBehavior((prev) => {
       let res = prev;
 
@@ -115,13 +131,21 @@ export default function Timer({ onTimingStart }: IProps) {
 
       res.daysInARow.recentDate = endTime;
 
-      const timingDuration =
-        startTime === null ? 0 : endTime.getTime() - startTime.getTime();
       if (timingDuration > res.longestDuration) {
         res.longestDuration = timingDuration;
       }
 
       return res;
+    });
+
+    mutateTimeRecords((prev) => {
+      const res: ITimeRecordDataType = {
+        duration: timingDuration,
+        startTime: startTime!,
+        endTime,
+      };
+
+      return [res, ...prev];
     });
   }, [isTimingNow]);
 
