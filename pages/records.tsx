@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { MdFormatListBulleted, MdViewQuilt } from "react-icons/md";
+import { MdFormatListBulleted, MdOpenInNew, MdViewQuilt } from "react-icons/md";
 import GrassGraph from "../components/GrassGraph/GrassGraph";
 import FlexableNav, {
   FlexableNavItem,
 } from "../components/FlexableNav/FlexableNav";
 import { Theme } from "../styles/theme";
 import { ClockColorType } from "../shared/types";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   clockColorValueAtom,
@@ -20,6 +20,7 @@ import {
 } from "../hooks/useIDB";
 import { useQuery } from "@tanstack/react-query";
 import { getDayGapBetween } from "../utils/time";
+import { Logo } from "../components/Intro/Intro.styled";
 
 interface IValueDisplayerStyleProps {
   inHead?: boolean;
@@ -33,6 +34,48 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+
+  footer {
+    margin-top: 16em;
+    width: 99%;
+    height: 240px;
+
+    border-top: 2px solid ${({ theme }) => theme.background.secondary};
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    .copyright {
+      font-size: 12px;
+      color: #a0a0a0;
+    }
+
+    .links {
+      margin-top: 12px;
+      display: flex;
+      gap: 16px;
+
+      a {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+
+        color: #a0a0a0;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      height: 360px;
+    }
+  }
 `;
 
 const PaddingAroundedContainer = styled.section`
@@ -398,7 +441,37 @@ export default function Records() {
           </ContentBody>
         </div>
       </PaddingAroundedContainer>
-      <footer></footer>
+      <footer>
+        <Logo
+          size={14}
+          hide={false}
+          style={{ filter: "brightness(0.94)", flexDirection: "row" }}
+        >
+          <div className="word">Time</div>
+          <div className="word bottom">Timer</div>
+        </Logo>
+        <span className="copyright">
+          Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
+        </span>
+        <div className="links">
+          <a
+            href="https://github.com/fecapark/time-timer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Github</span>
+            <MdOpenInNew />
+          </a>
+          <a
+            href="https://www.timetimer.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>About Time Timer</span>
+            <MdOpenInNew />
+          </a>
+        </div>
+      </footer>
     </Container>
   );
 }

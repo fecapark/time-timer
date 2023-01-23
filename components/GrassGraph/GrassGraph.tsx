@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { useRef, useState, useMemo } from "react";
 import useRefEffect from "../../hooks/useRefEffect";
-import { range } from "../Clock/Clock.util";
 
 interface IGrassGraphProps {
   color: string;
