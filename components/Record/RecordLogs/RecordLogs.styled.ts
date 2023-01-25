@@ -40,7 +40,7 @@ export const NoLogContainer = styled.div`
   color: #626262;
 
   opacity: 0;
-  transform: translate3d(0, calc(-14px * 4), 0);
+  transform: translate3d(0, calc(-14px * 4 + 30px), 0);
   animation: ${NoLogContainerFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.65s
     forwards;
 
@@ -84,6 +84,7 @@ export const CardBox = styled.div<{ borderColor: string }>`
   gap: 48px;
 
   opacity: 0;
+  transform: translate3d(0, 30px, 0);
   animation: ${CardContainerFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.65s
     forwards;
 
