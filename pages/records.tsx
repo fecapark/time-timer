@@ -152,6 +152,18 @@ const GoHomeButtonContainer = styled.div<{ color: string }>`
       color: white;
     }
   }
+
+  @media screen and (max-width: 768px) {
+    font-size: 42px;
+    right: 0.72em;
+    bottom: 1.1em;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 36px;
+    right: 0.65em;
+    bottom: 1em;
+  }
 `;
 
 export default function Records() {
