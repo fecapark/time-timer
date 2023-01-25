@@ -1,5 +1,3 @@
-import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { FaBoxOpen } from "react-icons/fa";

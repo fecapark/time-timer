@@ -1,5 +1,3 @@
-import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
@@ -10,7 +8,6 @@ import {
   TIME_RECORD_DB_KEY,
 } from "../../../hooks/useIDB";
 import { clockColorValueAtom } from "../../../shared/atom";
-import { ClockColorType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import { getDayGapBetween } from "../../../utils/time";
 import GrassGraph from "../../GrassGraph/GrassGraph";
