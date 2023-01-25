@@ -105,17 +105,18 @@ export default function RecordOverview() {
         aRecord.endTime
       );
 
-      if (res.length === 0) {
-        for (let i = 0; i < dayGapWithCurrentDate; i++) {
+      if (dayGapWithCurrentDate >= 1) {
+        for (
+          let i = 0;
+          i < dayGapWithCurrentDate - (res.length === 0 ? 0 : 1);
+          i++
+        ) {
           res.push(0);
         }
+        res.push(parseMSToMin(aRecord.duration));
+      } else {
+        res[res.length - 1] += parseMSToMin(aRecord.duration);
       }
-
-      for (let i = 0; i < dayGapWithCurrentDate; i++) {
-        res.push(0);
-      }
-
-      res[res.length - 1] += parseMSToMin(aRecord.duration);
 
       currentDate = aRecord.endTime;
     });
