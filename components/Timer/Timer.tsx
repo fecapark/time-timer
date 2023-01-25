@@ -18,18 +18,11 @@ import RoundButton from "../Button/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
-import { useMutation } from "@tanstack/react-query";
-import {
-  BEHAVIOR_DB_KEY,
-  setBehaviorToDB,
-  setTimeRecordsToDB,
-  TIME_RECORD_DB_KEY,
-} from "../../hooks/useIDB";
-import { isTomorrow } from "../../utils/time";
-import { ITimeRecordDataType } from "../../shared/types";
+import useRecordManager from "../../hooks/useRecordManager";
 
 let timerInterval: NodeJS.Timer | null = null;
 let startTime: Date | null = null;
+let startDegree: number = 0;
 let isPausedBefore: boolean = false;
 
 export default function Timer({ onTimingStart }: IProps) {
@@ -42,29 +35,18 @@ export default function Timer({ onTimingStart }: IProps) {
   const maxClockTime = useRecoilValue(MCT);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+  const { manageBehavior, manageTimeRecords } = useRecordManager();
   const isEmptyClockDegree = clockDegree >= 360;
-
-  /*
-    Queries
-  */
-  const { mutate: mutateBehavior } = useMutation(
-    [BEHAVIOR_DB_KEY],
-    setBehaviorToDB,
-    {
-      onSuccess: () => {
-        isPausedBefore = false;
-      },
-    }
-  );
-
-  const { mutate: mutateTimeRecords } = useMutation(
-    [TIME_RECORD_DB_KEY],
-    setTimeRecordsToDB
-  );
 
   /* 
     Functions
   */
+
+  const removeTimerInterval = () => {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+  };
+
   const startTimer = () => {
     const getNextDegree = (prevDegree: number, elapsedTime: number) => {
       const timeParseFactor = maxClockTime / 6;
@@ -79,13 +61,11 @@ export default function Timer({ onTimingStart }: IProps) {
       prevTime = curTime;
     };
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    if (timerInterval) removeTimerInterval();
 
     let prevTime = new Date().getTime();
     startTime = new Date();
+    startDegree = clockDegree;
     timerInterval = setInterval(onInterval, 1000);
   };
 
@@ -94,66 +74,41 @@ export default function Timer({ onTimingStart }: IProps) {
     setIsTimingNow(false);
   };
 
+  const getCompleteRatio = () => {
+    return 1 - (360 - clockDegree) / (360 - startDegree);
+  };
+
   /*
     Effects
   */
   useEffect(() => {
+    const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
+    if (!isTimingEnd) return;
+
+    isPausedBefore = false;
+    setIsTimingNow(false);
+  }, [clockDegree, isClockPointerDown]);
+
+  useEffect(() => {
     if (isTimingNow) return;
     if (!timerInterval) return;
-
-    clearInterval(timerInterval);
-    timerInterval = null;
-
     if (startTime === null) return;
+
+    removeTimerInterval();
 
     const endTime = new Date();
     const timingDuration = endTime.getTime() - startTime.getTime();
 
-    if (timingDuration < 10 * 60 * 1000) return;
-
-    mutateBehavior((prev) => {
-      let res = prev;
-
-      res.finishBehavior.wholeCount += 1;
-      res.finishBehavior.pauseCount += isPausedBefore ? 1 : 0;
-
-      if (res.daysInARow.recentDate === null) {
-        res.daysInARow.currentDays = 1;
-      } else if (isTomorrow(res.daysInARow.recentDate, endTime)) {
-        res.daysInARow.currentDays += 1;
-      } else {
-        res.daysInARow.currentDays = 1;
-      }
-
-      if (res.daysInARow.currentDays > res.daysInARow.maximumDays) {
-        res.daysInARow.maximumDays = res.daysInARow.currentDays;
-      }
-
-      res.daysInARow.recentDate = endTime;
-
-      if (timingDuration > res.longestDuration) {
-        res.longestDuration = timingDuration;
-      }
-
-      return res;
-    });
-
-    mutateTimeRecords((prev) => {
-      const res: ITimeRecordDataType = {
-        duration: timingDuration,
-        startTime: startTime!,
-        endTime,
-      };
-
-      return [res, ...prev];
+    if (timingDuration < 10 * 60 * 1000) return; // 10 min
+    manageBehavior({ isPausedBefore, endTime, timingDuration });
+    manageTimeRecords({
+      isPausedBefore,
+      startTime: startTime!,
+      endTime,
+      completeRatio: getCompleteRatio(),
+      timingDuration,
     });
   }, [isTimingNow]);
-
-  useEffect(() => {
-    const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
-    if (!isTimingEnd) return;
-    setIsTimingNow(false);
-  }, [clockDegree, isClockPointerDown]);
 
   return (
     <Container>

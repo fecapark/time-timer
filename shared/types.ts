@@ -28,6 +28,8 @@ export interface ITimeRecordDataType {
   duration: number;
   startTime: Date;
   endTime: Date;
+  finishedByPaused: boolean;
+  completeRatio: number;
 }
 
 export interface IBehaviorDataType {

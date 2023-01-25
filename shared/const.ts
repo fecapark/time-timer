@@ -49,29 +49,39 @@ export const behaviorDefaultValue: IBehaviorDataType = {
 };
 
 export const timeRecordsDefaultValue: Array<ITimeRecordDataType> = [
-  // {
-  //   duration: 58 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 23),
-  //   endTime: new Date(2023, 0, 23),
-  // },
-  // {
-  //   duration: 12 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 23),
-  //   endTime: new Date(2023, 0, 23),
-  // },
-  // {
-  //   duration: 82 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 21),
-  //   endTime: new Date(2023, 0, 21),
-  // },
-  // {
-  //   duration: 40 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 20),
-  //   endTime: new Date(2023, 0, 20),
-  // },
-  // {
-  //   duration: 48 * 60 * 1000,
-  //   startTime: new Date(2023, 0, 16),
-  //   endTime: new Date(2023, 0, 16),
-  // },
+  {
+    duration: 58 * 60 * 1000,
+    startTime: new Date(2023, 0, 23),
+    endTime: new Date(2023, 0, 23),
+    finishedByPaused: false,
+    completeRatio: 1,
+  },
+  {
+    duration: 12 * 60 * 1000,
+    startTime: new Date(2023, 0, 23),
+    endTime: new Date(2023, 0, 23),
+    finishedByPaused: true,
+    completeRatio: 0.16,
+  },
+  {
+    duration: 182 * 60 * 1000,
+    startTime: new Date(2023, 0, 21),
+    endTime: new Date(2023, 0, 21),
+    finishedByPaused: false,
+    completeRatio: 1,
+  },
+  {
+    duration: 40 * 60 * 1000,
+    startTime: new Date(2023, 0, 20),
+    endTime: new Date(2023, 0, 20),
+    finishedByPaused: true,
+    completeRatio: 0.39,
+  },
+  {
+    duration: 48 * 60 * 1000,
+    startTime: new Date(2023, 0, 16),
+    endTime: new Date(2023, 0, 16),
+    finishedByPaused: true,
+    completeRatio: 0.96,
+  },
 ];
