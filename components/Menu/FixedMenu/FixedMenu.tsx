@@ -38,9 +38,6 @@ import NotificationSectionContent from "./contents/Notification";
 import DisplaySectionContent from "./contents/Display";
 import LanguageSectionContent from "./contents/Language";
 import TimeSectionContent from "./contents/Time";
-import { useQuery } from "@tanstack/react-query";
-import { getOptionFromDB, OPTION_DB_KEY } from "../../../hooks/useIDB";
-import { useOptionSetEffect } from "../menu.util";
 import Link from "next/link";
 
 function Slider({ children, onClose }: ISliderProps) {

@@ -5,8 +5,6 @@ import GlobalTheme from "../styles/global";
 import { Theme } from "../styles/theme";
 import { Analytics } from "@vercel/analytics/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import useMediaMatch from "../hooks/useMediaMatch";
-import { useState } from "react";
 import Intro from "../components/Intro/Intro";
 import AppMiddleware from "../components/Middleware/AppMiddleware";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -14,9 +12,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const qc = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [introTimeouted, setIntroTimeouted] = useState(false);
-  const [_, mediaSetted] = useMediaMatch("");
-
   return (
     <>
       <RecoilRoot>
@@ -26,9 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <GlobalTheme />
             <AppMiddleware />
             <Component {...pageProps} />
-            {mediaSetted && introTimeouted ? null : (
-              <Intro setIntroTimeouted={setIntroTimeouted} />
-            )}
+            <Intro />
           </QueryClientProvider>
         </ThemeProvider>
       </RecoilRoot>

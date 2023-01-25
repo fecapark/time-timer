@@ -6,19 +6,17 @@ export const FlexableNavContainer = styled.div`
   max-width: 1760px;
 
   width: 100%;
-  height: 250px;
+  height: 100%;
 
   font-size: 14px;
   display: flex;
   gap: 8px;
 
   @media screen and (min-width: 799px) {
-    height: 450px;
     font-size: 16px;
   }
 
   @media screen and (min-width: 1269px) {
-    height: 550px;
     font-size: 18px;
   }
 `;

@@ -14,6 +14,9 @@ import {
 import { Logo } from "../components/Intro/Intro.styled";
 import RecordOverview from "../components/Record/RecordOverview/RecordOverview";
 import RecordLogs from "../components/Record/RecordLogs/RecordLogs";
+import Link from "next/link";
+import { IoMdTime } from "react-icons/io";
+import { darken } from "polished";
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +25,33 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+
+  .flexable {
+    width: 100%;
+    height: 250px;
+
+    display: flex;
+    gap: 8px;
+
+    .go-home {
+      width: 60px;
+      height: 100%;
+      background-color: ${({ theme }) => theme.background.secondary};
+      border-radius: 24px;
+
+      &:hover {
+        width: 90px;
+      }
+    }
+
+    @media screen and (min-width: 799px) {
+      height: 450px;
+    }
+
+    @media screen and (min-width: 1269px) {
+      height: 550px;
+    }
+  }
 
   footer {
     width: 99%;
@@ -88,6 +118,42 @@ const PaddingAroundedContainer = styled.div`
   }
 `;
 
+const GoHomeButtonContainer = styled.div<{ color: string }>`
+  font-size: 48px;
+
+  position: fixed;
+  right: 0.8em;
+  bottom: 1.2em;
+
+  padding: 0.6em;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: ${(props) => darken(0.15, props.color)};
+
+  cursor: pointer;
+
+  .icon-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    svg {
+      color: #eaf4f0;
+      font-size: 1em;
+      line-height: 1em;
+      color: white;
+    }
+  }
+`;
+
 export default function Records() {
   const clockColor = useRecoilValue(clockColorValueAtom);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
@@ -98,65 +164,83 @@ export default function Records() {
   };
 
   return (
-    <Container>
-      <FlexableNav>
-        <FlexableNavItem
-          position="left"
-          title="Overview"
-          description="Gather your time records at a glance."
-          activeColor={`${Theme.clock.color[clockColor]}99`}
-          isFlexed={curNavSection === "logs"}
-          flexedIcon={<MdViewQuilt />}
-          onFlexedClick={() => {
-            setCurNavSection("overview");
-          }}
-        />
-        <FlexableNavItem
-          position="right"
-          title="Logs"
-          description="Watch your records as a timeline."
-          activeColor={`${Theme.clock.color[clockColor]}99`}
-          isFlexed={curNavSection === "overview"}
-          flexedIcon={<MdFormatListBulleted />}
-          onFlexedClick={() => {
-            setCurNavSection("logs");
-          }}
-        />
-      </FlexableNav>
-      <PaddingAroundedContainer>
-        {sectionComponents[curNavSection]}
-      </PaddingAroundedContainer>
-      <footer>
-        <Logo
-          size={14}
-          hide={false}
-          style={{ filter: "brightness(0.94)", flexDirection: "row" }}
-        >
-          <div className="word">Time</div>
-          <div className="word bottom">Timer</div>
-        </Logo>
-        <span className="copyright">
-          Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
-        </span>
-        <div className="links">
-          <a
-            href="https://github.com/fecapark/time-timer"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>Github</span>
-            <MdOpenInNew />
-          </a>
-          <a
-            href="https://www.timetimer.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>About Time Timer</span>
-            <MdOpenInNew />
-          </a>
+    <>
+      <Container>
+        <div className="flexable">
+          <FlexableNav>
+            <FlexableNavItem
+              position="left"
+              title="Overview"
+              description="Gather your time records at a glance."
+              activeColor={`${Theme.clock.color[clockColor]}99`}
+              isFlexed={curNavSection === "logs"}
+              flexedIcon={<MdViewQuilt />}
+              onFlexedClick={() => {
+                setCurNavSection("overview");
+              }}
+            />
+            <FlexableNavItem
+              position="right"
+              title="Logs"
+              description="Watch your records as a timeline."
+              activeColor={`${Theme.clock.color[clockColor]}99`}
+              isFlexed={curNavSection === "overview"}
+              flexedIcon={<MdFormatListBulleted />}
+              onFlexedClick={() => {
+                setCurNavSection("logs");
+              }}
+            />
+          </FlexableNav>
         </div>
-      </footer>
-    </Container>
+        <PaddingAroundedContainer>
+          {sectionComponents[curNavSection]}
+        </PaddingAroundedContainer>
+        <footer>
+          <Logo
+            size={14}
+            hide={false}
+            style={{ filter: "brightness(0.94)", flexDirection: "row" }}
+          >
+            <div className="word">Time</div>
+            <div className="word bottom">Timer</div>
+          </Logo>
+          <span className="copyright">
+            Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
+          </span>
+          <div className="links">
+            <a
+              href="https://github.com/fecapark/time-timer"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>Github</span>
+              <MdOpenInNew />
+            </a>
+            <a
+              href="https://www.timetimer.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>About Time Timer</span>
+              <MdOpenInNew />
+            </a>
+          </div>
+        </footer>
+      </Container>
+      <Link
+        href="/"
+        style={{
+          textDecoration: "none",
+          WebkitTapHighlightColor: "transparent",
+        }}
+      >
+        <GoHomeButtonContainer color={`${Theme.clock.color[clockColor]}`}>
+          <div className="bg-filter"></div>
+          <div className="icon-wrapper">
+            <IoMdTime />
+          </div>
+        </GoHomeButtonContainer>
+      </Link>
+    </>
   );
 }

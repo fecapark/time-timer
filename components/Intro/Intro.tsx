@@ -1,19 +1,23 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IntroContainer, Logo } from "./Intro.styled";
+import { useRecoilState } from "recoil";
+import { isIntroTimeoutedAtom as IIT } from "../../shared/atom";
+import useMediaMatch from "../../hooks/useMediaMatch";
 
-export default function Intro({
-  setIntroTimeouted,
-}: {
-  setIntroTimeouted: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function Intro() {
   const logoRef = useRef<HTMLDivElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const [hideLogo, setHideLogo] = useState(false);
   const [hideWhole, setHideWhole] = useState(false);
+  const [isIntroTimeouted, setIsIntroTimeouted] = useRecoilState(IIT);
+  const [_, mediaSetted] = useMediaMatch("");
+
+  const checkIntroedOnce = () => isIntroTimeouted;
 
   useEffect(() => {
     if (!logoRef.current) return;
     if (!introRef.current) return;
+    if (checkIntroedOnce()) return;
 
     setTimeout(() => {
       if (!logoRef.current) return;
@@ -25,7 +29,7 @@ export default function Intro({
 
           setHideWhole(true);
           introRef.current!.ontransitionend = () => {
-            setIntroTimeouted(true);
+            setIsIntroTimeouted(true);
             introRef.current!.ontransitionend = null;
           };
         }, 500);
@@ -34,7 +38,7 @@ export default function Intro({
     }, 1500);
   }, [logoRef.current, introRef.current]);
 
-  return (
+  return isIntroTimeouted && mediaSetted ? null : (
     <IntroContainer ref={introRef} hide={hideWhole}>
       <Logo hide={hideLogo} ref={logoRef}>
         <div className="word">Time</div>

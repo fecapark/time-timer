@@ -137,3 +137,8 @@ export const onFlexableNavTransitionAtom = atom<boolean>({
   key: `on-flexable-nav-transition/${v1()}`,
   default: false,
 });
+
+export const isIntroTimeoutedAtom = atom<boolean>({
+  key: `is-intro-timeouted/${v1()}`,
+  default: false,
+});

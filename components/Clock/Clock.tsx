@@ -27,6 +27,7 @@ import {
   isTimingNowAtom as ITN,
   maxClockTimeAtom as MCT,
   clockTimeUnitAtom as CTU,
+  isIntroTimeoutedAtom as IIT,
 } from "../../shared/atom";
 
 let canSetClockDegree = false;
@@ -47,6 +48,7 @@ export default function Clock() {
   const clockColor = useRecoilValue(CCV);
   const maxClockTime = useRecoilValue(MCT);
   const clockTimeUnit = useRecoilValue(CTU);
+  const isIntroTimeouted = useRecoilValue(IIT);
 
   const onPointerDown = (e: PointerEvent) => {
     canSetClockDegree = true;
@@ -114,6 +116,8 @@ export default function Clock() {
   const rebaseDegree = () => {
     setClockDegree(rebaseClockDegree(clockDegree, maxClockTime));
   };
+
+  const isIntroedOnce = () => isIntroTimeouted;
 
   useEffect(() => {
     if (isClockPointerDown) return;
@@ -184,6 +188,7 @@ export default function Clock() {
   }, [resizeRef.current]);
 
   useEffect(() => {
+    if (isIntroedOnce()) return;
     setClockDegree(0);
     setTimeout(() => {
       setClockDegree(360);
