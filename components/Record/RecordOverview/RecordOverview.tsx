@@ -112,7 +112,11 @@ export default function RecordOverview() {
         }
         res.push(parseMSToMin(aRecord.duration));
       } else {
-        res[res.length - 1] += parseMSToMin(aRecord.duration);
+        if (res.length === 0) {
+          res.push(parseMSToMin(aRecord.duration));
+        } else {
+          res[res.length - 1] += parseMSToMin(aRecord.duration);
+        }
       }
 
       currentDate = aRecord.endTime;
