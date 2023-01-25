@@ -56,6 +56,8 @@ export const ActionIconWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
+  -webkit-tap-highlight-color: transparent;
+
   padding: 8px;
   border-radius: 50%;
   cursor: pointer;

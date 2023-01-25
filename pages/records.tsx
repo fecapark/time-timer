@@ -1,19 +1,19 @@
 import styled from "@emotion/styled";
-import { MdFormatListBulleted, MdViewQuilt } from "react-icons/md";
-import GrassGraph from "../components/GrassGraph/GrassGraph";
+import { MdFormatListBulleted, MdOpenInNew, MdViewQuilt } from "react-icons/md";
 import FlexableNav, {
   FlexableNavItem,
 } from "../components/FlexableNav/FlexableNav";
 import { Theme } from "../styles/theme";
-import { ClockColorType } from "../shared/types";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
-import { currentFlexableNavSectionAtom as CFNS } from "../shared/atom";
-
-interface IValueDisplayerStyleProps {
-  inHead?: boolean;
-  testColor: ClockColorType;
-}
+import { FlexableNavSectionType } from "../shared/types";
+import { ReactNode } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  clockColorValueAtom,
+  currentFlexableNavSectionAtom as CFNS,
+} from "../shared/atom";
+import { Logo } from "../components/Intro/Intro.styled";
+import RecordOverview from "../components/Record/RecordOverview/RecordOverview";
+import RecordLogs from "../components/Record/RecordLogs/RecordLogs";
 
 const Container = styled.div`
   width: 100%;
@@ -22,124 +22,80 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+
+  footer {
+    width: 99%;
+    height: 240px;
+
+    border-top: 2px solid ${({ theme }) => theme.background.secondary};
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    .copyright {
+      font-size: 12px;
+      color: #a0a0a0;
+    }
+
+    .links {
+      margin-top: 12px;
+      display: flex;
+      gap: 16px;
+
+      a {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+
+        color: #a0a0a0;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      height: 360px;
+    }
+  }
 `;
 
-const PaddingAroundedContainer = styled.section`
+const PaddingAroundedContainer = styled.div`
   font-size: 14px;
 
   width: 100%;
   max-width: 800px;
+  min-height: calc(100vh - 250px - 9em);
+
   padding: 0 1em;
 
   display: flex;
   flex-direction: column;
-  gap: 16em;
 
   margin-top: 8em;
-`;
-
-const ContentHeader = styled.div`
-  font-size: 1.45em;
-  margin-bottom: 4.5em;
-
-  h2 {
-    font-family: ${({ theme }) => theme.font.family.raleway};
-    font-size: 1.6em;
-    line-height: 1.7em;
-    font-weight: 600;
-  }
-
-  h3 {
-    font-family: ${({ theme }) => theme.font.family.raleway};
-    font-size: 0.85em;
-    font-weight: 400;
-    color: #e0e0e0;
-  }
-
-  @media screen and (min-width: 499px) {
-    font-size: 1.7em;
-  }
 
   @media screen and (min-width: 799px) {
-    font-size: 2em;
-  }
-`;
-
-const ContentBody = styled.div`
-  width: 100%;
-
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 3em;
-
-  @media screen and (min-width: 799px) {
-    &[data-name="total-time"] {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      row-gap: 5em;
-
-      & > div[data-head="true"] {
-        grid-column: 1 / 4;
-      }
-    }
-
-    &[data-name="behavior"] {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-`;
-
-const ValueItem = styled.div`
-  font-size: 14px;
-  font-family: ${({ theme }) => theme.font.family.poppins};
-
-  &[data-head="true"] {
-    font-size: 20px;
-  }
-`;
-
-const ValueDisplayer = styled.div<IValueDisplayerStyleProps>`
-  span {
-    line-height: calc(1em + 10px);
-    font-weight: 400;
+    min-height: calc(100vh - 450px - 9em);
   }
 
-  .big {
-    font-size: 4em;
-    line-height: calc(1em + 10px);
-    color: ${(props) => props.theme.clock.color[props.testColor]};
+  @media screen and (min-width: 1269px) {
+    min-height: calc(100vh - 550px - 9em);
   }
-
-  .mid {
-    font-size: 2em;
-    color: ${(props) => props.theme.clock.color[props.testColor]};
-  }
-
-  .small {
-    font-size: 1.3em;
-    margin-left: 6px;
-  }
-
-  @media screen and (min-width: 799px) {
-    ${(props) =>
-      props.inHead
-        ? `
-      font-size: 1.4em;
-      `
-        : ""}
-  }
-`;
-
-const ValueInfo = styled.span`
-  font-size: 1.2em;
-  line-height: 1.1em;
-
-  font-weight: 300;
 `;
 
 export default function Records() {
-  const [testColor, setTestColor] = useState<ClockColorType>("green");
+  const clockColor = useRecoilValue(clockColorValueAtom);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
+
+  const sectionComponents: Record<FlexableNavSectionType, ReactNode> = {
+    overview: <RecordOverview />,
+    logs: <RecordLogs />,
+  };
 
   return (
     <Container>
@@ -148,7 +104,7 @@ export default function Records() {
           position="left"
           title="Overview"
           description="Gather your time records at a glance."
-          activeColor={`${Theme.clock.color[testColor]}99`}
+          activeColor={`${Theme.clock.color[clockColor]}99`}
           isFlexed={curNavSection === "logs"}
           flexedIcon={<MdViewQuilt />}
           onFlexedClick={() => {
@@ -159,7 +115,7 @@ export default function Records() {
           position="right"
           title="Logs"
           description="Watch your records as a timeline."
-          activeColor={`${Theme.clock.color[testColor]}99`}
+          activeColor={`${Theme.clock.color[clockColor]}99`}
           isFlexed={curNavSection === "overview"}
           flexedIcon={<MdFormatListBulleted />}
           onFlexedClick={() => {
@@ -168,92 +124,39 @@ export default function Records() {
         />
       </FlexableNav>
       <PaddingAroundedContainer>
-        <div>
-          <ContentHeader>
-            <h2>Total Time</h2>
-            <h3>For only over 10 minutes records.</h3>
-          </ContentHeader>
-          <ContentBody data-name="total-time">
-            <ValueItem data-head="true">
-              <ValueDisplayer testColor={testColor} inHead={true}>
-                <span className="big">1234.</span>
-                <span className="mid">89</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>For whole days</ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">2.</span>
-                <span className="mid">39</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>For today</ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">127.</span>
-                <span className="mid">21</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>For a week</ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">474.</span>
-                <span className="mid">03</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>For a month</ValueInfo>
-            </ValueItem>
-          </ContentBody>
-        </div>
-        <div>
-          <ContentHeader>
-            <h2>Time Table</h2>
-            <h3>Visualize your recorded times per a day.</h3>
-          </ContentHeader>
-          <GrassGraph color={Theme.clock.color[testColor]} />
-        </div>
-        <div>
-          <ContentHeader>
-            <h2>Behaviors</h2>
-            <h3>We also collect your timing behaviors.</h3>
-          </ContentHeader>
-          <ContentBody data-name="behavior">
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">78</span>
-                <span className="small">%</span>
-              </ValueDisplayer>
-              <ValueInfo>
-                Finish timing
-                <br />
-                without pause
-              </ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">12</span>
-              </ValueDisplayer>
-              <ValueInfo>
-                Maximum days
-                <br />
-                in a row
-              </ValueInfo>
-            </ValueItem>
-            <ValueItem>
-              <ValueDisplayer testColor={testColor}>
-                <span className="big">6</span>
-                <span className="mid">.8</span>
-                <span className="small">H</span>
-              </ValueDisplayer>
-              <ValueInfo>Longest timing duration</ValueInfo>
-            </ValueItem>
-          </ContentBody>
-        </div>
+        {sectionComponents[curNavSection]}
       </PaddingAroundedContainer>
-      <footer></footer>
+      <footer>
+        <Logo
+          size={14}
+          hide={false}
+          style={{ filter: "brightness(0.94)", flexDirection: "row" }}
+        >
+          <div className="word">Time</div>
+          <div className="word bottom">Timer</div>
+        </Logo>
+        <span className="copyright">
+          Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
+        </span>
+        <div className="links">
+          <a
+            href="https://github.com/fecapark/time-timer"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Github</span>
+            <MdOpenInNew />
+          </a>
+          <a
+            href="https://www.timetimer.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>About Time Timer</span>
+            <MdOpenInNew />
+          </a>
+        </div>
+      </footer>
     </Container>
   );
 }

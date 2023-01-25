@@ -1,4 +1,5 @@
 import {
+  MdAllInbox,
   MdDesktopWindows,
   MdKeyboardArrowLeft,
   MdNotifications,
@@ -23,6 +24,7 @@ import {
   Container,
   MainMenuBar,
   SectionItemContainer,
+  SectionLinkItemContainer,
   SliderContainer,
 } from "./FixedMenu.styled";
 import {
@@ -39,6 +41,7 @@ import TimeSectionContent from "./contents/Time";
 import { useQuery } from "@tanstack/react-query";
 import { getOptionFromDB, OPTION_DB_KEY } from "../../../hooks/useIDB";
 import { useOptionSetEffect } from "../menu.util";
+import Link from "next/link";
 
 function Slider({ children, onClose }: ISliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -46,9 +49,6 @@ function Slider({ children, onClose }: ISliderProps) {
   const isTimingNow = useRecoilValue(ITN);
   const [isSliderActive, setIsSliderActive] = useRecoilState(ISA);
   const [isHideTimer] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
-
-  const { data: optionData } = useQuery([OPTION_DB_KEY], getOptionFromDB);
-  useOptionSetEffect;
 
   const closeSlider = () => {
     setIsSliderActive(false);
@@ -126,6 +126,20 @@ function SectionItem({
   );
 }
 
+function SectionLinkItem({ icon, text, href }: IOpenLinkItemProps) {
+  return (
+    <Link
+      href={href}
+      style={{ textDecoration: "none", WebkitTapHighlightColor: "transparent" }}
+    >
+      <SectionLinkItemContainer active={false}>
+        <div className="icon-wrapper">{icon}</div>
+        <span className="item-text">{text}</span>
+      </SectionLinkItemContainer>
+    </Link>
+  );
+}
+
 function OpenLinkItem({ icon, text, href }: IOpenLinkItemProps) {
   return (
     <SectionItemContainer active={false}>
@@ -163,6 +177,14 @@ export default function FixedMenu() {
       </Slider>
       <MainMenuBar>
         <div className="section">
+          <SectionLinkItem
+            href="/records"
+            icon={<MdAllInbox />}
+            text="Records"
+          />
+
+          <div style={{ height: "24px" }}></div>
+
           <SectionItem
             defaultIcon={<IoMdTime />}
             text={language === "kor" ? "시간" : "Time"}
@@ -189,6 +211,8 @@ export default function FixedMenu() {
             selected={section === "notification"}
             onClick={() => setSection("notification")}
           ></SectionItem>
+
+          <div style={{ height: "24px" }}></div>
         </div>
         <div className="section">
           <OpenLinkItem

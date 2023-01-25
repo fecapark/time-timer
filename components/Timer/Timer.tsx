@@ -18,8 +18,12 @@ import RoundButton from "../Button/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
+import useRecordManager from "../../hooks/useRecordManager";
 
 let timerInterval: NodeJS.Timer | null = null;
+let startTime: Date | null = null;
+let startDegree: number = 0;
+let isPausedBefore: boolean = false;
 
 export default function Timer({ onTimingStart }: IProps) {
   const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
@@ -31,19 +35,22 @@ export default function Timer({ onTimingStart }: IProps) {
   const maxClockTime = useRecoilValue(MCT);
   const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+  const { manageBehavior, manageTimeRecords } = useRecordManager();
   const isEmptyClockDegree = clockDegree >= 360;
+
+  /* 
+    Functions
+  */
+
+  const removeTimerInterval = () => {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+  };
 
   const startTimer = () => {
     const getNextDegree = (prevDegree: number, elapsedTime: number) => {
       const timeParseFactor = maxClockTime / 6;
       const result = prevDegree + elapsedTime / timeParseFactor;
-      const degreeOvered = result > 360;
-
-      if (degreeOvered && timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-
       return Math.min(360, result);
     };
 
@@ -54,33 +61,54 @@ export default function Timer({ onTimingStart }: IProps) {
       prevTime = curTime;
     };
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    if (timerInterval) removeTimerInterval();
 
     let prevTime = new Date().getTime();
+    startTime = new Date();
+    startDegree = clockDegree;
     timerInterval = setInterval(onInterval, 1000);
   };
 
   const pauseTimer = () => {
+    isPausedBefore = true;
     setIsTimingNow(false);
   };
 
-  useEffect(() => {
-    if (isTimingNow) return;
-    if (!timerInterval) return;
+  const getCompleteRatio = () => {
+    return 1 - (360 - clockDegree) / (360 - startDegree);
+  };
 
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }, [isTimingNow]);
-
+  /*
+    Effects
+  */
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
     if (!isTimingEnd) return;
 
+    isPausedBefore = false;
     setIsTimingNow(false);
   }, [clockDegree, isClockPointerDown]);
+
+  useEffect(() => {
+    if (isTimingNow) return;
+    if (!timerInterval) return;
+    if (startTime === null) return;
+
+    removeTimerInterval();
+
+    const endTime = new Date();
+    const timingDuration = endTime.getTime() - startTime.getTime();
+
+    if (timingDuration < 10 * 60 * 1000) return; // 10 min
+    manageBehavior({ isPausedBefore, endTime, timingDuration });
+    manageTimeRecords({
+      isPausedBefore,
+      startTime: startTime!,
+      endTime,
+      completeRatio: getCompleteRatio(),
+      timingDuration,
+    });
+  }, [isTimingNow]);
 
   return (
     <Container>

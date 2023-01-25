@@ -22,3 +22,8 @@ export interface IMenuContentLinkerProps {
   content: React.ReactNode;
   linkTo: MenuContentType;
 }
+
+export interface IRouterItemProps {
+  href: string;
+  text: string;
+}

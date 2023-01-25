@@ -37,7 +37,7 @@ const GlobalStyle = css`
   }
 
   #__next {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }

@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
 
+interface ILogoStyleProps {
+  hide: boolean;
+  size?: number;
+}
+
 export const IntroContainer = styled.div<{ hide: boolean }>`
   position: absolute;
   top: 0;
@@ -19,9 +24,9 @@ export const IntroContainer = styled.div<{ hide: boolean }>`
   transition: 0.4s cubic-bezier(0.2, 0, 0, 1);
 `;
 
-export const Logo = styled.div<{ hide: boolean }>`
+export const Logo = styled.div<ILogoStyleProps>`
   ${({ theme }) => theme.shareCSS.noDrag};
-  font-size: 18px;
+  font-size: ${(props) => props.size}px;
 
   display: flex;
   align-items: center;
@@ -34,6 +39,7 @@ export const Logo = styled.div<{ hide: boolean }>`
 
   .word {
     padding: 0.16em 0.33em;
+    color: #ffffff;
 
     &.bottom {
       background-color: white;
@@ -45,3 +51,7 @@ export const Logo = styled.div<{ hide: boolean }>`
   visibility: ${(props) => (props.hide ? "hidden" : "visible")};
   transition: 0.22s ease;
 `;
+
+Logo.defaultProps = {
+  size: 18,
+};

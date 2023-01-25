@@ -9,6 +9,7 @@ import useMediaMatch from "../hooks/useMediaMatch";
 import { useState } from "react";
 import Intro from "../components/Intro/Intro";
 import AppMiddleware from "../components/Middleware/AppMiddleware";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const qc = new QueryClient();
 
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <ThemeProvider theme={Theme}>
           <QueryClientProvider client={qc}>
+            <ReactQueryDevtools />
             <GlobalTheme />
             <AppMiddleware />
             <Component {...pageProps} />

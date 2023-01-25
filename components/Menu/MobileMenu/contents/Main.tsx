@@ -1,14 +1,18 @@
-import { MdArrowForward, MdOpenInNew } from "react-icons/md";
+import { MdAllInbox, MdArrowForward, MdOpenInNew } from "react-icons/md";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useModal from "../../../../hooks/useModal";
 import PreviewSoundModal from "../../../Modal/contents/PreviewSoundModal/PreviewSoundModal";
 import SupportingInfoModal from "../../../Modal/contents/SupportingInfoModal/SupportingInfoModal";
 import { ItemDrawer, SelectableItem } from "../../menu";
 import { ItemContainer, OpenLink } from "../../menu.styled";
-import { FadeFromLeftAnimationCSS } from "../MobileMenu.styled";
+import {
+  FadeFromLeftAnimationCSS,
+  RouterItemContainer,
+} from "../MobileMenu.styled";
 import {
   IMenuContentLinkerProps,
   IOpenLinkItemProps,
+  IRouterItemProps,
 } from "../MobileMenu.type";
 import {
   mobileMenuContentAtom as MMC,
@@ -16,6 +20,7 @@ import {
 } from "../../../../shared/atom";
 import { BsGithub } from "react-icons/bs";
 import { useOptionQuery } from "../../menu.util";
+import Link from "next/link";
 
 function OpenLinkItem({
   icon = <MdOpenInNew />,
@@ -29,6 +34,20 @@ function OpenLinkItem({
         {icon}
       </OpenLink>
     </ItemContainer>
+  );
+}
+
+function RouterItem({ href, text }: IRouterItemProps) {
+  return (
+    <Link
+      href={href}
+      style={{ textDecoration: "none", WebkitTapHighlightColor: "transparent" }}
+    >
+      <RouterItemContainer>
+        <span>{text}</span>
+        <MdAllInbox />
+      </RouterItemContainer>
+    </Link>
   );
 }
 
@@ -81,6 +100,9 @@ export default function MainMenuContent({
 
   return (
     <div css={FadeFromLeftAnimationCSS}>
+      <RouterItem text="Records" href="/records" />
+      <div style={{ margin: "24px 0" }} />
+
       <MenuContentLinker
         content={language === "kor" ? "시간" : "Time"}
         linkTo="time"

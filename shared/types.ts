@@ -24,6 +24,27 @@ export interface IOptionDataType {
   clockTimeUnit: ClockTimeUnitType;
 }
 
+export interface ITimeRecordDataType {
+  duration: number;
+  startTime: Date;
+  endTime: Date;
+  finishedByPaused: boolean;
+  completeRatio: number;
+}
+
+export interface IBehaviorDataType {
+  finishBehavior: {
+    pauseCount: number;
+    wholeCount: number;
+  };
+  daysInARow: {
+    maximumDays: number;
+    currentDays: number;
+    recentDate: Date | null;
+  };
+  longestDuration: number;
+}
+
 export type SetStateType<T> = Dispatch<SetStateAction<T>>;
 
 export type LanguageOptionType = "kor" | "en";

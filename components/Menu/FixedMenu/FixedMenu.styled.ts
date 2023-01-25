@@ -164,6 +164,9 @@ const FadeContentKeyframe = keyframes`
     opacity: 1;
   }
 `;
+
 export const FadeContentAnimationCSS = css`
   animation: ${FadeContentKeyframe} 0.5s cubic-bezier(0.2, 0, 0, 1) forwards;
 `;
+
+export const SectionLinkItemContainer = styled(SectionItemContainer)``;

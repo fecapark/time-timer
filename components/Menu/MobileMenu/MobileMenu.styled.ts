@@ -1,5 +1,6 @@
 import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+import { ItemContainer } from "../menu.styled";
 
 export const MenuContainer = styled.div<{ isActive: boolean }>`
   position: fixed;
@@ -90,6 +91,10 @@ export const MenuContentContainer = styled.div<{ isActive: boolean }>`
 
     text-align: center;
   }
+
+  @media screen and (max-width: 768px) {
+    padding-top: ${({ theme }) => theme.font.bodySize * 1.5 - 16}px;
+  }
 `;
 
 export const FadeFromRightKeyframe = keyframes`
@@ -137,5 +142,13 @@ export const ContentTitle = styled.h1`
   .title {
     font-size: 1.5em;
     font-weight: 600;
+  }
+`;
+
+export const RouterItemContainer = styled(ItemContainer)`
+  text-decoration: none;
+
+  svg {
+    font-size: 1.6em;
   }
 `;
