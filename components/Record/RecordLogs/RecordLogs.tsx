@@ -133,12 +133,13 @@ export default function RecordLogs() {
     });
     res.push(curRes);
 
-    return res.map((aDayRecords) => {
+    return res.map((aDayRecords, i) => {
       return (
-        <div className="same-day-container">
-          {aDayRecords.map((aRecord) => {
+        <div className="same-day-container" key={i}>
+          {aDayRecords.map((aRecord, j) => {
             return (
               <RecordCard
+                key={`${i}_${j}`}
                 duration={aRecord.duration}
                 endTime={aRecord.endTime}
                 paused={aRecord.finishedByPaused}
