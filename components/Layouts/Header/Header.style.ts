@@ -12,6 +12,7 @@ export const IconContainer = styled.div`
 
   transform: translate3d(-8px, -8px, 0);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     background-color: #323236;

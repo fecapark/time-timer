@@ -42,6 +42,7 @@ export const FlexableNavItemContainer = styled.div<IFlexableNavItemStyleProps>`
   color: #eaf4f0;
 
   cursor: ${(props) => (props.isFlexed ? "pointer" : "default")};
+  -webkit-tap-highlight-color: transparent;
 
   transition: ${(props) =>
     props.isTransitioning

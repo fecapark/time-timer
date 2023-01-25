@@ -26,8 +26,11 @@ const Container = styled.div`
   justify-content: space-between;
 
   padding: 2.5em 0;
-
   overflow-y: hidden;
+
+  @media screen and (max-width: 768px) {
+    padding: 1.5em 0;
+  }
 `;
 
 const Main = styled.div`

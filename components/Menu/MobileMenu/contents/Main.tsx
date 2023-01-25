@@ -39,7 +39,10 @@ function OpenLinkItem({
 
 function RouterItem({ href, text }: IRouterItemProps) {
   return (
-    <Link href={href}>
+    <Link
+      href={href}
+      style={{ textDecoration: "none", WebkitTapHighlightColor: "transparent" }}
+    >
       <RouterItemContainer>
         <span>{text}</span>
         <MdAllInbox />

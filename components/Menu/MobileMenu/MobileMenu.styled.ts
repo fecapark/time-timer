@@ -91,6 +91,10 @@ export const MenuContentContainer = styled.div<{ isActive: boolean }>`
 
     text-align: center;
   }
+
+  @media screen and (max-width: 768px) {
+    padding-top: ${({ theme }) => theme.font.bodySize * 1.5 - 16}px;
+  }
 `;
 
 export const FadeFromRightKeyframe = keyframes`
