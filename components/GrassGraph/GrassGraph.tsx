@@ -31,7 +31,7 @@ function Grass({ value, color, colorBoundary }: IGrassProps) {
   return (
     <GrassBlock
       backgroundColor={getGrassColorByValue(value, color, colorBoundary)}
-    />
+    ></GrassBlock>
   );
 }
 

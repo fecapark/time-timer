@@ -80,7 +80,7 @@ export const CardBox = styled.div<{ borderColor: string }>`
 
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 80px;
 
   opacity: 0;
   transform: translate3d(0, 30px, 0);
@@ -88,17 +88,21 @@ export const CardBox = styled.div<{ borderColor: string }>`
     forwards;
 
   .same-day-container {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
 
-    border-left: 4px solid ${(props) => props.borderColor};
-    padding-left: 32px;
+      border-left: 4px solid ${(props) => props.borderColor};
+      padding-left: 32px;
+    }
   }
 
   @media screen and (max-width: 800px) {
     .same-day-container {
-      padding-left: 24px;
+      .card-container {
+        padding-left: 24px;
+      }
     }
   }
 `;

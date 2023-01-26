@@ -10,12 +10,39 @@ import {
   clockColorValueAtom as CCV,
   languageOptionValueAtom as LOV,
 } from "../../../shared/atom";
-import { ITimeRecordDataType } from "../../../shared/types";
+import { ITimeRecordDataType, LanguageOptionType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import { getDayGapBetween } from "../../../utils/time";
 import { RiFlag2Fill } from "react-icons/ri";
 import { IRecordCardProps } from "./RecordLogs.type";
 import { CardBox, CardContainer, NoLogContainer } from "./RecordLogs.styled";
+import { MdCalendarToday } from "react-icons/md";
+
+const getDateString = (time: Date, language: LanguageOptionType) => {
+  const monthName = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  if (language === "kor")
+    return `${time.getFullYear()}년 ${
+      time.getMonth() + 1
+    }월 ${time.getDate()}일`;
+
+  return `${
+    monthName[time.getMonth()]
+  } ${time.getDate()}, ${time.getFullYear()}`;
+};
 
 function RecordCard({
   duration,
@@ -59,32 +86,6 @@ function RecordCard({
       : `${Math.floor(dayGap / 365)}y ago`;
   };
 
-  const getDateString = () => {
-    const monthName = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    if (language === "kor")
-      return `${endTime.getFullYear()}년 ${
-        endTime.getMonth() + 1
-      }월 ${endTime.getDate()}일`;
-
-    return `${
-      monthName[endTime.getMonth()]
-    } ${endTime.getDate()}, ${endTime.getFullYear()}`;
-  };
-
   return (
     <CardContainer accentColor={`${Theme.clock.color[clockColor]}`}>
       <div className="time-displayer">
@@ -95,7 +96,7 @@ function RecordCard({
       <div className="info-container">
         <div className="date-info">
           <span className="date-ago">{getHowMuchDateAgo()}</span>
-          <span className="full-date">{getDateString()}</span>
+          <span className="full-date">{getDateString(endTime, language)}</span>
         </div>
         <div className="pause-info">
           {paused ? (
@@ -152,19 +153,43 @@ export default function RecordLogs() {
     res.push(curRes);
 
     return res.map((aDayRecords, i) => {
+      if (aDayRecords.length === 0) return null;
+
+      function durationToTime(duration: number) {
+        const hour = Math.floor(duration / 1000 / 60 / 60);
+        const min = Math.floor(duration / 1000 / 60) % 60;
+        const sec = Math.floor(duration / 1000) % 60;
+
+        if (language === "kor") {
+          if (hour === 0 && min === 0) return `${sec}초`;
+          if (hour === 0) return `${min}분 ${sec}초`;
+          return `${hour}시간 ${min}분 ${sec}초`;
+        }
+
+        if (hour === 0 && min === 0) return `${sec}s`;
+        if (hour === 0) return `${min}m ${sec}s`;
+        return `${hour}h ${min}m ${sec}s`;
+      }
+
+      const total = aDayRecords.reduce((acc, cur) => {
+        return acc + cur.duration;
+      }, 0);
+
       return (
         <div className="same-day-container" key={i}>
-          {aDayRecords.map((aRecord, j) => {
-            return (
-              <RecordCard
-                key={`${i}_${j}`}
-                duration={aRecord.duration}
-                endTime={aRecord.endTime}
-                paused={aRecord.finishedByPaused}
-                completeRatio={aRecord.completeRatio}
-              />
-            );
-          })}
+          <div className="card-container">
+            {aDayRecords.map((aRecord, j) => {
+              return (
+                <RecordCard
+                  key={`${i}_${j}`}
+                  duration={aRecord.duration}
+                  endTime={aRecord.endTime}
+                  paused={aRecord.finishedByPaused}
+                  completeRatio={aRecord.completeRatio}
+                />
+              );
+            })}
+          </div>
         </div>
       );
     });
