@@ -1,6 +1,19 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { IGraduationStyleProps } from "./Clock.type";
 import { getRotatedPosition } from "./Clock.util";
+
+const ClockFadeKeyframe = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`;
 
 export const Container = styled.div`
   ${({ theme }) => theme.shareCSS.noDrag};
@@ -13,6 +26,10 @@ export const Container = styled.div`
   align-items: center;
 
   transform-origin: center center;
+
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  animation: ${ClockFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.4s forwards;
 `;
 
 export const MainClock = styled.div`
