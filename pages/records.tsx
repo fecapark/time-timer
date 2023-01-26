@@ -27,22 +27,9 @@ const Container = styled.div`
   flex-direction: column;
 
   .flexable {
+    max-width: 1760px;
     width: 100%;
     height: 250px;
-
-    display: flex;
-    gap: 8px;
-
-    .go-home {
-      width: 60px;
-      height: 100%;
-      background-color: ${({ theme }) => theme.background.secondary};
-      border-radius: 24px;
-
-      &:hover {
-        width: 90px;
-      }
-    }
 
     @media screen and (min-width: 799px) {
       height: 450px;

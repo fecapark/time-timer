@@ -3,8 +3,6 @@ import styled from "@emotion/styled";
 import { IFlexableNavItemStyleProps } from "./FlexableNav.type";
 
 export const FlexableNavContainer = styled.div`
-  max-width: 1760px;
-
   width: 100%;
   height: 100%;
 
