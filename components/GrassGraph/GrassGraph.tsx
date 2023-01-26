@@ -11,6 +11,8 @@ import {
   IGrassGraphProps,
   IGrassProps,
 } from "./GrassGraph.type";
+import { languageOptionValueAtom as LOV } from "../../shared/atom";
+import { useRecoilValue } from "recoil";
 
 const getGrassColorByValue = (
   value: number,
@@ -66,6 +68,7 @@ export default function GrassGraph({
 }: IGrassGraphProps) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [gridMaxItems, setGridMaxItems] = useState(0);
+  const language = useRecoilValue(LOV);
 
   /* 
     Memos
@@ -112,8 +115,8 @@ export default function GrassGraph({
     <Container>
       <ContentContainer>
         <div className="grid-timeline-info">
-          <span>Past</span>
-          <span>Present</span>
+          <span>{language === "kor" ? "예전" : "Past"}</span>
+          <span>{language === "kor" ? "최근" : "Present"}</span>
         </div>
         <GrassGrid ref={gridRef}>
           {parsedDatas.map((v, i) => {
@@ -128,14 +131,14 @@ export default function GrassGraph({
           })}
         </GrassGrid>
         <GrassColorsetInfo
-          leftText="0min"
-          rightText="2hrs"
+          leftText={language === "kor" ? "0분" : "0min"}
+          rightText={language === "kor" ? "2시간" : "2hrs"}
           color={color}
           colorBoundary={colorBoundary}
         />
       </ContentContainer>
       <div className="grid-date-info">
-        <span>Today</span>
+        <span>{language === "kor" ? "오늘" : "Today"}</span>
       </div>
     </Container>
   );

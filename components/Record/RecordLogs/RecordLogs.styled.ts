@@ -58,7 +58,6 @@ export const NoLogContainer = styled.div`
 
     .title {
       font-size: 1em;
-      letter-spacing: 1.5px;
       font-weight: 500;
     }
 

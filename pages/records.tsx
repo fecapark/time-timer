@@ -8,7 +8,8 @@ import { FlexableNavSectionType } from "../shared/types";
 import { ReactNode } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  clockColorValueAtom,
+  languageOptionValueAtom as LOV,
+  clockColorValueAtom as CCV,
   currentFlexableNavSectionAtom as CFNS,
 } from "../shared/atom";
 import { Logo } from "../components/Intro/Intro.styled";
@@ -154,7 +155,8 @@ const GoHomeButtonContainer = styled.div<{ color: string }>`
 `;
 
 export default function Records() {
-  const clockColor = useRecoilValue(clockColorValueAtom);
+  const language = useRecoilValue(LOV);
+  const clockColor = useRecoilValue(CCV);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
 
   const sectionComponents: Record<FlexableNavSectionType, ReactNode> = {
@@ -169,8 +171,12 @@ export default function Records() {
           <FlexableNav>
             <FlexableNavItem
               position="left"
-              title="Overview"
-              description="Gather your time records at a glance."
+              title={language === "kor" ? "개요" : "Overview"}
+              description={
+                language === "kor"
+                  ? "한 눈에 기록된 시간들을 모아보세요."
+                  : "Gather your time records at a glance."
+              }
               activeColor={`${Theme.clock.color[clockColor]}99`}
               isFlexed={curNavSection === "logs"}
               flexedIcon={<MdViewQuilt />}
@@ -180,8 +186,12 @@ export default function Records() {
             />
             <FlexableNavItem
               position="right"
-              title="Logs"
-              description="Watch your records as a timeline."
+              title={language === "kor" ? "기록" : "Logs"}
+              description={
+                language === "kor"
+                  ? "기록된 시간들을 시간순으로 나열했어요."
+                  : "Watch your records as a timeline."
+              }
               activeColor={`${Theme.clock.color[clockColor]}99`}
               isFlexed={curNavSection === "overview"}
               flexedIcon={<MdFormatListBulleted />}

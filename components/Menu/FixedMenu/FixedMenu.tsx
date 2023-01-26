@@ -177,7 +177,7 @@ export default function FixedMenu() {
           <SectionLinkItem
             href="/records"
             icon={<MdAllInbox />}
-            text="Records"
+            text={language === "kor" ? "기록" : "Records"}
           />
 
           <div style={{ height: "24px" }}></div>

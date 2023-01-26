@@ -6,7 +6,10 @@ import {
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
 } from "../../../hooks/useIDB";
-import { clockColorValueAtom } from "../../../shared/atom";
+import {
+  clockColorValueAtom as CCV,
+  languageOptionValueAtom as LOV,
+} from "../../../shared/atom";
 import { ITimeRecordDataType } from "../../../shared/types";
 import { Theme } from "../../../styles/theme";
 import { getDayGapBetween } from "../../../utils/time";
@@ -20,7 +23,8 @@ function RecordCard({
   paused,
   completeRatio,
 }: IRecordCardProps) {
-  const clockColor = useRecoilValue(clockColorValueAtom);
+  const language = useRecoilValue(LOV);
+  const clockColor = useRecoilValue(CCV);
 
   const getMinSec = () => {
     const min = Math.floor(duration / 1000 / 60).toString();
@@ -39,11 +43,20 @@ function RecordCard({
   const getHowMuchDateAgo = () => {
     const dayGap = getDayGapBetween(new Date(), endTime);
 
-    if (dayGap === 0) return "Today";
-    if (dayGap < 7) return `${dayGap}d ago`;
-    if (dayGap < 30) return `${Math.floor(dayGap / 7)}w ago`;
-    if (dayGap < 365) return `${Math.floor(dayGap / 30)}m ago`;
-    return `${Math.floor(dayGap / 365)}y ago`;
+    if (dayGap === 0) return language === "kor" ? "오늘" : "Today";
+    if (dayGap < 7)
+      return language === "kor" ? `${dayGap}일 전` : `${dayGap}d ago`;
+    if (dayGap < 30)
+      return language === "kor"
+        ? `${Math.floor(dayGap / 7)}주 전`
+        : `${Math.floor(dayGap / 7)}w ago`;
+    if (dayGap < 365)
+      return language === "kor"
+        ? `${Math.floor(dayGap / 30)}달 전`
+        : `${Math.floor(dayGap / 30)}m ago`;
+    return language === "kor"
+      ? `${Math.floor(dayGap / 365)}년 전`
+      : `${Math.floor(dayGap / 365)}y ago`;
   };
 
   const getDateString = () => {
@@ -61,6 +74,12 @@ function RecordCard({
       "Nov",
       "Dec",
     ];
+
+    if (language === "kor")
+      return `${endTime.getFullYear()}년 ${
+        endTime.getMonth() + 1
+      }월 ${endTime.getDate()}일`;
+
     return `${
       monthName[endTime.getMonth()]
     } ${endTime.getDate()}, ${endTime.getFullYear()}`;
@@ -93,7 +112,8 @@ function RecordCard({
 }
 
 export default function RecordLogs() {
-  const clockColor = useRecoilValue(clockColorValueAtom);
+  const language = useRecoilValue(LOV);
+  const clockColor = useRecoilValue(CCV);
 
   /*
     Queries
@@ -157,9 +177,16 @@ export default function RecordLogs() {
         <NoLogContainer>
           <FaBoxOpen />
           <div>
-            <span className="title">EMPTY</span>
+            <span
+              className="title"
+              style={{ letterSpacing: language === "kor" ? "0" : "1.5px" }}
+            >
+              {language === "kor" ? "비어있음" : "EMPTY"}
+            </span>
             <span className="description">
-              Start the timer over 10 minutes first.
+              {language === "kor"
+                ? "먼저 타이머를 시작해 10분 이상의 시간을 기록해보세요."
+                : "Start the timer over 10 minutes first."}
             </span>
           </div>
         </NoLogContainer>

@@ -7,7 +7,10 @@ import {
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
 } from "../../../hooks/useIDB";
-import { clockColorValueAtom } from "../../../shared/atom";
+import {
+  clockColorValueAtom as CCV,
+  languageOptionValueAtom as LOV,
+} from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import { getDayGapBetween } from "../../../utils/time";
 import GrassGraph from "../../GrassGraph/GrassGraph";
@@ -21,7 +24,8 @@ import {
 } from "./RecordOverview.styled";
 
 export default function RecordOverview() {
-  const clockColor = useRecoilValue(clockColorValueAtom);
+  const clockColor = useRecoilValue(CCV);
+  const language = useRecoilValue(LOV);
 
   /*
     Queries
@@ -167,8 +171,12 @@ export default function RecordOverview() {
         <>
           <ContentSection>
             <ContentHeader>
-              <h2>Total Time</h2>
-              <h3>For only over 10 minutes records.</h3>
+              <h2>{language === "kor" ? "기록된 시간들" : "Total Time"}</h2>
+              <h3>
+                {language === "kor"
+                  ? "10분 이상의 기록들만 보여드릴게요."
+                  : "For only over 10 minutes records."}
+              </h3>
             </ContentHeader>
             <ContentBody data-name="total-time">
               <ValueItem data-head="true">
@@ -177,7 +185,9 @@ export default function RecordOverview() {
                   <span className="mid">{durationSums.today?.float}</span>
                   <span className="small">H</span>
                 </ValueDisplayer>
-                <ValueInfo>For today</ValueInfo>
+                <ValueInfo>
+                  {language === "kor" ? "오늘은 이만큼 하셨어요." : "For today"}
+                </ValueInfo>
               </ValueItem>
               <ValueItem>
                 <ValueDisplayer testColor={clockColor}>
@@ -185,7 +195,9 @@ export default function RecordOverview() {
                   <span className="mid">{durationSums.week?.float}</span>
                   <span className="small">H</span>
                 </ValueDisplayer>
-                <ValueInfo>For a week</ValueInfo>
+                <ValueInfo>
+                  {language === "kor" ? "최근 7일간" : "For a week"}
+                </ValueInfo>
               </ValueItem>
               <ValueItem>
                 <ValueDisplayer testColor={clockColor}>
@@ -193,7 +205,9 @@ export default function RecordOverview() {
                   <span className="mid">{durationSums.month?.float}</span>
                   <span className="small">H</span>
                 </ValueDisplayer>
-                <ValueInfo>For a month</ValueInfo>
+                <ValueInfo>
+                  {language === "kor" ? "최근 30일간" : "For a month"}
+                </ValueInfo>
               </ValueItem>
               <ValueItem>
                 <ValueDisplayer testColor={clockColor}>
@@ -201,14 +215,20 @@ export default function RecordOverview() {
                   <span className="mid">{durationSums.all?.float}</span>
                   <span className="small">H</span>
                 </ValueDisplayer>
-                <ValueInfo>For whole days</ValueInfo>
+                <ValueInfo>
+                  {language === "kor" ? "전체 기간동안" : "For whole days"}
+                </ValueInfo>
               </ValueItem>
             </ContentBody>
           </ContentSection>
           <ContentSection>
             <ContentHeader>
-              <h2>Time Table</h2>
-              <h3>Visualize your recorded times per a day.</h3>
+              <h2>{language === "kor" ? "시간 그래프" : "Time Table"}</h2>
+              <h3>
+                {language === "kor"
+                  ? "기록된 시간들을 하루 단위로 시각화해서 보여드릴게요."
+                  : "Visualize your recorded times per a day."}
+              </h3>
             </ContentHeader>
             <GrassGraph
               recentDatas={timeValues}
@@ -218,8 +238,12 @@ export default function RecordOverview() {
           </ContentSection>
           <ContentSection>
             <ContentHeader>
-              <h2>Behaviors</h2>
-              <h3>We also collect your timing behaviors.</h3>
+              <h2>{language === "kor" ? "행동 분석" : "Behaviors"}</h2>
+              <h3>
+                {language === "kor"
+                  ? "사용자님은 어떻게 타이머를 사용하였을까요?"
+                  : "We also collect your timing behaviors."}
+              </h3>
             </ContentHeader>
             <ContentBody data-name="behavior">
               <ValueItem>
@@ -228,9 +252,9 @@ export default function RecordOverview() {
                   <span className="small">%</span>
                 </ValueDisplayer>
                 <ValueInfo>
-                  Finish timing
+                  {language === "kor" ? "설정한 시간을" : "Finish timing"}
                   <br />
-                  without pause
+                  {language === "kor" ? "완료한 비율" : "without pause"}
                 </ValueInfo>
               </ValueItem>
               <ValueItem>
@@ -238,9 +262,9 @@ export default function RecordOverview() {
                   <span className="big">{getMaximumRowDays()}</span>
                 </ValueDisplayer>
                 <ValueInfo>
-                  Maximum days
+                  {language === "kor" ? "최대 연속 일 수" : "Maximum days"}
                   <br />
-                  in a row
+                  {language === "kor" ? "" : "in a row"}
                 </ValueInfo>
               </ValueItem>
               <ValueItem>
@@ -251,7 +275,11 @@ export default function RecordOverview() {
                   </span>
                   <span className="small">H</span>
                 </ValueDisplayer>
-                <ValueInfo>Longest timing duration</ValueInfo>
+                <ValueInfo>
+                  {language === "kor"
+                    ? "가장 길게 사용한 시간"
+                    : "Longest timing duration"}
+                </ValueInfo>
               </ValueItem>
             </ContentBody>
           </ContentSection>
