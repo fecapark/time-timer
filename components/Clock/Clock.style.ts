@@ -26,10 +26,6 @@ export const Container = styled.div`
   align-items: center;
 
   transform-origin: center center;
-
-  opacity: 0;
-  transform: translate3d(0, 30px, 0);
-  animation: ${ClockFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.4s forwards;
 `;
 
 export const MainClock = styled.div`
@@ -42,6 +38,10 @@ export const MainClock = styled.div`
 
   touch-action: none;
   cursor: grab;
+
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  animation: ${ClockFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.4s forwards;
 `;
 
 export const ClockCenter = styled.div`
