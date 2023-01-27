@@ -11,6 +11,7 @@ import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
   currentFlexableNavSectionAtom as CFNS,
+  onFlexableNavTransitionAtom as OFNT,
 } from "../shared/atom";
 import { Logo } from "../components/Intro/Intro.styled";
 import RecordOverview from "../components/Record/RecordOverview/RecordOverview";
@@ -18,6 +19,7 @@ import RecordLogs from "../components/Record/RecordLogs/RecordLogs";
 import Link from "next/link";
 import { IoMdTime } from "react-icons/io";
 import { darken } from "polished";
+import ConditionalLink from "../components/Button/ConditionalLink/ConditionalLink";
 
 const Container = styled.div`
   width: 100%;
@@ -106,7 +108,7 @@ const PaddingAroundedContainer = styled.div`
   }
 `;
 
-const GoHomeButtonContainer = styled.div<{ color: string }>`
+const GoHomeButtonContainer = styled.button<{ color: string }>`
   font-size: 48px;
 
   position: fixed;
@@ -157,6 +159,7 @@ const GoHomeButtonContainer = styled.div<{ color: string }>`
 export default function Records() {
   const language = useRecoilValue(LOV);
   const clockColor = useRecoilValue(CCV);
+  const isFlexableNavTransitioning = useRecoilValue(OFNT);
   const [curNavSection, setCurNavSection] = useRecoilState(CFNS);
 
   const sectionComponents: Record<FlexableNavSectionType, ReactNode> = {
@@ -236,20 +239,17 @@ export default function Records() {
           </div>
         </footer>
       </Container>
-      <Link
-        href="/"
-        style={{
-          textDecoration: "none",
-          WebkitTapHighlightColor: "transparent",
-        }}
-      >
-        <GoHomeButtonContainer color={`${Theme.clock.color[clockColor]}`}>
+      <ConditionalLink href="/" disabled={isFlexableNavTransitioning}>
+        <GoHomeButtonContainer
+          color={`${Theme.clock.color[clockColor]}`}
+          disabled={isFlexableNavTransitioning}
+        >
           <div className="bg-filter"></div>
           <div className="icon-wrapper">
             <IoMdTime />
           </div>
         </GoHomeButtonContainer>
-      </Link>
+      </ConditionalLink>
     </>
   );
 }

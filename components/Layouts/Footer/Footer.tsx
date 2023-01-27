@@ -13,7 +13,7 @@ import {
 } from "../../../shared/atom";
 import { Theme } from "../../../styles/theme";
 import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
-import RoundButton from "../../Button/RoundButton";
+import RoundButton from "../../Button/RoundButton/RoundButton";
 import {
   getPercentageFromDegree,
   getTimeFromDegree,

@@ -14,7 +14,7 @@ import { getPercentageFromDegree, getTimeFromDegree } from "./Timer.util";
 import "firebase/messaging";
 import useAudio from "../../hooks/useAudio";
 import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
-import RoundButton from "../Button/RoundButton";
+import RoundButton from "../Button/RoundButton/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
