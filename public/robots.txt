@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://timer.fecapark.com
+
+# Sitemaps
+Sitemap: https://timer.fecapark.com/sitemap.xml
