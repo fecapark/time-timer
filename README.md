@@ -9,31 +9,18 @@
 
 <br />
 
-![C244D12E-A554-4F80-B704-45038C53D0F5](https://user-images.githubusercontent.com/101973955/209845740-ab1ed887-e9e0-43c0-be3a-434d4fffe625.jpeg)
-
+![D5D4F875-3E6F-4F1A-84B4-9604CE710341](https://user-images.githubusercontent.com/101973955/215377125-a0c4fd31-48d9-4e78-bafb-41f898faf093.gif)
+![](https://velog.velcdn.com/images/fecapark/post/8000c451-6796-4c4c-91e0-15169b527332/image.gif)
+  
 <br />
 
 [Project Link](https://timer.fecapark.com)  
 [About Time Timer](https://www.timetimer.com)
+  
+<br />
+  
+[Blog](https://velog.io/@fecapark/나의-첫-프론트엔드-프로젝트)
 
 <br />
 </div>
 
-## Plan
-
-- [x] 메뉴 바 제작
-- [x] 영어 지원하기
-- [x] favicon 제작하기 (현재는 임시 이미지 사용 중)
-- [x] `meta content='og:...'` 적용하기
-- [x] 디스코드 공유 meta content 추가하기
-- [x] 선택됨(Selected) margin-left 위치 변경하기
-- [x] (Mobile menu 전용) MenuSectionLinker 만들고 적용해서 display 섹션 완성하기
-- [x] duration (시계 최대시간 설정 섹션) 메뉴 옵션 만들기
-- [x] 회전당 시간 단위 변경 옵션 만들기
-- [x] CSS `cursor` 속성 작업하기
-- [x] 스크롤바 커스터마이징 작업하기
-- [x] 데스크탑 pwa 작업하기
-
-- [ ] 집중 기록 페이지 만들기
-
-- [ ] 푸쉬 알림 브라우저 미지원 기능 개선하기
