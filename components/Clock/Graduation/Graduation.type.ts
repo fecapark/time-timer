@@ -4,3 +4,7 @@ export interface IGraduationStyleProps {
   accent: boolean;
   spanAccent: boolean;
 }
+
+export interface IGraduationProps {
+  index: number;
+}

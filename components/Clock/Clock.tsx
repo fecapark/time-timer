@@ -1,12 +1,17 @@
-import React, { useEffect, useRef, useState, PointerEvent } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  PointerEvent,
+  useMemo,
+} from "react";
 import {
   ClockBackground,
   ClockCenter,
   ClockHandler,
   Container,
-  Graduation,
   MainClock,
-} from "./Clock.style";
+} from "./Clock.styled";
 import {
   getPointerPosFromCenter,
   getRotationDegree,
@@ -29,6 +34,7 @@ import {
   clockTimeUnitAtom as CTU,
   isIntroTimeoutedAtom as IIT,
 } from "../../shared/atom";
+import Graduation from "./Graduation/Graduation";
 
 let canSetClockDegree = false;
 let isOverLimited = false;
@@ -38,17 +44,17 @@ export default function Clock() {
   const backgroundRef = useRef<HTMLDivElement>(null);
   const handlerRef = useRef<HTMLDivElement>(null);
   const resizeRef = useRef<HTMLDivElement>(null);
-  const [moveAreaPos, setMoveAreaPos] = useState<Vector2>(new Vector2(0, 0));
-  const [centerPos, setCenterPos] = useState<Vector2>(new Vector2(0, 0));
-  const [prevRelPos, setPrevRelPos] = useState<Vector2 | null>(null);
   const isTimingNow = useRecoilValue(ITN);
-  const [isClockPointerDown, setIsClockPointerDown] = useRecoilState(ICPD);
-  const setClockSize = useSetRecoilState(CS);
-  const [clockDegree, setClockDegree] = useRecoilState(CD);
   const clockColor = useRecoilValue(CCV);
   const maxClockTime = useRecoilValue(MCT);
   const clockTimeUnit = useRecoilValue(CTU);
   const isIntroTimeouted = useRecoilValue(IIT);
+  const setClockSize = useSetRecoilState(CS);
+  const [moveAreaPos, setMoveAreaPos] = useState<Vector2>(new Vector2(0, 0));
+  const [centerPos, setCenterPos] = useState<Vector2>(new Vector2(0, 0));
+  const [prevRelPos, setPrevRelPos] = useState<Vector2 | null>(null);
+  const [clockDegree, setClockDegree] = useRecoilState(CD);
+  const [isClockPointerDown, setIsClockPointerDown] = useRecoilState(ICPD);
 
   const onPointerDown = (e: PointerEvent) => {
     canSetClockDegree = true;
@@ -96,28 +102,15 @@ export default function Clock() {
     setIsClockPointerDown(false);
   };
 
-  const parseIndexToGraduationValue = (index: number) => {
-    const gValue = Math.round((index * maxClockTime) / 6) / 10;
-
-    // If gValue is float
-    if (gValue !== Math.floor(gValue)) {
-      const float = gValue - Math.floor(gValue);
-      return (
-        <span>
-          {Math.floor(gValue)}
-          <span className="min">/{60 * float}</span>
-        </span>
-      );
-    }
-
-    return <span>{gValue}</span>;
-  };
-
   const rebaseDegree = () => {
     setClockDegree(rebaseClockDegree(clockDegree, maxClockTime));
   };
 
   const isIntroedOnce = () => isIntroTimeouted;
+
+  const Graduations = useMemo(() => {
+    return range(60).map((i) => <Graduation key={i} index={i} />);
+  }, []);
 
   useEffect(() => {
     if (isClockPointerDown) return;
@@ -165,11 +158,16 @@ export default function Clock() {
     const onResize = () => {
       const stageWidth = document.body.clientWidth;
       const stageHeight = document.body.clientHeight;
+      const HORIZONTAL_PADDING_SIZE = 190;
+      const CLOCK_SIZE = 600;
 
-      const resizedWidth = Math.min(600, stageWidth);
-      const resizedHeight = Math.min(600 + 190, stageHeight - 190);
+      const resizedWidth = Math.min(CLOCK_SIZE, stageWidth);
+      const resizedHeight = Math.min(
+        CLOCK_SIZE + HORIZONTAL_PADDING_SIZE,
+        stageHeight - HORIZONTAL_PADDING_SIZE
+      );
       const resultSize = Math.min(resizedWidth, resizedHeight);
-      const resultScaleRatio = Math.min(1, resultSize / 600);
+      const resultScaleRatio = Math.min(1, resultSize / CLOCK_SIZE);
 
       resizeRef.current!.style.transform = `
         scale(${resultScaleRatio})
@@ -203,21 +201,7 @@ export default function Clock() {
         onPointerMove={onPointerMove}
       >
         <ClockCenter>
-          {range(60).map((i) => (
-            <Graduation
-              rotate={i * 6}
-              accent={i % 5 == 0}
-              gap={24}
-              key={i}
-              spanAccent={360 - clockDegree >= i * 6}
-            >
-              {i %
-                (maxClockTime >= 60 ? 5 : 5 * Math.round(30 / maxClockTime)) ==
-              0
-                ? parseIndexToGraduationValue(i)
-                : null}
-            </Graduation>
-          ))}
+          {Graduations}
           <ClockBackground ref={backgroundRef} />
           <ClockHandler ref={handlerRef}>
             <div className="pointer"></div>
