@@ -1,10 +1,5 @@
 import Link from "next/link";
-
-interface IConditionalLinkProps {
-  href: string;
-  disabled?: boolean;
-  children: JSX.Element;
-}
+import { IConditionalLinkProps } from "./ConditionalLink.type";
 
 export default function ConditionalLink({
   href,
