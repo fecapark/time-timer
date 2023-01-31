@@ -7,8 +7,6 @@ export const getTimeFromDegree = (degree: number, maxClockTime: number) => {
   const parseTimeFactor = (maxClockTime * 60) / 360;
   const totalSec = Math.round((360 - degree) * parseTimeFactor);
 
-  // console.log(degree, maxClockTime, parseTimeFactor);
-
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
 

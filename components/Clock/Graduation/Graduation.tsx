@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { IGraduationProps } from "../Clock.type";
+import { IGraduationProps } from "./Graduation.type";
 import {
   clockDegreeAtom as CD,
   maxClockTimeAtom as MCT,

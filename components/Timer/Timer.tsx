@@ -4,13 +4,11 @@ import {
   clockDegreeAtom as CD,
   isClockPointerDownAtom as ICPD,
   isTimingNowAtom as ITN,
-  soundEffectAudioAtom as SEA,
   languageOptionValueAtom as LOV,
   progressUnitValueAtom as PUV,
   maxClockTimeAtom as MCT,
 } from "../../shared/atom";
-import { Container, TimeText } from "./Timer.styled";
-import { getPercentageFromDegree, getTimeFromDegree } from "./Timer.util";
+import { Container } from "./Timer.styled";
 import "firebase/messaging";
 import RoundButton from "../Button/RoundButton/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
@@ -18,6 +16,7 @@ import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
 import useRecordManager from "../../hooks/useRecordManager";
 import TimerOption from "../TimerOption/TimerOption";
+import TimeText from "../TimeText/TimeText";
 
 let timerInterval: NodeJS.Timer | null = null;
 let startTime: Date | null = null;
@@ -25,14 +24,13 @@ let startDegree: number = 0;
 let isPausedBefore: boolean = false;
 
 export default function Timer({ onTimingStart }: IProps) {
-  const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
-  const [clockDegree, setClockDegree] = useRecoilState(CD);
   const isClockPointerDown = useRecoilValue(ICPD);
   const language = useRecoilValue(LOV);
-  const progressUnit = useRecoilValue(PUV);
   const maxClockTime = useRecoilValue(MCT);
-  const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
+  const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
+  const [clockDegree, setClockDegree] = useRecoilState(CD);
   const { manageBehavior, manageTimeRecords } = useRecordManager();
+  const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const isEmptyClockDegree = clockDegree >= 360;
 
   const removeTimerInterval = () => {
@@ -131,25 +129,7 @@ export default function Timer({ onTimingStart }: IProps) {
         />
         <TimerOption />
       </div>
-      <TimeText
-        triggerZoom={isClockPointerDown || isTimingNow}
-        isHide={isHideTimer}
-      >
-        <div className="row">
-          <span className="min">
-            {progressUnit === "time"
-              ? getTimeFromDegree(clockDegree, maxClockTime).min
-              : getPercentageFromDegree(clockDegree).int}
-          </span>
-        </div>
-        <div className="row">
-          <span className="sec">
-            {progressUnit === "time"
-              ? getTimeFromDegree(clockDegree, maxClockTime).sec
-              : "." + getPercentageFromDegree(clockDegree).float}
-          </span>
-        </div>
-      </TimeText>
+      <TimeText />
     </Container>
   );
 }

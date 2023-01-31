@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { IGraduationStyleProps } from "../Clock.type";
+import { IGraduationStyleProps } from "./Graduation.type";
 import { getRotatedPosition } from "../Clock.util";
 
 export const GraduationContainer = styled.div<IGraduationStyleProps>`
