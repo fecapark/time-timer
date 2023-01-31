@@ -12,13 +12,12 @@ import {
 import { Container, TimeText } from "./Timer.styled";
 import { getPercentageFromDegree, getTimeFromDegree } from "./Timer.util";
 import "firebase/messaging";
-import useAudio from "../../hooks/useAudio";
-import AlarmOptionContainer from "../AlarmOption/AlarmOptionContainer";
 import RoundButton from "../Button/RoundButton/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
 import { IProps } from "./Timer.type";
 import useRecordManager from "../../hooks/useRecordManager";
+import TimerOption from "../TimerOption/TimerOption";
 
 let timerInterval: NodeJS.Timer | null = null;
 let startTime: Date | null = null;
@@ -29,18 +28,12 @@ export default function Timer({ onTimingStart }: IProps) {
   const [isTimingNow, setIsTimingNow] = useRecoilState(ITN);
   const [clockDegree, setClockDegree] = useRecoilState(CD);
   const isClockPointerDown = useRecoilValue(ICPD);
-  const soundEffectAudio = useRecoilValue(SEA);
   const language = useRecoilValue(LOV);
   const progressUnit = useRecoilValue(PUV);
   const maxClockTime = useRecoilValue(MCT);
-  const [getAudioPermission, playAudio] = useAudio(soundEffectAudio?.src);
   const [isHideTimer, _] = useMediaMatch(Theme.mediaQueries.hideTimerMaxWidth);
   const { manageBehavior, manageTimeRecords } = useRecordManager();
   const isEmptyClockDegree = clockDegree >= 360;
-
-  /* 
-    Functions
-  */
 
   const removeTimerInterval = () => {
     if (timerInterval) clearInterval(timerInterval);
@@ -78,9 +71,6 @@ export default function Timer({ onTimingStart }: IProps) {
     return 1 - (360 - clockDegree) / (360 - startDegree);
   };
 
-  /*
-    Effects
-  */
   useEffect(() => {
     const isTimingEnd = !isClockPointerDown && isEmptyClockDegree;
     if (!isTimingEnd) return;
@@ -133,17 +123,13 @@ export default function Timer({ onTimingStart }: IProps) {
           }
           disabled={isEmptyClockDegree}
           onClick={() => {
-            getAudioPermission();
             setIsTimingNow(true);
             startTimer();
             if (onTimingStart) onTimingStart();
           }}
           triggerHide={isClockPointerDown || isTimingNow}
         />
-        <AlarmOptionContainer
-          timer={{ isEmptyClockDegree, isTimingNow }}
-          audio={{ isAudioLoaded: soundEffectAudio !== null, playAudio }}
-        />
+        <TimerOption />
       </div>
       <TimeText
         triggerZoom={isClockPointerDown || isTimingNow}

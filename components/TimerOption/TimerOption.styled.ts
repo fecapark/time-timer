@@ -18,26 +18,3 @@ export const Container = styled.div<{ triggerHide: boolean }>`
       ? "0.3s cubic-bezier(0.2, 0, 0, 1) 0.1s"
       : "0.2s cubic-bezier(0, 0, 0, 1) 0.5s"};
 `;
-
-export const OptionSwitchRow = styled.div<{ isOn: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  span {
-    margin-right: 12px;
-    font-family: ${({ theme }) => theme.font.family.openSans};
-    font-size: 13px;
-    text-align: end;
-    color: ${(props) => (props.isOn ? "white" : "grey")};
-  }
-`;
-
-export const LoaderWrapper = styled.div`
-  width: 50px;
-  height: 32px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
