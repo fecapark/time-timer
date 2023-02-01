@@ -28,15 +28,12 @@ export default function RecordOverview() {
     );
   };
 
+  if (isLoading()) return null;
   return (
     <>
-      {isLoading() ? null : (
-        <>
-          <TotalTime timeRecordsData={timeRecordsData!} />
-          <Graph timeRecordsData={timeRecordsData!} />
-          <Behavior behaviorData={behaviorData!} />
-        </>
-      )}
+      <TotalTime timeRecordsData={timeRecordsData!} />
+      <Graph timeRecordsData={timeRecordsData!} />
+      <Behavior behaviorData={behaviorData!} />
     </>
   );
 }

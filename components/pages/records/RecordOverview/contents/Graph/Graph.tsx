@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useRecoilValue } from "recoil";
+import useViewportCollision from "../../../../../../hooks/useViewportCollision";
 import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
@@ -15,8 +16,14 @@ interface IGraphProps {
 }
 
 export default function Graph({ timeRecordsData }: IGraphProps) {
+  const fadeRef = useRef<HTMLDivElement>(null);
   const language = useRecoilValue(LOV);
   const clockColor = useRecoilValue(CCV);
+  const { collide, scrolled } = useViewportCollision({
+    ref: fadeRef,
+    threshold: 0.6,
+    rootMargin: "0 0 -80px 0",
+  });
 
   const timeValues = useMemo(() => {
     function parseMSToMin(ms: number) {
@@ -48,8 +55,10 @@ export default function Graph({ timeRecordsData }: IGraphProps) {
     return res;
   }, [timeRecordsData]);
 
+  console.log(scrolled);
+
   return (
-    <ContentSection>
+    <ContentSection ref={fadeRef} show={collide} scrolled={scrolled}>
       <ContentHeader>
         <h2>{language === "kor" ? "시간 그래프" : "Time Table"}</h2>
         <h3>

@@ -13,14 +13,22 @@ import {
 } from "../../../../../../shared/atom";
 import { splitIntAndFloatPartWithFixed } from "../../RecordOverview.util";
 import { IBehaviorDataType } from "../../../../../../shared/types";
+import { useRef } from "react";
+import useViewportCollision from "../../../../../../hooks/useViewportCollision";
 
 interface IBehaviorProps {
   behaviorData: IBehaviorDataType;
 }
 
 export default function Behavior({ behaviorData }: IBehaviorProps) {
+  const fadeRef = useRef<HTMLDivElement>(null);
   const clockColor = useRecoilValue(CCV);
   const language = useRecoilValue(LOV);
+  const { collide, scrolled } = useViewportCollision({
+    ref: fadeRef,
+    threshold: 0.6,
+    rootMargin: "0 0 -80px 0",
+  });
 
   const getPausePercentage = () => {
     const { pauseCount, wholeCount } = behaviorData.finishBehavior;
@@ -42,7 +50,7 @@ export default function Behavior({ behaviorData }: IBehaviorProps) {
   };
 
   return (
-    <ContentSection>
+    <ContentSection ref={fadeRef} show={collide} scrolled={scrolled}>
       <ContentHeader>
         <h2>{language === "kor" ? "행동 분석" : "Behaviors"}</h2>
         <h3>

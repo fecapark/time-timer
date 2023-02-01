@@ -102,22 +102,20 @@ export const ValueInfo = styled.span`
   font-weight: 300;
 `;
 
-const ContentSectionFadeKeyframe = keyframes`
-  from {
-    opacity: 0;
-    transform: translate3d(0, 30px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-`;
-
-export const ContentSection = styled.div`
+export const ContentSection = styled.div<{
+  show?: boolean;
+  scrolled?: boolean;
+}>`
   margin-bottom: 16em;
-  opacity: 0;
 
-  animation: ${ContentSectionFadeKeyframe} 0.4s cubic-bezier(0.2, 0, 0, 1) 0.65s
-    forwards;
+  opacity: ${(props) => (props.show ? "1" : "0")};
+  transform: translate3d(0, ${(props) => (props.show ? "0" : "80px")}, 0);
+
+  transition: 0.4s cubic-bezier(0.2, 0, 0, 1);
+  transition-delay: ${(props) => (props.scrolled ? "0s" : "0.65s")};
 `;
+
+ContentSection.defaultProps = {
+  show: true,
+  scrolled: false,
+};

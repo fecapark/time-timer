@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import {
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
 } from "../../../../../../hooks/useIDB";
+import useViewportCollision from "../../../../../../hooks/useViewportCollision";
 import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
@@ -26,8 +27,14 @@ interface ITotalTimeProps {
 }
 
 export default function TotalTime({ timeRecordsData }: ITotalTimeProps) {
+  const fadeRef = useRef<HTMLDivElement>(null);
   const language = useRecoilValue(LOV);
   const clockColor = useRecoilValue(CCV);
+  const { collide, scrolled } = useViewportCollision({
+    ref: fadeRef,
+    threshold: 0.2,
+    rootMargin: "0 0 -80px 0",
+  });
 
   const getReducedDurations = () => {
     const durationSums = {
@@ -65,7 +72,7 @@ export default function TotalTime({ timeRecordsData }: ITotalTimeProps) {
   }, [timeRecordsData]);
 
   return (
-    <ContentSection>
+    <ContentSection ref={fadeRef} show={collide}>
       <ContentHeader>
         <h2>{language === "kor" ? "기록된 시간들" : "Total Time"}</h2>
         <h3>
