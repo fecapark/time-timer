@@ -4,13 +4,13 @@ import { useRecoilValue } from "recoil";
 import {
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
-} from "../../../../../hooks/useIDB";
+} from "../../../../../../hooks/useIDB";
 import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
-} from "../../../../../shared/atom";
-import { ITimeRecordDataType } from "../../../../../shared/types";
-import { getDayGapBetween } from "../../../../../utils/time";
+} from "../../../../../../shared/atom";
+import { ITimeRecordDataType } from "../../../../../../shared/types";
+import { getDayGapBetween } from "../../../../../../utils/time";
 import {
   ContentBody,
   ContentHeader,

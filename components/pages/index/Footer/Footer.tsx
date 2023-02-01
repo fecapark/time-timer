@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import useBottomSheet from "../../../hooks/useBottomSheet";
-import useMediaMatch from "../../../hooks/useMediaMatch";
+import useBottomSheet from "../../../../hooks/useBottomSheet";
+import useMediaMatch from "../../../../hooks/useMediaMatch";
 import {
   clockDegreeAtom as CD,
   clockSizeAtom as CS,
@@ -10,14 +10,14 @@ import {
   languageOptionValueAtom as LOV,
   progressUnitValueAtom as PUV,
   maxClockTimeAtom as MCT,
-} from "../../../shared/atom";
-import { Theme } from "../../../styles/theme";
-import BottomSheetTimer from "../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
-import RoundButton from "../../Button/RoundButton/RoundButton";
+} from "../../../../shared/atom";
+import { Theme } from "../../../../styles/theme";
+import BottomSheetTimer from "../../../BottomSheet/contents/BottomSheetTimer/BottomSheetTimer";
+import RoundButton from "../../../Button/RoundButton/RoundButton";
 import {
   getPercentageFromDegree,
   getTimeFromDegree,
-} from "../../Timer/Timer.util";
+} from "../../../Timer/Timer.util";
 import { Container, PauseButton, TimeText } from "./Footer.style";
 import { IoMdPause } from "react-icons/io";
 
@@ -66,7 +66,8 @@ export default function Footer() {
             />
           ) : (
             <span>
-              Copyright &copy; 2022 Sanghyeok Park. All rights reserved.
+              Copyright &copy; {new Date().getFullYear()} Sanghyeok Park. All
+              rights reserved.
             </span>
           )
         ) : null}

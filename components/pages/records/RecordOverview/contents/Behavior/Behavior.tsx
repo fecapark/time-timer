@@ -1,7 +1,7 @@
 import { useRecoilValue } from "recoil";
-import { ContentHeader } from "../../../../BottomSheet/BottomSheet.styled";
 import {
   ContentBody,
+  ContentHeader,
   ContentSection,
   ValueDisplayer,
   ValueInfo,
@@ -10,14 +10,9 @@ import {
 import {
   clockColorValueAtom as CCV,
   languageOptionValueAtom as LOV,
-} from "../../../../../shared/atom";
-import {
-  BEHAVIOR_DB_KEY,
-  getBehaviorFromDB,
-} from "../../../../../hooks/useIDB";
-import { useQuery } from "@tanstack/react-query";
+} from "../../../../../../shared/atom";
 import { splitIntAndFloatPartWithFixed } from "../../RecordOverview.util";
-import { IBehaviorDataType } from "../../../../../shared/types";
+import { IBehaviorDataType } from "../../../../../../shared/types";
 
 interface IBehaviorProps {
   behaviorData: IBehaviorDataType;

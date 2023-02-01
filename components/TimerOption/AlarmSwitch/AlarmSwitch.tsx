@@ -45,7 +45,7 @@ export default function AlarmSwitch() {
         language === "kor" ? "종료시 알람 소리 켜기" : "Activate alarm sound"
       }
       isActive={isAlarmSoundOn}
-      isLoading={soundEffectAudio !== null}
+      isLoading={soundEffectAudio === null}
       onSwitchOn={onSoundAlarmOn}
       onSwitchOff={onSoundAlarmOff}
     />

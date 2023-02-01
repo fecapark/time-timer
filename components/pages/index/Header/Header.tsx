@@ -7,15 +7,15 @@ import {
   isActiveMenuAtom as IAM,
   progressUnitValueAtom as PUV,
   maxClockTimeAtom as MCT,
-} from "../../../shared/atom";
+} from "../../../../shared/atom";
 import { Container, IconContainer, TimeText } from "./Header.style";
-import useMediaMatch from "../../../hooks/useMediaMatch";
-import { Theme } from "../../../styles/theme";
+import useMediaMatch from "../../../../hooks/useMediaMatch";
+import { Theme } from "../../../../styles/theme";
 import { useEffect, useState } from "react";
 import {
   getPercentageFromDegree,
   getTimeFromDegree,
-} from "../../Timer/Timer.util";
+} from "../../../Timer/Timer.util";
 import { IoMdMenu } from "react-icons/io";
 
 export default function Header() {

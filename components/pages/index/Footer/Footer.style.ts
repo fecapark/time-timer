@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Theme } from "../../../../styles/theme";
 
 export const PauseButton = styled.button<{ triggerHide: boolean }>`
   all: unset;
@@ -101,8 +102,7 @@ export const Container = styled.footer<{
   justify-content: center;
   align-items: flex-end;
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.responsiveSizes.hideTimer}px) {
+  @media screen and (max-width: ${Theme.responsiveSizes.hideTimer}px) {
     font-size: 15px;
     transition: transform
       ${(props) =>

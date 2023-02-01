@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Theme } from "../../../styles/theme";
+import { Theme } from "../../../../styles/theme";
 
 export const IconContainer = styled.div`
   display: inline-flex;
@@ -123,12 +123,10 @@ export const Container = styled.header<{
         ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.4s"
         : "0.3s cubic-bezier(0, 0, 0, 1) 0.4s"};
 
-  @media screen and (max-width: ${({ theme }) =>
-      theme.responsiveSizes.hideTimer}px) {
-    transition: transform
-      ${(props) =>
-        props.triggerHide
-          ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.1s"
-          : "0.3s cubic-bezier(0, 0, 0, 1) 0.5s"};
+  @media screen and (max-width: ${Theme.responsiveSizes.hideTimer}px) {
+    transition: ${(props) =>
+      props.triggerHide
+        ? "0.5s cubic-bezier(0.2, 0, 0, 1) 0.1s"
+        : "0.3s cubic-bezier(0, 0, 0, 1) 0.5s"};
   }
 `;

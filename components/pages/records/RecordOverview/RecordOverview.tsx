@@ -4,7 +4,7 @@ import {
   getBehaviorFromDB,
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
-} from "../../../hooks/useIDB";
+} from "../../../../hooks/useIDB";
 import Behavior from "./contents/Behavior/Behavior";
 import Graph from "./contents/Graph/Graph";
 import TotalTime from "./contents/TotalTime/TotalTime";

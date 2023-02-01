@@ -4,8 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import Clock from "../components/Clock/Clock";
-import Footer from "../components/Layouts/Footer/Footer";
-import Header from "../components/Layouts/Header/Header";
+import Footer from "../components/pages/index/Footer/Footer";
 import FixedMenu from "../components/Menu/FixedMenu/FixedMenu";
 import MobileMenu from "../components/Menu/MobileMenu/MobileMenu";
 import Modal from "../components/Modal/Modal";
@@ -14,6 +13,7 @@ import Timer from "../components/Timer/Timer";
 import useMediaMatch from "../hooks/useMediaMatch";
 import { soundEffectAudioAtom } from "../shared/atom";
 import { Theme } from "../styles/theme";
+import Header from "../components/pages/index/Header/Header";
 
 const Container = styled.div`
   position: relative;

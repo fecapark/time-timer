@@ -70,7 +70,7 @@ export default function MobileMenu() {
         {menuContent === "main" ? (
           <div className="footer">
             <span>
-              Copyright &copy; 2022 Sanghyeok Park.
+              Copyright &copy; {new Date().getFullYear()} Sanghyeok Park.
               <br />
               All rights reserved.
             </span>

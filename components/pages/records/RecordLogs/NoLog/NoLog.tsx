@@ -1,6 +1,6 @@
 import { FaBoxOpen } from "react-icons/fa";
 import { NoLogContainer } from "./NoLog.styled";
-import { languageOptionValueAtom as LOV } from "../../../../shared/atom";
+import { languageOptionValueAtom as LOV } from "../../../../../shared/atom";
 import { useRecoilValue } from "recoil";
 
 export default function NoLog() {

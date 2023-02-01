@@ -1,4 +1,4 @@
-import { LanguageOptionType } from "../../../shared/types";
+import { LanguageOptionType } from "../../../../../shared/types";
 
 export function getDateString(time: Date, language: LanguageOptionType) {
   const monthName = [

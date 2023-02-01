@@ -3,10 +3,10 @@ import { IRecordCardProps } from "./RecordCard.type";
 import {
   languageOptionValueAtom as LOV,
   clockColorValueAtom as CCV,
-} from "../../../../shared/atom";
-import { getDayGapBetween } from "../../../../utils/time";
+} from "../../../../../shared/atom";
+import { getDayGapBetween } from "../../../../../utils/time";
 import { CardContainer } from "./RecordCard.styled";
-import { Theme } from "../../../../styles/theme";
+import { Theme } from "../../../../../styles/theme";
 import { RiFlag2Fill } from "react-icons/ri";
 import { getDateString } from "./RecordCard.util";
 
