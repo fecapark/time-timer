@@ -1,5 +1,5 @@
-export interface IGrassGraphProps {
+export interface IGrassProps {
+  value: number;
   color: string;
-  recentDatas: Array<number>;
   colorBoundary: [number, number, number, number];
 }

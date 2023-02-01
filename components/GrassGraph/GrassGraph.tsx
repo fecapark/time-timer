@@ -1,66 +1,10 @@
 import { useRef, useState, useMemo, useEffect } from "react";
-import {
-  Container,
-  ContentContainer,
-  GrassBlock,
-  GrassColorsetInfoContainer,
-  GrassGrid,
-} from "./GrassGraph.styled";
-import {
-  IGrassColorsetInfoProps,
-  IGrassGraphProps,
-  IGrassProps,
-} from "./GrassGraph.type";
+import { Container, ContentContainer, GrassGrid } from "./GrassGraph.styled";
+import { IGrassGraphProps } from "./GrassGraph.type";
 import { languageOptionValueAtom as LOV } from "../../shared/atom";
 import { useRecoilValue } from "recoil";
-import { Theme } from "../../styles/theme";
-
-const getGrassColorByValue = (
-  value: number,
-  hex: string,
-  boundary: [number, number, number, number]
-) => {
-  if (value < boundary[0]) return `${Theme.background.secondary}`;
-  if (value < boundary[1]) return `${hex}66`;
-  if (value < boundary[2]) return `${hex}aa`;
-  if (value < boundary[3]) return `${hex}dd`;
-  return `${hex}ff`;
-};
-
-function Grass({ value, color, colorBoundary }: IGrassProps) {
-  return (
-    <GrassBlock
-      backgroundColor={getGrassColorByValue(value, color, colorBoundary)}
-    ></GrassBlock>
-  );
-}
-
-function GrassColorsetInfo({
-  color,
-  colorBoundary,
-  leftText,
-  rightText,
-}: IGrassColorsetInfoProps) {
-  return (
-    <GrassColorsetInfoContainer>
-      <span style={{ marginRight: 6 }}>{leftText}</span>
-      {[0, ...colorBoundary].map((aBoundary) => (
-        <div
-          key={aBoundary}
-          className="color"
-          style={{
-            backgroundColor: getGrassColorByValue(
-              aBoundary,
-              color,
-              colorBoundary
-            ),
-          }}
-        ></div>
-      ))}
-      <span style={{ marginLeft: 6 }}>{rightText}</span>
-    </GrassColorsetInfoContainer>
-  );
-}
+import GrassColorsetInfo from "./GrassColorsetInfo/GrassColorsetInfo";
+import Grass from "./Grass/Grass";
 
 export default function GrassGraph({
   color,
@@ -68,38 +12,35 @@ export default function GrassGraph({
   colorBoundary,
 }: IGrassGraphProps) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const [gridMaxItems, setGridMaxItems] = useState(0);
   const language = useRecoilValue(LOV);
+  const [gridMaxItems, setGridMaxItems] = useState(0);
 
-  /* 
-    Memos
-  */
   const parsedDatas = useMemo(() => {
-    const res: number[] = [];
-    for (let i = gridMaxItems - 1; i >= 0; i--) {
-      if (i < recentDatas.length) {
-        res.push(recentDatas[i]);
-      } else {
-        res.push(0);
-      }
-    }
-    return res;
+    const ZERO_SIZE = Math.max(gridMaxItems - recentDatas.length, 0);
+    const zeros = Array(ZERO_SIZE).fill(0);
+    const datas = recentDatas.slice(0, gridMaxItems);
+    return [...zeros, ...datas.reverse()];
   }, [recentDatas, gridMaxItems]);
 
-  /* 
-    Effects
-  */
+  const grassItems = useMemo(() => {
+    return parsedDatas.map((v, i) => {
+      return (
+        <Grass key={i} color={color} value={v} colorBoundary={colorBoundary} />
+      );
+    });
+  }, [parsedDatas]);
+
   useEffect(() => {
     const onResize = () => {
-      const { width: gridWidth } = gridRef.current!.getBoundingClientRect();
-      const gridItemPixelSize = 10;
-      const gridGap = 4;
-
+      const GRID_ROW_COUNT = 7;
+      const GRID_ITEM_SIZE = 10;
+      const GRID_GAP = 4;
+      const { width } = gridRef.current!.getBoundingClientRect();
       const columns = Math.floor(
-        (gridWidth + gridGap) / (gridItemPixelSize + gridGap)
+        (width + GRID_GAP) / (GRID_ITEM_SIZE + GRID_GAP)
       );
 
-      setGridMaxItems(7 * columns);
+      setGridMaxItems(GRID_ROW_COUNT * columns);
     };
 
     if (!gridRef.current) return;
@@ -119,18 +60,7 @@ export default function GrassGraph({
           <span>{language === "kor" ? "예전" : "Past"}</span>
           <span>{language === "kor" ? "최근" : "Present"}</span>
         </div>
-        <GrassGrid ref={gridRef}>
-          {parsedDatas.map((v, i) => {
-            return (
-              <Grass
-                key={i}
-                color={color}
-                value={v}
-                colorBoundary={colorBoundary}
-              />
-            );
-          })}
-        </GrassGrid>
+        <GrassGrid ref={gridRef}>{grassItems}</GrassGrid>
         <GrassColorsetInfo
           leftText={language === "kor" ? "0분" : "0min"}
           rightText={language === "kor" ? "2시간" : "2hrs"}

@@ -48,30 +48,3 @@ export const GrassGrid = styled.div`
 
   overflow-x: hidden;
 `;
-
-export const GrassBlock = styled.div<{ backgroundColor: string }>`
-  width: 100%;
-  height: 100%;
-  background-color: ${(props) => props.backgroundColor};
-
-  border-radius: 1px;
-`;
-
-export const GrassColorsetInfoContainer = styled.div`
-  margin-top: 16px;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  .color {
-    width: 10px;
-    height: 10px;
-    border-radius: 1px;
-  }
-
-  span {
-    font-size: 12px;
-    color: #e0e0e0;
-  }
-`;
