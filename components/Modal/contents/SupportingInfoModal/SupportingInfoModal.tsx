@@ -6,31 +6,15 @@ import {
   FaApple,
 } from "react-icons/fa";
 import { SiGooglechrome } from "react-icons/si";
-import { MdCheck, MdClose } from "react-icons/md";
 import {
-  SupportItemContainer,
   Container,
   SupportTitle,
   SupportContainer,
 } from "./SupportingInfoModal.styled";
-import {
-  ISupportItemProp,
-  ISupportModalProps,
-} from "./SupportingInfoModal.type";
+import { ISupportModalProps } from "./SupportingInfoModal.type";
 import { useRecoilValue } from "recoil";
 import { languageOptionValueAtom as LOV } from "../../../../shared/atom";
-
-function SupportItem({ name, icon, support = true }: ISupportItemProp) {
-  return (
-    <SupportItemContainer support={support}>
-      <div className="icon-wrapper">
-        {icon}
-        <span>{name}</span>
-      </div>
-      <div className="status">{support ? <MdCheck /> : <MdClose />}</div>
-    </SupportItemContainer>
-  );
-}
+import SupportItem from "./SupportItem/SupportItem";
 
 export default function SupportingInfoModal({
   notSupport = true,
@@ -76,7 +60,11 @@ export default function SupportingInfoModal({
           {language === "kor" ? "모바일 지원" : "Mobile"}
         </SupportTitle>
         <SupportContainer>
-          <SupportItem name="Firefox" icon={<FaFirefoxBrowser />} />
+          <SupportItem
+            name="Firefox"
+            icon={<FaFirefoxBrowser />}
+            support={false}
+          />
           <SupportItem name="Edge" icon={<FaEdge />} support={false} />
           <SupportItem name="Chrome" icon={<SiGooglechrome />} />
           <SupportItem name="IOS Browsers" icon={<FaApple />} support={false} />

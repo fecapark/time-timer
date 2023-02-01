@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { clear } from "idb-keyval";
+// import { clear } from "idb-keyval";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import {
@@ -30,9 +30,6 @@ export default function AppMiddleware() {
   const setClockTimeUnit = useSetRecoilState(CTU);
   const setLanguage = useSetRecoilState(LOV);
 
-  /*
-    Queries
-  */
   const { refetch: optionRefetch } = useQuery([OPTION_DB_KEY], getOptionFromDB);
   const { refetch: behaviorRefetch } = useQuery(
     [BEHAVIOR_DB_KEY],
