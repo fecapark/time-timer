@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loadAudios } from "../backend/loadAudios";
@@ -14,35 +13,7 @@ import useMediaMatch from "../hooks/useMediaMatch";
 import { soundEffectAudioAtom } from "../shared/atom";
 import { Theme } from "../styles/theme";
 import Header from "../components/pages/index/Header/Header";
-
-const Container = styled.div`
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  padding: 2.5em 0;
-  overflow-y: hidden;
-
-  @media screen and (max-width: 768px) {
-    padding: 1.5em 0;
-  }
-`;
-
-const Main = styled.div`
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: relative;
-`;
+import { Container, Main } from "../components/pages/index/index.styled";
 
 export default function Home() {
   const setSoundEffectAudio = useSetRecoilState(soundEffectAudioAtom);

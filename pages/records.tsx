@@ -1,25 +1,24 @@
-import { MdOpenInNew } from "react-icons/md";
-import { Theme } from "../../styles/theme";
-import { FlexableNavSectionType } from "../../shared/types";
+import { Theme } from "../styles/theme";
+import { FlexableNavSectionType } from "../shared/types";
 import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 import {
   clockColorValueAtom as CCV,
   currentFlexableNavSectionAtom as CFNS,
   onFlexableNavTransitionAtom as OFNT,
-} from "../../shared/atom";
-import RecordOverview from "../../components/pages/records/RecordOverview/RecordOverview";
-import RecordLogs from "../../components/pages/records/RecordLogs/RecordLogs";
+} from "../shared/atom";
+import RecordOverview from "../components/pages/records/RecordOverview/RecordOverview";
+import RecordLogs from "../components/pages/records/RecordLogs/RecordLogs";
 import { IoMdTime } from "react-icons/io";
-import ConditionalLink from "../../components/Button/ConditionalLink/ConditionalLink";
-import Seo from "../../components/SEO/Seo";
+import ConditionalLink from "../components/Button/ConditionalLink/ConditionalLink";
+import Seo from "../components/SEO/Seo";
 import {
   Container,
   GoHomeButtonContainer,
   PaddingAroundedContainer,
-} from "./index.styled";
-import Hero from "../../components/pages/records/Hero/Hero";
-import Footer from "../../components/pages/records/Footer/Footer";
+} from "../components/pages/records/index.styled";
+import Hero from "../components/pages/records/Hero/Hero";
+import Footer from "../components/pages/records/Footer/Footer";
 
 export default function Records() {
   const clockColor = useRecoilValue(CCV);
