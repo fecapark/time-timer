@@ -72,7 +72,7 @@ export default function TotalTime({ timeRecordsData }: ITotalTimeProps) {
   }, [timeRecordsData]);
 
   return (
-    <ContentSection ref={fadeRef} show={collide}>
+    <ContentSection ref={fadeRef} show={collide} scrolled={scrolled}>
       <ContentHeader>
         <h2>{language === "kor" ? "기록된 시간들" : "Total Time"}</h2>
         <h3>

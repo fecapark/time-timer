@@ -1,21 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { useRecoilValue } from "recoil";
 import {
   getTimeRecordsFromDB,
   TIME_RECORD_DB_KEY,
 } from "../../../../hooks/useIDB";
-import { clockColorValueAtom as CCV } from "../../../../shared/atom";
 import { ITimeRecordDataType } from "../../../../shared/types";
-import { Theme } from "../../../../styles/theme";
 import { getDayGapBetween } from "../../../../utils/time";
 import NoLog from "./NoLog/NoLog";
-import RecordCard from "./RecordCard/RecordCard";
 import { CardBox } from "./RecordLogs.styled";
+import SameDayContainer from "./SameDayContainer/SameDayContainer";
 
 export default function RecordLogs() {
-  const clockColor = useRecoilValue(CCV);
-
   const { isLoading, data: timeRecordDatas } = useQuery(
     [TIME_RECORD_DB_KEY],
     getTimeRecordsFromDB
@@ -51,23 +46,7 @@ export default function RecordLogs() {
     const groupedRecords = groupingRecordsBySameDate();
     return groupedRecords.map((aDayRecords, i) => {
       if (aDayRecords.length === 0) return null;
-      return (
-        <div className="same-day-container" key={i}>
-          <div className="card-container">
-            {aDayRecords.map((aRecord, j) => {
-              return (
-                <RecordCard
-                  key={`${i}_${j}`}
-                  duration={aRecord.duration}
-                  endTime={aRecord.endTime}
-                  paused={aRecord.finishedByPaused}
-                  completeRatio={aRecord.completeRatio}
-                />
-              );
-            })}
-          </div>
-        </div>
-      );
+      return <SameDayContainer key={i} dayRecords={aDayRecords} />;
     });
   }, [timeRecordDatas]);
 
@@ -77,9 +56,7 @@ export default function RecordLogs() {
         <NoLog />
       ) : (
         <>
-          <CardBox borderColor={`${Theme.clock.color[clockColor]}bb`}>
-            {cards}
-          </CardBox>
+          <CardBox>{cards}</CardBox>
           <div style={{ height: "16em" }}></div>
         </>
       )}

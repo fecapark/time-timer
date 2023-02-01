@@ -111,7 +111,7 @@ export const ContentSection = styled.div<{
   opacity: ${(props) => (props.show ? "1" : "0")};
   transform: translate3d(0, ${(props) => (props.show ? "0" : "80px")}, 0);
 
-  transition: 0.4s cubic-bezier(0.2, 0, 0, 1);
+  transition: 0.45s cubic-bezier(0.2, 0, 0, 1);
   transition-delay: ${(props) => (props.scrolled ? "0s" : "0.65s")};
 `;
 
