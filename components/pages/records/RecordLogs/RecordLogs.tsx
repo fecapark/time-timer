@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { FaBoxOpen } from "react-icons/fa";
 import { useRecoilValue } from "recoil";
 import {
   getTimeRecordsFromDB,

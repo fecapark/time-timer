@@ -5,15 +5,14 @@ import {
   isClockPointerDownAtom as ICPD,
   isTimingNowAtom as ITN,
   languageOptionValueAtom as LOV,
-  progressUnitValueAtom as PUV,
   maxClockTimeAtom as MCT,
 } from "../../shared/atom";
-import { Container } from "./Timer.styled";
+import { Container, TimerFadeAnimationCSS } from "./Timer.styled";
 import "firebase/messaging";
 import RoundButton from "../Button/RoundButton/RoundButton";
 import useMediaMatch from "../../hooks/useMediaMatch";
 import { Theme } from "../../styles/theme";
-import { IProps } from "./Timer.type";
+import { ITimerProps } from "./Timer.type";
 import useRecordManager from "../../hooks/useRecordManager";
 import TimerOption from "../TimerOption/TimerOption";
 import TimeText from "../TimeText/TimeText";
@@ -23,7 +22,10 @@ let startTime: Date | null = null;
 let startDegree: number = 0;
 let isPausedBefore: boolean = false;
 
-export default function Timer({ onTimingStart }: IProps) {
+export default function Timer({
+  onTimingStart,
+  disableAnimation = false,
+}: ITimerProps) {
   const isClockPointerDown = useRecoilValue(ICPD);
   const language = useRecoilValue(LOV);
   const maxClockTime = useRecoilValue(MCT);
@@ -99,7 +101,10 @@ export default function Timer({ onTimingStart }: IProps) {
   }, [isTimingNow]);
 
   return (
-    <Container>
+    <Container
+      css={disableAnimation ? null : TimerFadeAnimationCSS}
+      disableAnimation={disableAnimation}
+    >
       <div className="option-container">
         {isHideTimer ? null : (
           <RoundButton

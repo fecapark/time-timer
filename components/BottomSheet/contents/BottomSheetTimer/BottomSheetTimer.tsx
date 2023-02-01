@@ -8,6 +8,7 @@ export default function BottomSheetTimer({
   return (
     <ContentContainer>
       <Timer
+        disableAnimation={true}
         onTimingStart={() => {
           hideBottomSheet();
         }}
