@@ -20,6 +20,7 @@ import Link from "next/link";
 import { IoMdTime } from "react-icons/io";
 import { darken } from "polished";
 import ConditionalLink from "../components/Button/ConditionalLink/ConditionalLink";
+import Seo from "../components/SEO/Seo";
 
 const Container = styled.div`
   width: 100%;
@@ -169,6 +170,10 @@ export default function Records() {
 
   return (
     <>
+      <Seo
+        title="Records | 타임 타이머"
+        description="60분 온라인 타이머를 사용해서 최고의 집중을 만들어보세요."
+      />
       <Container>
         <div className="flexable">
           <FlexableNav>
