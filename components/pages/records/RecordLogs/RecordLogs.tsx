@@ -33,7 +33,7 @@ export default function RecordLogs() {
     let curRes: ITimeRecordDataType[] = [timeRecordDatas![0]];
     const res: Array<typeof curRes> = [];
 
-    timeRecordDatas!.forEach((aRecord) => {
+    timeRecordDatas!.slice(1).forEach((aRecord) => {
       if (getDayGapBetween(curDate, aRecord.endTime) === 0) {
         curRes.push(aRecord);
         return;
@@ -45,7 +45,6 @@ export default function RecordLogs() {
     });
 
     if (curRes.length > 0) res.push(curRes);
-
     return res;
   };
 

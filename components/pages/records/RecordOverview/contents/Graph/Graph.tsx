@@ -26,14 +26,14 @@ export default function Graph({ timeRecordsData }: IGraphProps) {
     const addZeroPadding = (dayGap: number, duration: number) => {
       const PADDING_SIZE = dayGap - 1;
       const PADDING = Array(PADDING_SIZE).fill(0);
-      res.concat([...PADDING, parseMSToMin(duration)]);
+      res = res.concat([...PADDING, parseMSToMin(duration)]);
     };
 
     const mergeTodayDuration = (duration: number) => {
       res[res.length - 1] += parseMSToMin(duration);
     };
 
-    const res: number[] = [0];
+    let res: number[] = [0];
     let currentDate: Date = new Date();
 
     timeRecordsData?.forEach((aRecord) => {
