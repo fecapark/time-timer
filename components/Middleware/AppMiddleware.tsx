@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { clear } from "idb-keyval";
+// import { clear } from "idb-keyval";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import {
@@ -74,7 +74,7 @@ export default function AppMiddleware() {
 
     const refetchTimeRecords = async () => {
       await timeRecordsRefetch();
-      clear();
+      // clear();
     };
 
     if (!isDefaultLoaded) return;
