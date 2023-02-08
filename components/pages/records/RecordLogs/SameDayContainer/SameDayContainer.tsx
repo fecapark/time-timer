@@ -15,7 +15,7 @@ export default function SameDayContainer({
   const { collide, scrolled } = useViewportCollision({
     ref: fadeRef,
     threshold: 0.4,
-    rootMargin: "0 0 -80px 0",
+    rootMargin: "0px 0px -80px 0px",
   });
 
   return (

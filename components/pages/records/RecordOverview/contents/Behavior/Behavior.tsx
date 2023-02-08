@@ -27,7 +27,7 @@ export default function Behavior({ behaviorData }: IBehaviorProps) {
   const { collide, scrolled } = useViewportCollision({
     ref: fadeRef,
     threshold: 0.6,
-    rootMargin: "0 0 -80px 0",
+    rootMargin: "0px 0px -80px 0px",
   });
 
   const getPausePercentage = () => {
