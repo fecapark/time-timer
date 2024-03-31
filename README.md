@@ -14,7 +14,7 @@
   
 <br />
 
-[Project Link](https://timer.fecapark.com)  
+[Project Link](https://time-timer.vercel.app)  
 [About Time Timer](https://www.timetimer.com)
   
 <br />
