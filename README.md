@@ -18,7 +18,9 @@
 [About Time Timer](https://www.timetimer.com)
   
 <br />
-  
+
+## See dev log
+
 [Blog](https://velog.io/@fecapark/나의-첫-프론트엔드-프로젝트)
 
 <br />
