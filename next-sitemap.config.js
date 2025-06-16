@@ -1,10 +1,10 @@
 /** @type {import('next-sitemap').IConfig} */
 
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://timer.fecapark.com",
+  siteUrl: process.env.SITE_URL || "https://time-timer.vercel.app",
   exclude: ["/sitemap.xml"],
   generateRobotsTxt: true,
   robotsTxtOptions: {
-    additionalSitemaps: ["https://timer.fecapark.com/sitemap.xml"],
+    additionalSitemaps: ["https://time-timer.vercel.app/sitemap.xml"],
   },
 };
