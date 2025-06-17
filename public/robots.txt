@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://timer.fecapark.com
+Host: https://time-timer.vercel.app
 
 # Sitemaps
-Sitemap: https://timer.fecapark.com/sitemap.xml
+Sitemap: https://time-timer.vercel.app/sitemap.xml
